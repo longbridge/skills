@@ -126,6 +126,19 @@ python3 cli.py warrant-issuers
 | `no_input` | "请告诉我合约 / 标的代码" |
 | `invalid_input_format` | "代码或日期格式不对;窝轮仅港股可查" |
 
+## MCP 备选
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `option-quote` | `mcp__longbridge__option_quote` |
+| `option-chain`(无 date) | `mcp__longbridge__option_chain_expiry_date_list` |
+| `option-chain --date` | `mcp__longbridge__option_chain_info_by_date` |
+| `warrant-quote` | `mcp__longbridge__warrant_quote` |
+| `warrant-list` | `mcp__longbridge__warrant_list` |
+| `warrant-issuers` | `mcp__longbridge__warrant_issuers` |
+
+MCP 拓展能力:`mcp__longbridge__option_volume`、`mcp__longbridge__option_volume_daily`(期权成交量分析,CLI 没有)。
+
 ## 代码结构
 
 ```

@@ -65,7 +65,8 @@ default_install: true | false             # 必填,高风险 skill 必须 false
 6. `## 输出 JSON Schema` — 默认结构 + 任何变体(差异化稿可在此覆写父文档默认)
 7. `## 数据来源标注` — 固定话术见下
 8. `## 错误处理` — 把 error_kind 翻成给用户的中文话术
-9. `## 代码结构` — 平铺目录树(必须是 skill 实际有的文件)
+9. `## MCP 备选` — 列出对应官方 MCP 工具(`mcp__longbridge__<tool>`),供 cli.py 不可用时回退
+10. `## 代码结构` — 平铺目录树(必须是 skill 实际有的文件)
 
 差异化稿写各章节里要替换/补充的内容,不是把整个 SKILL.md 重写一遍。
 
@@ -223,6 +224,25 @@ def make_fake_longbridge(stdout="", stderr="", exit_code=0, branches=None):
   - patch (`1.0.x`):typo 修复、不影响行为
   - minor (`1.x.0`):新增 cli.py 参数、扩展 datas 字段(向下兼容)
   - major (`x.0.0`):删/改字段、改 error_kind 枚举、改 SKILL.md 触发逻辑
+
+## MCP 与 CLI 的双路模型
+
+每个 skill 默认走本地 `longbridge` CLI(subprocess + 本机 OAuth),但 SKILL.md 必须包含 `## MCP 备选` 章节,列出对应的官方 MCP 工具名(`longbridge-mcp` 项目里 `pub async fn <name>` 直接对应 `mcp__longbridge__<name>`)。
+
+**LLM 路由原则**(写在每个 SKILL.md 里的"步骤 0"):
+1. **优先 cli.py**——本机 subprocess 更快、不走网络;
+2. **若 cli.py 返回 `binary_not_found`**(本机没装 longbridge CLI),改用 MCP 工具;
+3. **若用户问的是 CLI 不支持的能力**(基本面 / 财经日历 / 资讯 / 提醒 / DCA / A/H 溢价 / 经纪商持仓 / 异动 / 指数成分等),直接走 MCP,不用 cli.py。
+
+用户启用 MCP 的方式:
+
+```bash
+claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
+```
+
+首次工具调用触发浏览器 OAuth(token 缓存,自动刷新)。
+
+`mutating` skill(#11 股票交易、#12 自选股管理)在 MCP 路径上仍要遵守 dry-run + confirm 双步流程——SKILL.md 必须明确"无论走 cli.py 还是 MCP,LLM 第一次调用都不带 confirm,把 plan 朗读给用户后等明确确认"。
 
 ## 部署方式
 

@@ -196,6 +196,13 @@ python3 scripts/cli.py -s 600519.SH
 | `no_input` | "请告诉我要查的股票代码或公司名" |
 | `invalid_input_format` | "代码格式不对,要写成 `<CODE>.<MARKET>`,例如 `NVDA.US`、`700.HK`、`600519.SH`;且本 skill 一次只能查一只标的" |
 
+## MCP 备选
+
+| cli.py 行为 | 等效 MCP 工具 |
+|---|---|
+| 默认(只 capital-flow) | `mcp__longbridge__capital_flow` |
+| `--include-dist` | `mcp__longbridge__capital_flow` + `mcp__longbridge__capital_distribution`(LLM 合并) |
+
 ## 代码结构
 
 ```

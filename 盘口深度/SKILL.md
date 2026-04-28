@@ -106,6 +106,19 @@ python3 cli.py all     <symbol> [--count 20]
 | `no_input` | "请告诉我要查的标的(格式 <CODE>.<MARKET>)" |
 | `invalid_input_format` | "代码格式不对:<details>。或经纪商队列仅港股可查,请改用 depth 或换港股代码。" |
 
+## MCP 备选
+
+cli.py 返回 `binary_not_found` 时回退:
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `depth` | `mcp__longbridge__depth` |
+| `brokers` | `mcp__longbridge__brokers` |
+| `trades` | `mcp__longbridge__trades` |
+| `all` | 依次调上面三个 + 用 LLM 合并(MCP 没有 all 组合工具) |
+
+MCP 拓展能力(CLI 没有):`mcp__longbridge__short_positions`(空头持仓)、`mcp__longbridge__option_volume`、`mcp__longbridge__option_volume_daily`。
+
 ## 代码结构
 
 ```

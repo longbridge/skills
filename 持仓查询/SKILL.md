@@ -123,6 +123,21 @@ python3 cli.py max-qty       <symbol> --side buy|sell [--price <decimal>] [--ord
 | `no_input` | "请告诉我要查什么:portfolio / positions / funds / balance / margin-ratio / max-qty" |
 | `invalid_input_format` | "标的代码或参数格式不对:<details>" |
 
+## MCP 备选
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `positions` | `mcp__longbridge__stock_positions` |
+| `funds` | `mcp__longbridge__fund_positions` |
+| `balance` | `mcp__longbridge__account_balance` |
+| `margin-ratio` | `mcp__longbridge__margin_ratio` |
+| `max-qty` | `mcp__longbridge__estimate_max_purchase_quantity` |
+| `portfolio` | 依次调 stock_positions + fund_positions + account_balance(MCP 没有合体工具) |
+
+MCP 拓展能力(CLI 没有):`mcp__longbridge__profit_analysis` / `profit_analysis_detail`(组合 P/L 分析,可选日期范围)、`mcp__longbridge__exchange_rate`(汇率换算)。这两个对"看一下我的总浮盈"类问句尤其有用。
+
+注意:本账户的 OAuth token 若不含交易 API scope,CLI 会报 `auth_expired`(stderr 含 "authorized scope" 关键词)。MCP 走的是同一个 OAuth,scope 限制相同——除非用户重新授权拿 trade scope,两条路都不通。
+
 ## 代码结构
 
 ```

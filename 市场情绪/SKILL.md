@@ -110,6 +110,17 @@ python3 cli.py days     [--market HK|US|CN|SG] [--start YYYY-MM-DD] [--end YYYY-
 | `no_input` | "请告诉我要查什么:temp / session / days" |
 | `invalid_input_format` | "市场或日期格式不对:<details>" |
 
+## MCP 备选
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `temp`(快照) | `mcp__longbridge__market_temperature` |
+| `temp --history` | `mcp__longbridge__history_market_temperature` |
+| `session` | `mcp__longbridge__trading_session` |
+| `days` | `mcp__longbridge__trading_days` |
+
+MCP 拓展能力(CLI 没有):`mcp__longbridge__market_status`(更细的市场状态)、`mcp__longbridge__finance_calendar`(财报 / 分红 / IPO / 宏观日历,见「财经日历」skill 路线)。
+
 ## 代码结构
 
 ```

@@ -138,6 +138,18 @@ python3 cli.py intraday   <symbol>
 | `no_input` | "请告诉我要查的标的代码,以及子命令(kline / history / intraday)" |
 | `invalid_input_format` | "代码或日期格式不对:<details>。" |
 
+## MCP 备选
+
+cli.py 返回 `binary_not_found` 时,如果已配置 `claude mcp add longbridge ...`,可改用:
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `kline` | `mcp__longbridge__candlesticks` |
+| `history` | `mcp__longbridge__history_candlesticks_by_offset` 或 `mcp__longbridge__history_candlesticks_by_date` |
+| `intraday` | `mcp__longbridge__intraday` |
+
+优先 cli.py,本机更快;MCP 仅作回退。
+
 ## 代码结构
 
 ```

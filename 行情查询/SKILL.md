@@ -204,6 +204,18 @@ python3 scripts/cli.py -s NVDA.US --include-static --index pe,pb,total_market_va
 | `no_input` | "请告诉我要查的股票代码或公司名" |
 | `invalid_input_format` | "代码格式不对,要写成 `<CODE>.<MARKET>`,例如 `NVDA.US`、`700.HK`、`600519.SH`" |
 
+## MCP 备选
+
+cli.py 返回 `binary_not_found` 时,如果用户已经 `claude mcp add longbridge https://openapi.longbridge.com/mcp`,可改用以下官方 MCP 工具:
+
+| cli.py 行为 | 等效 MCP 工具 |
+|---|---|
+| 报价 (quote 子进程) | `mcp__longbridge__quote` |
+| 静态参考 (static 子进程) | `mcp__longbridge__static_info` |
+| 估值指数 (calc-index 子进程) | `mcp__longbridge__calc_indexes` |
+
+MCP 走 HTTP + OAuth,比 cli.py 慢但不依赖本机有 `longbridge` 二进制。优先 cli.py,仅在 cli.py 不可用时回退到 MCP。
+
 ## 代码结构
 
 ```

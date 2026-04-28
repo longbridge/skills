@@ -109,6 +109,14 @@ python3 cli.py [--group <id>] [--group-name <name>]
 | `auth_expired` | "长桥登录态过期了,请跑 `longbridge login`" |
 | `subprocess_failed` | "查询失败:<details.stderr>" |
 
+## MCP 备选
+
+| cli.py 行为 | 等效 MCP 工具 |
+|---|---|
+| 列出自选(无 / 带过滤) | `mcp__longbridge__watchlist`(返回全部,过滤由 LLM 在结果上做) |
+
+MCP 拓展能力(CLI / 本 skill 都没有):`mcp__longbridge__sharelist_*`(社区分享清单,共 8 个工具:list / detail / create / update / delete / member_add / member_remove / popular)。社区清单和个人自选股是两个数据域,如果用户问"热门清单 / 别人在看什么",改路 sharelist 工具。
+
 ## 代码结构
 
 ```

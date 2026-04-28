@@ -120,6 +120,21 @@ python3 cli.py cash-flow  [--start YYYY-MM-DD] [--end YYYY-MM-DD]
 | `invalid_input_format` | "日期 / 标的格式不对:<details>" |
 | `empty_result` | (仅 order 子命令)"未找到订单 <id>。请确认订单 ID。" |
 
+## MCP 备选
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `orders`(当日) | `mcp__longbridge__today_orders` |
+| `orders --history` | `mcp__longbridge__history_orders` |
+| `order <id>` | `mcp__longbridge__order_detail` |
+| `executions`(当日) | `mcp__longbridge__today_executions` |
+| `executions --history` | `mcp__longbridge__history_executions` |
+| `cash-flow` | `mcp__longbridge__cash_flow` |
+
+MCP 拓展能力(CLI 没有):账单导出 `mcp__longbridge__statement_*`(详见账单 skill 路线)。
+
+注意:同 #08 持仓,本账户 OAuth scope 不足时 cli.py 与 MCP 都会报 auth_expired。
+
 ## 代码结构
 
 ```

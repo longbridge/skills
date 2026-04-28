@@ -77,6 +77,12 @@ python3 cli.py
 | `auth_expired` | "长桥登录态过期了,请跑 `longbridge login`" |
 | `subprocess_failed` | "查询失败:<details.stderr>" |
 
+## MCP 备选
+
+**MCP 没有等效工具。** longbridge-mcp 是无状态 HTTP 服务,本身没有 WebSocket 订阅会话的概念,不存在"列出当前订阅"这种查询。本 skill 必须依赖本机 `longbridge` CLI(它维护着 OAuth + WebSocket 长连接)。
+
+如果 cli.py 返回 `binary_not_found`,告诉用户:本 skill 仅本机可用,需要装 longbridge-terminal。
+
 ## 代码结构
 
 ```

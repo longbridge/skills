@@ -100,6 +100,15 @@ participants:`datas`(数组,每条 `{broker_id, name_en, name_cn}`)
 | `no_input` | "请告诉我要查什么:securities / participants" |
 | `invalid_input_format` | "市场不支持。可选 HK / US / CN / SG" |
 
+## MCP 备选
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `securities` | `mcp__longbridge__security_list` |
+| `participants` | `mcp__longbridge__participants` |
+
+由于 cli.py 在 `securities` 上偶发后端 param_error(longbridge-terminal 当前版本的已知问题),如果失败,**优先**改用 `mcp__longbridge__security_list` —— MCP 走的是直接 SDK 调用,不受 CLI 中间层影响。
+
 ## 代码结构
 
 ```

@@ -185,6 +185,18 @@ python3 cli.py delete-group <group_id> [--purge] [--confirm]
 | `invalid_input_format` | "参数格式不对:<details>" |
 | `risk_block` | "出于安全考虑,本技能 --confirm 时只接受 PATH 上的 longbridge,不接受任意路径" |
 
+## MCP 备选
+
+| cli.py 子命令 | 等效 MCP 工具 |
+|---|---|
+| `create-group` | `mcp__longbridge__create_watchlist_group` |
+| `update-group` | `mcp__longbridge__update_watchlist_group` |
+| `delete-group` | `mcp__longbridge__delete_watchlist_group` |
+
+**重要**:走 MCP 路径时,**仍然必须遵守 dry-run + confirm 双步流程**。LLM 第一次不直接调 MCP 写工具;先用本 cli.py 跑一次 dry-run(不带 --confirm,不接 longbridge)拿到 plan → 朗读给用户 → 等"确认" → 第二次才调 MCP 写工具(或带 --confirm 调 cli.py)。
+
+MCP 是无 dry-run 概念的纯写工具,SKILL 层负责确认流程,不能让 LLM 直接 MCP 一步到位。
+
 ## 代码结构
 
 ```
