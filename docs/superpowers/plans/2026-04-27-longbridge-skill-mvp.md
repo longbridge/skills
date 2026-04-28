@@ -1001,3 +1001,41 @@ git commit -m "docs(plan): record Claude Code integration acceptance"
 - 默认输出 schema(Task 6)、`--include-static` 输出 schema(Task 8)
 - 边界:静态部分缺失但 quote 完整(Task 8 second test)
 - 总计 10 个 unit test + 4 条手工集成 prompt(Task 10)
+
+---
+
+## Acceptance Log
+
+### 2026-04-28 — 一次性走完 Task 1-10 + Task 11(--index)
+
+**实际实施时按 platform protocol(2026-04-28-skill-platform-protocol.md)做了以下与原 plan 的差异**:
+1. SKILL.md front-matter 加了 `version` `risk_level` `requires_login` `default_install` 四个字段
+2. JSON envelope 加了 `source` `skill` `skill_version` 三个字段
+3. error_kind 重命名:`no_symbols` → `no_input`,`invalid_symbol_format` → `invalid_input_format`(平台规约统一命名)
+4. **新增 Task 11**:`--index` 参数 + `calc-index` 子进程 + 三方合并(quote / static / calc-index)。比原 plan 的 10 task 多一份能力,SKILL.md 加了完整 calc-index 字段列表。
+5. 新增 `--timeout` 参数(原 plan 硬编码 30s)
+6. 总计 12 个 unit test(原 plan 10 个 + calc-index 2 个),全过
+
+### Task 9 — 真账户烟测(2026-04-28)
+
+| 命令 | 结果 |
+|---|---|
+| `python3 scripts/cli.py -s NVDA.US` | exit 0,NVDA 最新 $216.61 |
+| `python3 scripts/cli.py -s NVDA.US -s 700.HK --include-static` | exit 0,两条都含非空 quote + static(NVIDIA / TENCENT,EPS / BPS / dividend_yield 齐全) |
+| `python3 scripts/cli.py -s NVDA.US --index pe,pb,turnover_rate` | exit 0,calc_index = `{pe_ttm: 43.84, pb: 33.46, turnover_rate: 0.80}` |
+| `python3 scripts/cli.py -s NVDA` | exit 1,error_kind=invalid_input_format |
+
+### Task 10 — Claude Code 集成测试(2026-04-28)
+
+Symlink 部署:`~/.claude/skills/longbridge-quote → /Users/hogan/work/longbridge/longbridge-skills/行情查询`
+
+新会话依次跑了 6 条问句,**全部通过**(模型自动路由到 longbridge-quote skill,返回含数据的回答,引用"长桥证券"):
+
+1. ✅ NVDA 现在多少钱
+2. ✅ AAPL 和 NVDA 哪个涨得多
+3. ✅ 看一下 700.HK 的市值(触发 --include-static)
+4. ✅ 茅台股价多少(LLM 自动映射 茅台 → 600519.SH)
+5. ✅ NVDA 现在 PE 多少(触发 --index pe)
+6. ✅ 看下 茅台 全貌(同时触发 --include-static + --index)
+
+行情查询 skill #01 全流程关闭。下一步进入 #02 K线查询 / #08 持仓查询 / #10 自选股(只读)。
