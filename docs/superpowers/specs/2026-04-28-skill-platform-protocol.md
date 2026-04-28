@@ -225,6 +225,23 @@ def make_fake_longbridge(stdout="", stderr="", exit_code=0, branches=None):
   - minor (`1.x.0`):新增 cli.py 参数、扩展 datas 字段(向下兼容)
   - major (`x.0.0`):删/改字段、改 error_kind 枚举、改 SKILL.md 触发逻辑
 
+## 两类 skill:读取层 vs 分析层
+
+| 维度 | 读取层(#01-#13)| 分析层(#14-#18)|
+|---|---|---|
+| 目录 | `<中文名>/SKILL.md + scripts/cli.py + scripts/test_cli.py` | `<中文名>/SKILL.md`(**无 scripts/**) |
+| 工具来源 | longbridge CLI(主) + MCP(备选) | **MCP(主)** + chain 到读取层 skill |
+| 用户 OAuth | 部分 skill 可不登录(read-only 行情) | 多数需 trade-scope token |
+| 输出形态 | 原始 datas(LLM 翻译成中文) | **结构化分析**(分类 + 提炼 + 对比表) |
+| 是否构成建议 | N/A | **明确 disclaim "不构成投资建议"** |
+| 实施前提 | longbridge CLI 装在本机 | **MCP 已 `claude mcp add`** |
+
+分析层 skill 必须在 front-matter 加 `requires_mcp: true`,SKILL.md 在「使用前」段告知用户配置 MCP 的命令:
+
+```bash
+claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
+```
+
 ## MCP 与 CLI 的双路模型
 
 每个 skill 默认走本地 `longbridge` CLI(subprocess + 本机 OAuth),但 SKILL.md 必须包含 `## MCP 备选` 章节,列出对应的官方 MCP 工具名(`longbridge-mcp` 项目里 `pub async fn <name>` 直接对应 `mcp__longbridge__<name>`)。

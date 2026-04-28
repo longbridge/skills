@@ -1,11 +1,12 @@
 # Longbridge Skill 全景清单
 
 **Date:** 2026-04-28
-**Status:** Decisions locked — 13 个 skill 全部 design 已写,等用户审稿与 plan 阶段
+**Status:** 18 个 skill 全部 design 已写;读取层 12 个已实施,分析层 5 个 prompt-only 待实施
 **Decisions(2026-04-28 brainstorm 锁定):**
-- 范围:全 13 个 skill
-- spec 粒度:1 份平台规约 + 13 份短差异化稿(本目录下)
-- 交易类(#11):P0 阶段就出 design + 部署 gate(`default_install: false`),实施推迟 P2
+- 范围:13 个读取层 skill(#01-#13) + 5 个分析层 skill(#14-#18)= 18
+- spec 粒度:1 份平台规约 + 18 份短差异化稿
+- 交易类(#11):P0 出 design + 部署 gate(`default_install: false`),实施推迟 P2
+- 分析层(#14-#18):prompt-only,无 cli.py,**强依赖 MCP**(用户需 `claude mcp add longbridge ...`)
 - 目录:全部留 `longbridge-skills/`,部署用 symlink 到 `~/.claude/skills/`
 
 ## 调研背景
@@ -170,29 +171,62 @@ iwencai 有但我们没有的能力,**短期不做**(底层不支持):
 
 平台规约(所有 skill 共享):
 
-- [`2026-04-28-skill-platform-protocol.md`](./2026-04-28-skill-platform-protocol.md) — 目录结构、SKILL.md 规约、cli.py 接口约定、error_kind 枚举、test 模板、部署方式
+- [`2026-04-28-skill-platform-protocol.md`](./2026-04-28-skill-platform-protocol.md) — 目录结构、SKILL.md 规约、cli.py 接口约定、error_kind 枚举、test 模板、部署方式、MCP + CLI 双路模型
 
-13 份差异化设计:
+### 读取层(13 份,#01-#13,wraps CLI/MCP 1:N)
 
 | # | Skill | 设计稿 | 优先级 |
 |---:|---|---|:---:|
-| 01 | 行情查询 | [skill-01-quote-design.md](./2026-04-28-skill-01-quote-design.md)(配套 MVP plan) | P0 |
-| 02 | K线查询 | [skill-02-kline-design.md](./2026-04-28-skill-02-kline-design.md) | P0 |
-| 03 | 盘口深度 | [skill-03-depth-design.md](./2026-04-28-skill-03-depth-design.md) | P1 |
-| 04 | 资金流向 | [skill-04-capital-flow-design.md](./2026-04-28-skill-04-capital-flow-design.md) | P1 |
-| 05 | 市场情绪 | [skill-05-market-temp-design.md](./2026-04-28-skill-05-market-temp-design.md) | P2 |
-| 06 | 期权与窝轮 | [skill-06-derivatives-design.md](./2026-04-28-skill-06-derivatives-design.md) | P2 |
-| 07 | 证券查找 | [skill-07-security-list-design.md](./2026-04-28-skill-07-security-list-design.md) | P3 |
-| 08 | 持仓查询 | [skill-08-positions-design.md](./2026-04-28-skill-08-positions-design.md) | P0 |
-| 09 | 订单与成交 | [skill-09-orders-design.md](./2026-04-28-skill-09-orders-design.md) | P1 |
-| 10 | 自选股(读) | [skill-10-watchlist-design.md](./2026-04-28-skill-10-watchlist-design.md) | P0 |
+| 01 | 行情查询 | [skill-01-quote-design.md](./2026-04-28-skill-01-quote-design.md)(配套 MVP plan) | P0 ✅ |
+| 02 | K线查询 | [skill-02-kline-design.md](./2026-04-28-skill-02-kline-design.md) | P0 ✅ |
+| 03 | 盘口深度 | [skill-03-depth-design.md](./2026-04-28-skill-03-depth-design.md) | P1 ✅ |
+| 04 | 资金流向 | [skill-04-capital-flow-design.md](./2026-04-28-skill-04-capital-flow-design.md) | P1 ✅ |
+| 05 | 市场情绪 | [skill-05-market-temp-design.md](./2026-04-28-skill-05-market-temp-design.md) | P2 ✅ |
+| 06 | 期权与窝轮 | [skill-06-derivatives-design.md](./2026-04-28-skill-06-derivatives-design.md) | P2 ✅ |
+| 07 | 证券查找 | [skill-07-security-list-design.md](./2026-04-28-skill-07-security-list-design.md) | P3 ✅ |
+| 08 | 持仓查询 | [skill-08-positions-design.md](./2026-04-28-skill-08-positions-design.md) | P0 ✅ |
+| 09 | 订单与成交 | [skill-09-orders-design.md](./2026-04-28-skill-09-orders-design.md) | P1 ✅ |
+| 10 | 自选股(读) | [skill-10-watchlist-design.md](./2026-04-28-skill-10-watchlist-design.md) | P0 ✅ |
 | 11 | 股票交易 ⚠️ | [skill-11-trading-risk-design.md](./2026-04-28-skill-11-trading-risk-design.md) | **设计 P0 / 实施 P2** |
-| 12 | 自选股管理(写) | [skill-12-watchlist-write-design.md](./2026-04-28-skill-12-watchlist-write-design.md) | P2 |
-| 13 | 实时订阅 | [skill-13-subscriptions-design.md](./2026-04-28-skill-13-subscriptions-design.md) | P3 |
+| 12 | 自选股管理(写) | [skill-12-watchlist-write-design.md](./2026-04-28-skill-12-watchlist-write-design.md) | P2 ✅ |
+| 13 | 实时订阅 | [skill-13-subscriptions-design.md](./2026-04-28-skill-13-subscriptions-design.md) | P3 ✅ |
 
-## 实施 plan 顺序(下一阶段)
+### 分析层(5 份,#14-#18,prompt-only,**强依赖 MCP**)
 
-1. P0 plan:**行情查询**(MVP plan 已存在,合并 #01 差异化稿的微调)→ K线查询 → 持仓查询 → 自选股(读)
-2. P1 plan:盘口深度 → 资金流向 → 订单与成交
-3. P2 plan(衍生品 + 写入):期权与窝轮 → 市场情绪 → 自选股管理(写) → **股票交易(必须先解决 #11 设计稿末尾的 4 个先决条件)**
-4. P3 plan:证券查找 → 实时订阅
+prompt-only = 无 cli.py;SKILL.md 直接编排 MCP 工具 + chain 现有 skill。
+
+| # | Skill | 设计稿 | 解锁的高频问句 |
+|---:|---|---|---|
+| 14 | 估值分析 | [skill-14-valuation-design.md](./2026-04-28-skill-14-valuation-design.md) | "X 估值贵不贵 / 历史百分位" |
+| 15 | 基本面分析 | [skill-15-fundamental-design.md](./2026-04-28-skill-15-fundamental-design.md) | "X 业绩怎么样 / 财务健康吗" |
+| 16 | 同行对比 | [skill-16-peer-comparison-design.md](./2026-04-28-skill-16-peer-comparison-design.md) | "X 跟 Y 谁更值得买"(2-5 个 symbol) |
+| 17 | 投资组合分析 | [skill-17-portfolio-design.md](./2026-04-28-skill-17-portfolio-design.md) | "我账户表现如何 / 哪只股贡献最多" |
+| 18 | 资讯舆情 | [skill-18-news-design.md](./2026-04-28-skill-18-news-design.md) | "X 最近新闻 / 公告 / 市场怎么看" |
+
+**分析层共同特征:**
+- 不下投资建议(SKILL.md 强制约束 LLM 不输出"建议买/卖"原话)
+- 末尾必须"不构成投资建议"
+- 分类输出(不直接 dump raw datas)
+- 数据来源标注"长桥证券"
+
+## 实施 plan 顺序
+
+### 读取层(✅ 全部已实施,12 个 symlink 在 `~/.claude/skills/`)
+
+1. ✅ 行情查询 / K线查询 / 持仓查询 / 自选股
+2. ✅ 盘口深度 / 资金流向 / 订单与成交
+3. ✅ 市场情绪 / 期权与窝轮 / 自选股管理(写)
+4. ✅ 证券查找 / 实时订阅
+5. ⏸️ 股票交易(#11)— design 稿末尾 4 个先决条件未解决,实施推迟
+
+### 分析层(5 个,prompt-only,待实施)
+
+实施 = 写 SKILL.md(没有 cli.py)+ symlink 到 `~/.claude/skills/`。**前提:用户先 `claude mcp add longbridge ...`**。
+
+实施顺序按预期使用频率:
+
+1. 估值分析(#14)— "贵不贵"是最高频投资问句
+2. 基本面分析(#15)— "X 怎么样"第二高频
+3. 资讯舆情(#18)— 替代 LLM 乱用 WebSearch
+4. 同行对比(#16)— 多 symbol 编排,价值高但触发频率中等
+5. 投资组合分析(#17)— 需 trade scope token,触发频率最低
