@@ -54,9 +54,15 @@ LLM 看到"自选股 + X 数据"时,典型流程是双 / 三步:
 | "我的「X」分组" | --group-name X |
 | "分组 ID 12345" | --group 12345 |
 
-### 步骤 2:调用 CLI
+### 步骤 2:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`(--group / --group-name 过滤在 cli.py 内做)
+- 本机无 CLI / `binary_not_found` → 改用 `mcp__longbridge__watchlist`(返回全部分组,过滤由 LLM 在 datas 上做)
+- 用户问"热门清单 / 别人在看什么 / 公开分享" → 不是个人自选股,走 MCP 的 `sharelist_*` 工具
 
 ```bash
+# 默认 cli.py 调用
 python3 scripts/cli.py
 python3 scripts/cli.py --group-name 科技
 python3 scripts/cli.py --group 12345

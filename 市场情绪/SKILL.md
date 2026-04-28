@@ -57,9 +57,15 @@ LLM 把用户口语映射到 `--market`:
 
 `session` 不需要 market(返回所有市场)。
 
-### 步骤 3:调用 CLI
+### 步骤 3:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`
+- 本机无 CLI / `binary_not_found` → 改用 `mcp__longbridge__market_temperature` / `history_market_temperature` / `trading_session` / `trading_days`
+- 用户问财报 / IPO / 宏观日历等"事件维度" → CLI / 本 skill 不包,引导走 MCP 的 `mcp__longbridge__finance_calendar`
 
 ```bash
+# 默认 cli.py 调用
 python3 scripts/cli.py temp --market HK
 python3 scripts/cli.py session
 python3 scripts/cli.py days --market US --start 2026-04-28 --end 2026-05-31

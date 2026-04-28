@@ -77,7 +77,12 @@ default_install: true
 
 update-group / delete-group 必须先有 `group_id`。如果用户给了分组名,先用「自选股(只读)」skill 查 group_id,再用本 skill 操作。
 
-### 步骤 3:Dry-run 调用
+### 步骤 3:Dry-run 调用(CLI 必须 / MCP 不能)
+
+**路径选择(写类特殊规则)**:
+- **dry-run 必须走 cli.py**(MCP 是无 dry-run 概念的纯写工具,不能用 MCP 做 dry-run)
+- 不带 `--confirm` 的 cli.py 不会真正调用 longbridge,只生成 plan
+- 步骤 5 真正写入时再选 cli.py 还是 MCP(见步骤 5 路径选择)
 
 ```bash
 # create
@@ -109,13 +114,20 @@ python3 scripts/cli.py delete-group 12345 --purge  # 同时删股票
 > 即将向分组 12345 添加 NVDA.US, AAPL.US。是否确认执行?
 > 即将删除分组 12345 (--purge:同时删除分组内全部股票)。是否确认执行?
 
-### 步骤 5:Confirm 调用
+### 步骤 5:Confirm 调用(CLI 优先,必要时改 MCP)
 
-完全相同的参数,加 `--confirm`:
+用户已经在步骤 4 给出明确"确认"后,才走这一步。
+
+**路径选择**:
+- 本机有 CLI → `python3 scripts/cli.py ... --confirm`(完全相同的参数 + `--confirm`)
+- 本机无 CLI / `binary_not_found` → 改用 MCP 写工具:`mcp__longbridge__create_watchlist_group` / `update_watchlist_group` / `delete_watchlist_group`,但**只在确认通过后才能调**
 
 ```bash
+# 默认 cli.py 路径
 python3 scripts/cli.py create-group "科技股" --confirm
 ```
+
+**绝对不要把 dry-run 步骤(3)和 confirm 步骤(5)合并到一次 MCP 调用**——MCP 工具直接写,没有 dry-run 入口,合并即绕过用户确认。
 
 ### 步骤 6:回答用户
 

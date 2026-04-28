@@ -66,9 +66,15 @@ LLM 自有知识:
 - 行权价 / strike price → Strike
 - 到期日 / expiry → Expiry
 
-### 步骤 4:调用 CLI
+### 步骤 4:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`
+- 本机无 CLI / `binary_not_found` → 改用末尾「MCP 备选」段列出的 `mcp__longbridge__option_*` / `warrant_*` 系列
+- 用户问期权成交量异动等 CLI 不支持的指标 → 走 MCP 拓展(`option_volume` / `option_volume_daily`)
 
 ```bash
+# 默认 cli.py 调用
 python3 scripts/cli.py option-quote AAPL250117C190000 AAPL250117P190000
 python3 scripts/cli.py option-chain AAPL.US
 python3 scripts/cli.py option-chain AAPL.US --date 2025-01-17

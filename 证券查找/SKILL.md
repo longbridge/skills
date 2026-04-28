@@ -49,9 +49,18 @@ default_install: true
 - "A 股 / 沪深 / SH / SZ" → CN
 - "新加坡 / SG" → SG
 
-### 步骤 3:调用 CLI
+### 步骤 3:调用工具(securities 优先 MCP,participants CLI 优先)
+
+**路径选择**:
+- `participants` → cli.py 默认(本机更快)
+- `securities` → **优先走 MCP**(`mcp__longbridge__security_list`),原因:CLI 当前版本对 security-list 偶发后端 param_error,MCP 走 SDK 直连绕过 CLI 中间层
+- 本机无 CLI / `binary_not_found` → 全部改 MCP
 
 ```bash
+# participants 默认走 cli.py
+python3 scripts/cli.py participants
+
+# securities 数据量大,如果调用失败优先改走 MCP
 python3 scripts/cli.py securities --market HK --timeout 60
 python3 scripts/cli.py participants
 ```

@@ -77,10 +77,15 @@ leverage_ratio  conversion_ratio  balance_point
 ```
 未知 index 名称会被静默忽略,不报错。
 
-### 步骤 4:调用 CLI
+### 步骤 4:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 longbridge CLI → 默认走 `python3 scripts/cli.py`(subprocess 延迟低)
+- 本机无 CLI(`binary_not_found`)或 cli.py 报已知 bug → 改用末尾「MCP 备选」段列出的 `mcp__longbridge__*` 等效工具
+- 用户问的能力本 skill 没包(基本面 / 财报 / 财经日历 / 资讯 / 提醒等) → 不要在本 skill 里硬撑,告诉用户应该去哪个 skill 或哪个 MCP 工具
 
 ```bash
-# 基础查询(只取报价)
+# 默认 cli.py 调用 — 基础查询(只取报价)
 python3 scripts/cli.py -s NVDA.US -s 700.HK
 
 # 报价 + 静态参考

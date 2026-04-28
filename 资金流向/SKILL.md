@@ -64,10 +64,15 @@ default_install: true
 | 大单 / 中单 / 小单 / 分布 / 截面 | `--include-dist` |
 | 综合("看一下资金面") | `--include-dist` |
 
-### 步骤 4:调用 CLI
+### 步骤 4:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`
+- 本机无 CLI / `binary_not_found` → 改用 `mcp__longbridge__capital_flow`(+ `capital_distribution` 当 --include-dist 等价)
+- 用户问历史资金流(过去 X 天)→ 本 skill 与 MCP 都只查当日,告诉用户改走 K 线 / 行情查询看历史成交
 
 ```bash
-# 默认:只查时序
+# 默认 cli.py 调用 — 只查时序
 python3 scripts/cli.py -s NVDA.US
 
 # 同时查分布

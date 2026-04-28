@@ -46,9 +46,15 @@ default_install: true
 | "逐笔" / "tick" / "最近 N 笔成交" | trades(--count N) |
 | "全部盘口" / "微观结构全貌" | all |
 
-### 步骤 3:调用 CLI
+### 步骤 3:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`
+- 本机无 CLI(`binary_not_found`)→ 改用末尾「MCP 备选」段的 `mcp__longbridge__depth / brokers / trades`(`all` 组合在 MCP 上需要 LLM 自己合并三次调用)
+- 用户问空头持仓 / 期权成交量等 CLI 不支持的微观结构指标 → 直接走 MCP 拓展工具(见末尾备选段)
 
 ```bash
+# 默认 cli.py 调用
 python3 scripts/cli.py depth 700.HK
 python3 scripts/cli.py trades 700.HK --count 50
 python3 scripts/cli.py all 700.HK

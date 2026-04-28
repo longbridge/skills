@@ -62,9 +62,16 @@ default_install: true
 2. 市价单(MO):无需 --price,加 --order-type MO
 3. 返回 cash_max_qty(纯现金) 与 margin_max_qty(含融资);回答时要区分两者并提示融资风险
 
-### 步骤 3:调用 CLI
+### 步骤 3:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`
+- 本机无 CLI / `binary_not_found` → 改用末尾「MCP 备选」段的 `mcp__longbridge__stock_positions` / `account_balance` 等
+- 用户问账户 P/L 分析、币种汇率等 CLI 不支持的能力 → 走 MCP 拓展(`profit_analysis` / `exchange_rate`),回答时说明这是 MCP 拓展能力
+- **OAuth scope 提示**:本账户 token 若无交易 API scope,CLI 与 MCP 都报 auth_expired——两条路都不通,告诉用户重新授权
 
 ```bash
+# 默认 cli.py 调用
 python3 scripts/cli.py portfolio
 python3 scripts/cli.py positions
 python3 scripts/cli.py balance --currency USD

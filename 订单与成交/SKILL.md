@@ -62,9 +62,16 @@ default_install: true
 
 LLM 自己算日期(用 today 当前日期),cli.py 只校验格式 YYYY-MM-DD。
 
-### 步骤 3:调用 CLI
+### 步骤 3:调用工具(CLI 优先,必要时改 MCP)
+
+**路径选择**:
+- 本机有 CLI → 默认 `python3 scripts/cli.py`
+- 本机无 CLI / `binary_not_found` → 改用末尾「MCP 备选」段的 `mcp__longbridge__today_orders` / `history_orders` / `order_detail` 等
+- 用户问账单导出 / 报表期间统计 → CLI / 本 skill 不包,引导走 MCP 的 `statement_*` 工具
+- **OAuth scope 提示**:本账户 token 若无交易 API scope,两条路都报 auth_expired
 
 ```bash
+# 默认 cli.py 调用
 python3 scripts/cli.py orders
 python3 scripts/cli.py orders --history --start 2025-01-01 --end 2025-04-01 --symbol TSLA.US
 python3 scripts/cli.py order 20240101-123456789
