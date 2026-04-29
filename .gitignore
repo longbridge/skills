@@ -1,5 +1,32 @@
+# Python
 __pycache__/
-*.pyc
-.DS_Store
-.venv/
+*.py[cod]
+*$py.class
+*.egg-info/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local secrets / overrides
+.env
+.env.local
+*.local
+
+# Build artefacts
+dist/
+build/

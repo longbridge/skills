@@ -1,0 +1,30 @@
+{
+  "name": "longbridge-skills",
+  "owner": {
+    "name": "longbridge",
+    "url": "https://github.com/longbridge"
+  },
+  "metadata": {
+    "description": "Agent Skills for Longbridge securities — quotes, charts, fundamentals, valuation, portfolio analysis, news. Covers HK / US / A-share / SG markets with trilingual triggers (Simplified Chinese, Traditional Chinese, English).",
+    "version": "1.0.0",
+    "pluginRoot": "./"
+  },
+  "plugins": [
+    {
+      "name": "longbridge",
+      "source": "./",
+      "description": "Longbridge securities skill family: 17 skills covering market quotes, account read-only, watchlist mutations, and analysis-tier composites (valuation / fundamentals / peer comparison / portfolio / news). Multilingual triggers (Simplified Chinese, Traditional Chinese, English).",
+      "version": "1.0.0",
+      "author": {
+        "name": "longbridge",
+        "url": "https://longbridge.com"
+      },
+      "homepage": "https://github.com/longbridge/skills",
+      "repository": "https://github.com/longbridge/skills",
+      "license": "MIT",
+      "keywords": ["longbridge", "stocks", "quotes", "trading", "valuation", "fundamentals", "portfolio", "hk-stocks", "us-stocks", "a-shares"],
+      "category": "finance",
+      "skills": ["./skills/"]
+    }
+  ]
+}
