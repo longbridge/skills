@@ -1,6 +1,6 @@
 # `--index` field reference
 
-Pass any combination of these field names to `cli.py --index <a>,<b>,...`. Unknown names are silently ignored.
+Pass any comma-separated combination of these field names to `longbridge calc-index --index <a>,<b>,... <SYMBOL>... --format json`. Unknown names are silently ignored. Run `longbridge calc-index --help` to confirm the current default set and accepted spellings.
 
 ## Price / change
 

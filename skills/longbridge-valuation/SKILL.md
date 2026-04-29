@@ -15,7 +15,7 @@ metadata:
 
 # longbridge-valuation
 
-Prompt-only analysis skill. Orchestrates Longbridge MCP tools to answer *"is X expensive?"* with three dimensions: current snapshot, historical percentile, industry context. **No `cli.py`** — this skill works only when MCP is configured.
+Prompt-only analysis skill. Orchestrates Longbridge MCP tools to answer *"is X expensive?"* across three dimensions: current snapshot, historical percentile, industry context. **MCP is required** — the underlying tools (`valuation_history`, `industry_valuation_dist`) have no `longbridge` CLI equivalent.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
