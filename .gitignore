@@ -30,3 +30,6 @@ Thumbs.db
 # Build artefacts
 dist/
 build/
+
+# Internal historical specs (not shipped with the public plugin)
+docs/superpowers/

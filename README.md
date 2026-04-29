@@ -15,8 +15,7 @@ longbridge-skills/
 │   └── longbridge-catalyst-radar/
 ├── docs/
 │   ├── architecture.md                 # how multilingual + CLI/MCP routing work
-│   ├── install.md                      # full install / verify / FAQ
-│   └── superpowers/                    # historical specs + plans (audit trail)
+│   └── install.md                      # full install / verify / FAQ
 ├── scripts/validate-skills.py          # frontmatter + test harness
 ├── LICENSE                             # MIT
 └── README.md
@@ -115,12 +114,7 @@ Errors block (exit 1); soft warnings (e.g. SKILL.md body > 500 lines) return exi
 
 `longbridge-watchlist-admin` modifies the user's watchlist (no money, but persistent state). All mutations require `--confirm` plus a dry-run preview. See the skill's [SKILL.md](./skills/longbridge-watchlist-admin/SKILL.md).
 
-A `longbridge-trading` skill (place / cancel / replace orders) is **designed but intentionally not implemented** in this release; it requires further risk gating and a deployment-time soft cap. See [docs/superpowers/specs/2026-04-28-skill-11-trading-risk-design.md](./docs/superpowers/specs/2026-04-28-skill-11-trading-risk-design.md).
-
-## Historical / design docs
-
-- [docs/superpowers/specs/](./docs/superpowers/specs/) — 18 design specs (platform protocol + per-skill differences). Pre-rename: still references the original Chinese skill names; preserved as audit trail.
-- [docs/superpowers/plans/](./docs/superpowers/plans/) — implementation plans, in priority order.
+A `longbridge-trading` skill (place / cancel / replace orders) is **designed but intentionally not implemented** in this release; it requires further risk gating and a deployment-time soft cap.
 
 ## License
 
