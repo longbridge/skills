@@ -26,11 +26,6 @@ description: >
 **Do not trigger if:** user wants an initiation report.
 
 ## Output Language
-
-Follow the user's preference. Default to the language they write in. User can explicitly request a language (e.g. "write in Chinese" / "用中文写").
-
-Chart labels, axis titles, and file names are always in English regardless of output language.
-
 ## Data Sources
 
 Priority: **CLI (primary) → Web Search (supplement)**
