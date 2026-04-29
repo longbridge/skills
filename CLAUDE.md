@@ -4,7 +4,7 @@ This file briefs Claude Code when working **inside this repo** (adding new skill
 
 ## What this repo is
 
-19 [Agent Skills](https://agentskills.io/specification) that wrap the [Longbridge Securities](https://longbridge.com) platform — quotes, charts, fundamentals, valuation, news, watchlist, account analytics, etc. Multilingual triggers (Simplified Chinese / Traditional Chinese / English). All skills are **prompt-only** — no Python wrappers anywhere.
+19 [Agent Skills](https://agentskills.io/specification) that wrap the [Longbridge Securities](https://longbridge.com) platform — quotes, charts, fundamentals, valuation, news, watchlist, account analytics, etc. Multilingual triggers (Simplified Chinese / Traditional Chinese / English). The default style is **prompt-only** (SKILL.md tells the LLM what `longbridge ...` command to run); `scripts/` and `commands/` subfolders are allowed but should be opt-in for clear runtime needs (DOCX generation, chart helpers, slash commands), not as a wrapper-by-default.
 
 ## Layout
 
@@ -14,7 +14,9 @@ longbridge-skills/
 ├── skills/                            # 19 skill folders
 │   ├── <slug>/
 │   │   ├── SKILL.md                   # required
-│   │   └── references/                # optional, on-demand detail
+│   │   ├── references/                # optional — on-demand detail loaded by the LLM
+│   │   ├── scripts/                   # optional — Python helpers (e.g. DOCX, charts) when there's a clear runtime need
+│   │   └── commands/                  # optional — Claude Code slash commands (`/<command>`)
 │   └── ...
 ├── docs/
 │   ├── architecture.md                # multilingual + CLI/MCP routing design
@@ -78,21 +80,35 @@ Every SKILL.md must include this line right after the H1 + intro paragraph:
 
 This instructs the LLM to detect the user's input language and reply in the same language. Field tables and error reply tables must be 3-column (Simplified / Traditional / English).
 
-### 5. No Python wrappers
+### 5. CLI calls — prefer prompt-only, but `scripts/` is allowed when justified
 
-The repo is **fully prompt-only**. SKILL.md instructs the LLM to call the Longbridge CLI directly:
+**Default**: SKILL.md instructs the LLM to call the Longbridge CLI directly:
 
 ```bash
 longbridge <subcommand> --format json
 ```
 
-When SKILL.md is uncertain about the exact flag spelling, defaults, or argument order, it must instruct the LLM to run:
+When SKILL.md isn't sure about the exact flag spelling, defaults, or argument order, it must instruct the LLM to run:
 
 ```bash
 longbridge <subcommand> --help
 ```
 
 — the CLI's built-in help is the canonical source. **Do not hard-code flag names in SKILL.md** without telling the LLM to verify them against `--help` first; that creates version-coupling.
+
+**When `scripts/` is justified**: a Python (or other) helper is acceptable when the skill needs something the LLM can't (or shouldn't try to) do inline — for example:
+
+- DOCX / XLSX / PDF generation (`python-docx`, `openpyxl`, etc.)
+- Chart generation with bilingual fonts (`matplotlib` + CJK font fallback)
+- A safety-gate runtime check (e.g. dry-run + binary lock for mutating writes)
+
+In that case, keep the helper **narrow** (does one thing, accepts CLI args, no business templates baked in), document the inputs/outputs in SKILL.md, and still keep SKILL.md the primary instruction surface.
+
+**Anti-pattern**: `scripts/cli.py` that wraps the longbridge CLI itself by hard-coding flag names like `-s NVDA.US --include-static`. The longbridge CLI evolves; wrappers like that desync. The original repo had these and we removed them in favour of LLM + `--help` discovery.
+
+### 5b. `commands/` — optional Claude Code slash commands
+
+A `<skill>/commands/<name>.md` file declares a `/<name>` slash command that triggers this skill with optional arguments (`argument-hint`). Add only when a slash command is genuinely useful (e.g. *"give me an earnings update on TSLA.US"* → `/earnings TSLA.US`); otherwise rely on description triggers.
 
 ### 6. Path selection: CLI vs MCP
 
@@ -127,19 +143,20 @@ Keep SKILL.md under ~200 lines. Push detail (long field dictionaries, multi-page
 3. Body: H1, intro, **Response language** directive.
 4. Sections: `## When to use`, `## Workflow`, `## CLI` (with `longbridge ... --format json` examples and a "run `--help` if unsure" note), `## Output`, `## Error handling`, `## MCP fallback`, `## Related skills`, `## File layout`.
 5. If the body grows past ~200 lines, move detail into `references/<topic>.md`.
-6. Update [README.md](./README.md) "What's inside" table to include the new skill.
-7. Plugin marketplace auto-discovers it (`.claude-plugin/marketplace.json` declares `skills: ["./skills/"]`); no marketplace edit needed.
-8. Sanity-check by hand:
-   - Slug matches dir name? `ls skills/<slug>/` and `grep '^name:' skills/<slug>/SKILL.md`
-   - All three languages in triggers?
-   - Response language directive present?
-9. Commit. Don't include any `scripts/` directory — the repo is prompt-only.
+6. If the skill genuinely needs a runtime helper (DOCX / chart / safety gate), add `scripts/<helper>.py` and document inputs/outputs in SKILL.md. Otherwise stay prompt-only.
+7. If a slash command makes sense (`/<name> <arg>` → run this skill), add `commands/<name>.md` with `description:` and `argument-hint:`.
+8. Update [README.md](./README.md) "What's inside" table to include the new skill.
+9. Plugin marketplace auto-discovers it (`.claude-plugin/marketplace.json` declares `skills: ["./skills/"]`); no marketplace edit needed.
+10. Sanity-check by hand:
+    - Slug matches dir name? `ls skills/<slug>/` and `grep '^name:' skills/<slug>/SKILL.md`
+    - All three languages in triggers?
+    - Response language directive present?
 
 ## Anti-patterns to avoid
 
-- **Hard-coded flag names**: `python3 scripts/cli.py -s NVDA.US --include-static` — we do not have wrappers anymore. Always `longbridge <subcommand> ... --format json` and reference `longbridge ... --help` for canonical syntax.
+- **`scripts/cli.py` wrapping the longbridge CLI itself with hard-coded flags** (`-s NVDA.US --include-static`). The CLI evolves; wrappers desync. Either call `longbridge ... --format json` directly from the prompt, or — if you really need a helper — keep it narrow and pass arguments through (don't bake business templates into Python).
 - **Bilingual tables**: never write "Chinese / English" — must be 3-column (Simplified / Traditional / English).
-- **Skipping the Response language directive**: even prompt-only skills need it, otherwise output language is unstable.
+- **Skipping the Response language directive**: every SKILL.md needs it, otherwise output language is unstable.
 - **Combining preview + execute** for mutating skills: must be two distinct turns, separated by an explicit user confirmation.
 
 ## Reference docs

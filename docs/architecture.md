@@ -135,7 +135,7 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
 | `calc-index` | `mcp__longbridge__calc_indexes` |
 ```
 
-> **All 19 skills are now prompt-only** — every SKILL.md tells the LLM what `longbridge <subcommand>` to run; the LLM calls it directly and reads the raw JSON. There is no Python wrapper anywhere in the repo.
+> **Default style: prompt-only.** Every SKILL.md tells the LLM what `longbridge <subcommand>` to run; the LLM calls it directly and reads the raw JSON. A skill MAY ship a `scripts/<helper>.py` (or `commands/<slash>.md`) when there's a clear runtime need — DOCX/chart generation, format-specific output, or a safety gate. The helper should stay narrow and not re-wrap the longbridge CLI itself.
 >
 > When a SKILL.md is uncertain about exact flag names, defaults, or argument order (because the underlying CLI may have evolved), it instructs the LLM to run `longbridge <subcommand> --help` first — the CLI's built-in help is the canonical source.
 
@@ -213,7 +213,7 @@ In short: **when the local CLI is installed, it is faster than MCP.** MCP exists
 
 ### Shell exit / stderr is the glue between CLI and MCP
 
-For the 17 skills with no Python wrapper, the LLM reads:
+For prompt-only skills (the default style — no `scripts/cli.py` between the LLM and `longbridge`), the LLM reads:
 
 | Signal | LLM response |
 |---|---|
@@ -245,4 +245,4 @@ When adding or rewriting a skill, follow these:
 
 ---
 
-**One last note**: both mechanisms (multilingual + CLI/MCP) share the same essence — **express policy through prompt; push the decision to the LLM rather than coding it at runtime**. 17 of 19 skills are pure SKILL.md (no Python), and the remaining two keep a thin wrapper only where a runtime guarantee is needed (`longbridge-quote`'s multi-call envelope; `longbridge-watchlist-admin`'s dry-run + binary-lock gate). Adding a new policy almost always means editing one SKILL.md, not touching code.
+**One last note**: both mechanisms (multilingual + CLI/MCP) share the same essence — **express policy through prompt; push the decision to the LLM rather than coding it at runtime**. The default style across the repo is prompt-only SKILL.md. A small number of skills may add `scripts/` or `commands/` subfolders for narrow runtime needs (DOCX/chart generation, format helpers, slash commands) — those are opt-in, not required. Adding or changing a policy almost always means editing a SKILL.md, not touching code.
