@@ -9,8 +9,9 @@ Checks (per the Agent Skills spec at https://agentskills.io/specification):
 - SKILL.md body is ≤ 500 lines (a soft warning, per spec recommendation).
 - Marketplace declares the plugin under .claude-plugin/.
 
-For the two skills that still ship a Python wrapper (`longbridge-quote` and
-`longbridge-watchlist-admin`), runs their `scripts/test_cli.py` if present.
+All 19 skills are prompt-only — no Python tests to run. The skill folders should
+contain SKILL.md (and optionally references/ files); a `scripts/` dir would be a
+red flag suggesting drift back to a Python wrapper.
 
 Exit 0 = all clean. Exit 1 = at least one error. Exit 2 = warnings only.
 """

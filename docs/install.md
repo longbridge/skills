@@ -24,15 +24,9 @@ Different tiers of skills have different runtime dependencies — install only w
 
    A browser opens for authorisation. **Tick the "Trade" permission** if you want the account-tier skills (`positions / orders / watchlist / watchlist-admin`). Quote-only access is sufficient for market-data skills.
 
-3. **Python 3.8+** (`scripts/cli.py` is stdlib-only, no third-party dependencies):
+### Optional (required for the analysis tier — 6 skills)
 
-   ```bash
-   python3 --version  # ≥ 3.8
-   ```
-
-### Optional (required for the analysis tier — 5 skills)
-
-4. **Longbridge MCP server** (the analysis-tier skills `valuation / fundamental / news / peer-comparison / portfolio` depend entirely on this):
+**Longbridge MCP server** (the analysis-tier skills `valuation / fundamental / news / peer-comparison / portfolio / catalyst-radar` depend entirely on this):
 
    ```bash
    claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
@@ -184,24 +178,21 @@ All clean ✓
 The validator checks:
 - Every SKILL.md frontmatter conforms to spec (`name` is a valid slug, `description` ≤ 1024 chars).
 - `name` matches the parent directory name.
-- All read-tier `scripts/test_cli.py` files pass (~1 s per skill).
 
 ### 2. Real-account smoke test (only if you've installed the longbridge CLI and run `longbridge login`)
 
-From the repo root:
-
 ```bash
 # Quote
-python3 skills/longbridge-quote/scripts/cli.py -s NVDA.US
+longbridge quote NVDA.US --format json
 
 # 5 daily candles
-python3 skills/longbridge-kline/scripts/cli.py kline NVDA.US --period day --count 5
+longbridge kline NVDA.US --period day --count 5 --format json
 
 # Watchlist
-python3 skills/longbridge-watchlist/scripts/cli.py
+longbridge watchlist --format json
 ```
 
-Each call should return a JSON envelope with `"success": true`.
+Each call should return JSON. If you're unsure of an exact flag, run `longbridge <subcommand> --help` first — every subcommand self-documents.
 
 ### 3. End-to-end through Claude Code
 
@@ -274,9 +265,9 @@ claude mcp remove longbridge                          # remove the MCP registrat
   ```
 - MCP behaves the same — `claude mcp logout longbridge` and re-authorise on the next MCP tool call.
 
-### `binary_not_found`
+### `command not found: longbridge`
 
-`cli.py` cannot locate the `longbridge` binary. Two fixes:
+The shell cannot locate the `longbridge` binary. Two fixes:
 
 - **Recommended:** install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal).
 - **Alternative:** install MCP (`claude mcp add ...`) so the LLM falls back automatically.

@@ -43,71 +43,86 @@ For 2–5 symbol comparison defer to `longbridge-peer-comparison`. For historica
 
 If the market is ambiguous, **ask the user** rather than guessing.
 
+## Subcommands
+
+This skill orchestrates up to three Longbridge CLI subcommands and merges their JSON output:
+
+| CLI command | Returns |
+|---|---|
+| `longbridge quote <SYMBOL>... --format json` | last / open / high / low / prev_close / volume / turnover / trade_status |
+| `longbridge static <SYMBOL>... --format json` | name / industry / lot_size / total_shares / circulating_shares / EPS / BPS / dividend yield / currency |
+| `longbridge calc-index <SYMBOL>... --index pe,pb,... --format json` | per-symbol valuation indices (PE, PB, turnover_rate, total_market_value, change_rate, …) |
+
+> **If you're ever unsure of the exact flag names or defaults**, run `longbridge <subcommand> --help` first — every Longbridge CLI subcommand self-documents its arguments, defaults, and examples. Do not hard-code flag names from this SKILL.md if the CLI version may have evolved.
+
 ## Workflow
 
 1. Extract symbol(s) from the prompt; normalise each to `<CODE>.<MARKET>`.
-2. Decide which info is required:
-   - **Quote only** (price / change / volume) → default `cli.py -s ...`
-   - **Static** (industry, market cap, EPS, BPS, dividend yield) → add `--include-static`
-   - **Indices** (PE, PB, turnover rate, etc.) → add `--index pe,pb,turnover_rate,...`
-   - **Combined** ("full snapshot") → both flags
-3. Run via local CLI (preferred) or MCP fallback (see below).
-4. Translate JSON to natural language; cite the source as **Longbridge Securities** / **数据来源:长桥证券** / **數據來源:長橋證券**.
+2. Decide which subset of subcommands is needed:
+   - **Quote only** (price / change / volume) → just `longbridge quote …`
+   - **Static** (industry, market cap, EPS, BPS, dividend yield) → also `longbridge static …`
+   - **Indices** (PE, PB, turnover rate, etc.) → also `longbridge calc-index … --index pe,pb,…`
+   - **Combined** ("full snapshot") → all three
+3. Run them (parallel is fine when supported by the agent runtime). Each command returns a JSON array keyed by symbol.
+4. Merge the per-symbol rows by `symbol` into a single object per security.
+5. Translate to natural language; cite the source as **Longbridge Securities** / **数据来源:长桥证券** / **數據來源:長橋證券**.
 
-## CLI
+## CLI examples
 
 ```bash
-python3 scripts/cli.py -s NVDA.US -s 700.HK
-python3 scripts/cli.py -s 600519.SH --include-static
-python3 scripts/cli.py -s NVDA.US --index pe,pb,turnover_rate
-python3 scripts/cli.py -s NVDA.US --include-static --index pe,pb,total_market_value
+# Single-symbol quote
+longbridge quote NVDA.US --format json
+
+# Multi-symbol quote
+longbridge quote NVDA.US 700.HK 600519.SH --format json
+
+# Static reference
+longbridge static 600519.SH --format json
+
+# Valuation indices
+longbridge calc-index NVDA.US --index pe,pb,turnover_rate --format json
+
+# Full snapshot (run all three and merge)
+longbridge quote      NVDA.US                                        --format json
+longbridge static     NVDA.US                                        --format json
+longbridge calc-index NVDA.US --index pe,pb,total_market_value       --format json
 ```
 
-Common flags (all read-tier skills): `--longbridge-bin`, `--format json`, `--timeout 30`.
-
-Full `--index` field list: see [references/calc-index-fields.md](references/calc-index-fields.md).
+The `calc-index --index` parameter accepts a comma-separated list. Run `longbridge calc-index --help` to see the full set of supported field names; the cheat-sheet (with multilingual labels) lives in [references/calc-index-fields.md](references/calc-index-fields.md).
 
 ## Output
 
-Success envelope:
+Each subcommand returns a JSON array, one object per requested symbol. Missing per-symbol values appear as `"-"` or `null` (not an error). When merging, key by `symbol` and emit a structure like:
 
 ```json
 {
-  "success": true,
-  "source": "longbridge",
-  "skill": "longbridge-quote",
-  "skill_version": "1.0.0",
-  "count": 2,
-  "symbols": ["NVDA.US", "700.HK"],
-  "datas": [{"symbol": "NVDA.US", ...}, {"symbol": "700.HK", ...}]
+  "symbol": "NVDA.US",
+  "quote":      { "last": "...", "prev_close": "...", "volume": "...", ... },
+  "static":     { "industry": "...", "eps": "...", "bps": "...", ... },
+  "calc_index": { "pe_ttm": "...", "pb": "...", "total_market_value": "...", ... }
 }
 ```
 
-With `--include-static` / `--index`, each `datas[i]` becomes `{symbol, quote, static?, calc_index?}`. Missing per-symbol fields → `null` (not an error).
-
-Error envelope: `{success: false, error_kind, error, details}`. See error table below.
-
 ## Error handling
 
-| `error_kind` | What happened | Reply phrase (zh-Hans / zh-Hant / en) |
-|---|---|---|
-| `binary_not_found` | `longbridge` CLI not installed | "长桥 CLI 未安装,请先安装 longbridge-terminal" / "長橋 CLI 未安裝,請先安裝 longbridge-terminal" / "Longbridge CLI not installed: https://github.com/longportapp/longbridge-terminal" |
-| `auth_expired` | OAuth token expired | "长桥登录态过期,请跑 `longbridge login`" / "登入過期,請執行 `longbridge login`" / "Login expired — run `longbridge login`." |
-| `subprocess_failed` | Other CLI failure | "查询失败:<details.stderr>" / "查詢失敗:..." / "Query failed: <details.stderr>." |
-| `no_input` | Required arg missing | "请告诉我要查的股票" / "請告訴我要查的股票" / "Tell me which symbol to query." |
-| `invalid_input_format` | Symbol format wrong | "代码格式应为 `<CODE>.<MARKET>`,如 `NVDA.US`、`700.HK`" / similar zh-Hant / "Symbol must be `<CODE>.<MARKET>`, e.g. `NVDA.US`, `700.HK`." |
+| Situation | LLM response |
+|---|---|
+| Shell `command not found: longbridge` | Fall back to MCP if configured (see below); otherwise tell the user to install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal). |
+| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge login`. |
+| stderr contains `param_error` or "invalid symbol" | Re-check the `<CODE>.<MARKET>` format with the user. |
+| Other stderr | Surface verbatim — never silently retry. |
 
 ## MCP fallback
 
-If `cli.py` returns `binary_not_found` and the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, fall back to:
+If the CLI binary is unavailable and the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, fall back to:
 
-| CLI behaviour | MCP tool |
+| CLI subcommand | MCP tool |
 |---|---|
-| `quote` subprocess | `mcp__longbridge__quote` |
-| `static` subprocess | `mcp__longbridge__static_info` |
-| `calc-index` subprocess | `mcp__longbridge__calc_indexes` |
+| `quote` | `mcp__longbridge__quote` |
+| `static` | `mcp__longbridge__static_info` |
+| `calc-index` | `mcp__longbridge__calc_indexes` |
 
-MCP is slower (HTTP + OAuth) but works without a local binary.
+MCP is slower (HTTP + OAuth) but does not depend on a local binary.
 
 ## Related skills
 
@@ -117,7 +132,7 @@ MCP is slower (HTTP + OAuth) but works without a local binary.
 | Orderbook depth / brokers / ticks | `longbridge-depth` |
 | Capital flow / large-order distribution | `longbridge-capital-flow` |
 | 2–5 symbol comparison | `longbridge-peer-comparison` |
-| Historical PE/PB percentile | `longbridge-valuation` |
+| Historical PE / PB percentile | `longbridge-valuation` |
 | Earnings / fundamentals | `longbridge-fundamental` |
 | Recent news / filings | `longbridge-news` |
 
@@ -126,9 +141,8 @@ MCP is slower (HTTP + OAuth) but works without a local binary.
 ```
 longbridge-quote/
 ├── SKILL.md
-├── references/
-│   └── calc-index-fields.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── references/
+    └── calc-index-fields.md
 ```
+
+Prompt-only — no `scripts/`. Discover the latest CLI flags via `longbridge <subcommand> --help`.

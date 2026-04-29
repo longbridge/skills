@@ -63,16 +63,17 @@ When rendering the answer, the LLM consults the column matching the language det
 
 #### 4️⃣ Error-reply tables — three languages side by side
 
-Each read-tier skill's `## Error handling` section is also three columns. Example: [longbridge-quote/SKILL.md](../skills/longbridge-quote/SKILL.md):
+Each read-tier skill's `## Error handling` section maps a class of failure (recognised by either shell behaviour or stderr keyword) to a multilingual reply phrase. Example: [longbridge-quote/SKILL.md](../skills/longbridge-quote/SKILL.md):
 
 ```markdown
-| `error_kind` | What happened | Reply phrase (zh-Hans / zh-Hant / en) |
-|---|---|---|
-| `binary_not_found` | longbridge CLI not installed | "长桥 CLI 未安装,请先安装 longbridge-terminal" / "長橋 CLI 未安裝,請先安裝 longbridge-terminal" / "Longbridge CLI not installed: https://github.com/longportapp/longbridge-terminal" |
-| `auth_expired` | OAuth token expired | "长桥登录态过期,请跑 `longbridge login`" / "登入過期,請執行 `longbridge login`" / "Login expired — run `longbridge login`." |
+| Situation | LLM response |
+|---|---|
+| Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal). |
+| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge login`. |
+| stderr contains `param_error` or "invalid symbol" | Re-check the `<CODE>.<MARKET>` format with the user. |
 ```
 
-The 17 prompt-only skills surface raw `longbridge` stderr to the user. The two Python-wrapped skills (`longbridge-quote`, `longbridge-watchlist-admin`) collapse failures into stable `error_kind` enum values (`binary_not_found / auth_expired / subprocess_failed / no_input / invalid_input_format / empty_result / risk_block`); the LLM then looks up the matching language column. Either way, the user gets phrasing in their own language.
+The LLM reads `longbridge` stderr directly and translates the situation into the user's language. There are no canned `error_kind` enums to look up — the SKILL's table is a recipe for interpreting raw shell output.
 
 ### End-to-end flow
 
@@ -90,15 +91,15 @@ The 17 prompt-only skills surface raw `longbridge` stderr to the user. The two P
    3. Response-language directive tells the LLM:
         user typed zh-Hant → reply in zh-Hant
                             ↓
-              python3 scripts/cli.py -s NVDA.US     # quote-only wrapper
-                            ↓
-       cli.py returns JSON (English fields + canonical error_kind)
+     longbridge quote NVDA.US --format json   (LLM may also call `static`
+                            ↓                   and `calc-index` and merge by symbol)
+       longbridge CLI returns a JSON array (English fields)
                             ↓
    4. LLM uses zh-Hant + the multilingual tables in §3/§4 to compose:
    "NVDA 現在 209.27 美元,當日下跌 -2.86%。數據來源:長橋證券。"
 ```
 
-**The entire pipeline runs in the prompt layer.** Neither the raw `longbridge` CLI nor the two Python wrappers contain any i18n code. Adding a new language (Japanese, Korean, Spanish, …) means adding triggers to the description plus another column to the tables — **no code changes required**.
+**The entire pipeline runs in the prompt layer.** The Longbridge CLI itself contains no i18n logic — JSON is always English. Adding a new language (Japanese, Korean, Spanish, …) means adding triggers to the description plus another column to the tables — **no code changes required**.
 
 ---
 
@@ -134,11 +135,9 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
 | `calc-index` | `mcp__longbridge__calc_indexes` |
 ```
 
-> **Two skills retain a Python wrapper** (`scripts/cli.py`):
-> - **`longbridge-quote`** — merges `quote` + `static` + `calc-index` outputs into one envelope so the LLM doesn't lose fields when stitching three subprocess calls.
-> - **`longbridge-watchlist-admin`** — enforces a dry-run + `--confirm` gate plus a binary-lock guard. The wrapper turns the safety contract from a prompt convention into a runtime check.
+> **All 19 skills are now prompt-only** — every SKILL.md tells the LLM what `longbridge <subcommand>` to run; the LLM calls it directly and reads the raw JSON. There is no Python wrapper anywhere in the repo.
 >
-> The other 17 skills are pure prompt orchestration: SKILL.md tells the LLM what `longbridge ...` command to run; the LLM calls it directly and reads the raw JSON.
+> When a SKILL.md is uncertain about exact flag names, defaults, or argument order (because the underlying CLI may have evolved), it instructs the LLM to run `longbridge <subcommand> --help` first — the CLI's built-in help is the canonical source.
 
 ### Four exceptions (each `SKILL.md` overrides the default explicitly)
 
@@ -147,7 +146,7 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
 | **`longbridge-security-list securities`** | **MCP-preferred** | The current `longbridge` CLI hits an intermittent `param_error` on the security-list endpoint; MCP calls the SDK directly and avoids the CLI middle layer | [security-list/SKILL.md `## Path-selection note`](../skills/longbridge-security-list/SKILL.md) |
 | **`longbridge-subscriptions`** | **CLI-only** | MCP is stateless HTTP — there is **no WebSocket session concept**, hence no equivalent tool | [subscriptions/SKILL.md `## Local-only`](../skills/longbridge-subscriptions/SKILL.md) |
 | **Six analysis-tier skills** (valuation / fundamental / news / peer-comparison / portfolio / catalyst-radar) | **MCP-only** | `requires_mcp: true` in frontmatter; they invoke MCP-only tools (`valuation_history` / `profit_analysis` / `news` / `topic`, …) that the CLI does not expose | each analysis-tier SKILL.md `## Prerequisite` |
-| **`longbridge-watchlist-admin` dry-run** | **CLI required** | Dry-run is the SKILL-layer confirmation gate — MCP write tools have no dry-run concept. Hybrid: dry-run goes through `cli.py` (no `--confirm`); after the user confirms, the actual write may go via `cli.py --confirm` or an MCP write tool | [watchlist-admin/SKILL.md `## Two-step protocol`](../skills/longbridge-watchlist-admin/SKILL.md) |
+| **`longbridge-watchlist-admin`** | **Two-turn protocol** | Mutating writes need an explicit confirmation gate. The SKILL preview the action in plain language and waits for user confirmation before issuing `longbridge watchlist <create / update / delete>` (or the MCP equivalent). The CLI's `delete` subcommand also has its own built-in confirmation prompt | [watchlist-admin/SKILL.md `## Two-step protocol`](../skills/longbridge-watchlist-admin/SKILL.md) |
 
 ### Decision flow
 
@@ -155,23 +154,20 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
                 User prompt arrives
                        ↓
   ┌─ Analysis-tier skill? (valuation / fundamental / news / peer / portfolio / catalyst-radar)
-  │    └─ yes ──→ MCP-only (no cli.py / no direct CLI)
+  │    └─ yes ──→ MCP-only — the underlying tools have no CLI equivalent
   │            └─ MCP unconfigured? → ask user to run `claude mcp add longbridge ...`
   │    └─ no ──→ continue
   ↓
-  ┌─ Mutating skill? (watchlist-admin — keeps cli.py for the safety gate)
-  │    └─ yes ──→ ① dry-run via `python3 scripts/cli.py ...` (no --confirm)
-  │              ② LLM reads the plan back, waits for explicit confirmation
+  ┌─ Mutating skill? (watchlist-admin — SKILL-layer two-step protocol)
+  │    └─ yes ──→ ① preview the plan in plain language (no CLI call yet)
+  │              ② wait for explicit confirmation
   │                 (matches "确认" / "yes" / "是的" / "confirm")
-  │              ③ once confirmed → `cli.py --confirm` OR MCP write tool
+  │              ③ once confirmed → run `longbridge watchlist <create|update|delete> ...`
+  │                 (or the equivalent MCP write tool)
   │    └─ no ──→ continue
   ↓
   ┌─ Skill declares MCP-preferred? (security-list securities)
   │    └─ yes ──→ go to MCP directly
-  │    └─ no ──→ continue
-  ↓
-  ┌─ Skill ships a Python wrapper? (longbridge-quote)
-  │    └─ yes ──→ run `python3 scripts/cli.py ...` for the merged envelope
   │    └─ no ──→ run `longbridge <subcommand> ... --format json` directly
   ↓
   Result handling
@@ -244,8 +240,8 @@ When adding or rewriting a skill, follow these:
    - CLI-only → add `## Local-only` explaining why MCP has no equivalent
    - MCP-only (analysis tier) → frontmatter `requires_mcp: true` + `## Prerequisite` mentioning `claude mcp add longbridge ...`
    - Mutating → add `## Two-step protocol (mandatory)` describing the dry-run + confirm flow
-5. **`cli.py` envelope fields are mandatory** — `success / source: "longbridge" / skill / skill_version / datas` on success; `success: false / error_kind / error / details` on failure. `error_kind` must be one of the seven enum values.
-6. **`error_kind=binary_not_found` is the path-switch signal** — `cli.py` must return it when `shutil.which()` returns `None`, so the LLM can correctly fall back to MCP.
+5. **No Python wrappers** — point the LLM at the raw `longbridge <subcommand>` and tell it to run `longbridge <subcommand> --help` whenever flag names might have evolved. Hard-coding flag names in code (or a SKILL.md cheat sheet) creates version-coupling that we explicitly avoid.
+6. **Shell `command not found` is the path-switch signal** — when `longbridge` isn't on `PATH`, the LLM falls back to MCP (or asks the user to install longbridge-terminal). Other stderr (auth / param / etc.) is surfaced verbatim — no silent retries.
 
 ---
 
