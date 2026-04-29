@@ -15,6 +15,7 @@ description: >
 # Earnings Update Skill
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English. Both the DOCX report body and the in-chat summary follow the user's language; chart labels, axis titles, and file names always stay in English.
+
 ## When to Use
 
 | Trigger | Example |
@@ -25,7 +26,6 @@ description: >
 
 **Do not trigger if:** user wants an initiation report.
 
-## Output Language
 ## Data Sources
 
 Priority: **CLI (primary) → Web Search (supplement)**
@@ -83,6 +83,43 @@ See [references/summary-card-spec.md](references/summary-card-spec.md)
 2. **Conversation summary**: 8-module structured output directly in chat
 
 **IMPORTANT**: Do NOT append a Sources section or reference links to the conversation output. All citations belong in the DOCX only.
+
+## MCP fallback
+
+If the local `longbridge` CLI is unavailable (`command not found: longbridge`) and the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, the same data is reachable through MCP. Subcommand → MCP tool mapping:
+
+| CLI subcommand | MCP tool |
+|---|---|
+| `longbridge filing` | `mcp__longbridge__filings` (and related filing tools) |
+| `longbridge financial-report` | `mcp__longbridge__financial_report` |
+| `longbridge consensus` | `mcp__longbridge__consensus` |
+| `longbridge forecast-eps` | `mcp__longbridge__forecast_eps` |
+| `longbridge quote` | `mcp__longbridge__quote` |
+| `longbridge calc-index` | `mcp__longbridge__calc_indexes` |
+| `longbridge kline` | `mcp__longbridge__candlesticks` / `history_candlesticks_by_offset` / `history_candlesticks_by_date` |
+| `longbridge institution-rating` | `mcp__longbridge__institution_rating` |
+| `longbridge news` | `mcp__longbridge__news` |
+
+MCP-only extras worth pulling in for Step 3 valuation:
+
+- `mcp__longbridge__valuation_history` — historical PE/PB time series for percentile context
+- `mcp__longbridge__industry_valuation_dist` — industry-relative position
+- `mcp__longbridge__profit_analysis` / `profit_analysis_detail` — only if the user wants a portfolio-level P&L view alongside the single-name update
+
+## Related skills
+
+This skill is the heaviest in the family (institutional-grade 8–12 page DOCX). For lighter or differently-framed asks, defer to a sibling:
+
+| User asks for ... | Use |
+|---|---|
+| Historical PE/PB percentile, "is X expensive vs its own history / industry?" | [`longbridge-valuation`](../longbridge-valuation) |
+| 5-dimension KPI overview (revenue / margins / ROE / dividend / consensus) without a DOCX deliverable | [`longbridge-fundamental`](../longbridge-fundamental) |
+| Cross-symbol matrix, "X vs Y vs Z" | [`longbridge-peer-comparison`](../longbridge-peer-comparison) |
+| Classified news + filings + community sentiment for a single name | [`longbridge-news`](../longbridge-news) |
+| Daily incremental briefing across the user's watchlist | [`longbridge-catalyst-radar`](../longbridge-catalyst-radar) |
+| Live quote / valuation indices | [`longbridge-quote`](../longbridge-quote) |
+
+If the user wants the full earnings DOCX *plus* one of the above (e.g. "earnings update on TSLA and how it compares to Ford"), do this skill first, then chain to the other.
 
 ## Reference Files
 
