@@ -1,128 +1,104 @@
 # Longbridge Skills
 
-[Agent Skills](https://agentskills.io/specification) for [Longbridge Securities](https://longbridge.com) — query market quotes, charts, orderbook depth, fundamentals, news, and analyse personal portfolios across HK / US / A-share / SG markets.
+Make your AI assistant fluent in [Longbridge Securities](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-**19 skills · multilingual triggers (Simplified Chinese / Traditional Chinese / English) · supports two install paths (single-skill symlink + plugin marketplace).**
+19 skills covering quotes, charts, fundamentals, valuation, news, and portfolio analysis across HK / US / A-share / Singapore markets.
 
-```text
-longbridge-skills/
-├── .claude-plugin/marketplace.json     # plugin entry for /plugin install
-├── skills/                             # 19 skill folders, lowercase ASCII slugs
-│   ├── longbridge/                     # platform foundation (SDK / CLI / MCP / LLM integration)
-│   ├── longbridge-quote/
-│   ├── longbridge-kline/
-│   ├── ...
-│   ├── longbridge-portfolio/
-│   └── longbridge-catalyst-radar/
-├── docs/
-│   ├── architecture.md                 # how multilingual + CLI/MCP routing work
-│   └── install.md                      # full install / verify / FAQ
-├── scripts/validate-skills.py          # frontmatter + test harness
-├── LICENSE                             # MIT
-└── README.md
+---
+
+## Install
+
+Pick whichever fits your workflow:
+
+### with `npx` (one line, no setup)
+
+```bash
+# Install everything
+npx skills add longbridge/skills
+
+# Or just one skill
+npx skills add longbridge/skills --skill longbridge-quote
 ```
 
-## Quick install
+### with `bun`
 
-Two install paths — full guide in [docs/install.md](./docs/install.md).
+```bash
+bunx skills add longbridge/skills
+bunx skills add longbridge/skills --skill longbridge-quote
+```
 
-**A. Plugin marketplace** (one shot, all 17 skills):
+### inside Claude Code (plugin marketplace)
 
 ```text
 /plugin marketplace add longbridge/skills
 /plugin install longbridge@longbridge-skills
 ```
 
-**B. Single-skill symlink** (cherry-pick):
+### manual symlink (clone first)
 
 ```bash
-ln -s "$PWD/skills/longbridge-quote" ~/.claude/skills/longbridge-quote
-```
-
-Or batch-symlink all 17:
-
-```bash
-for d in "$PWD"/skills/*; do
-  ln -sfn "$d" "$HOME/.claude/skills/$(basename $d)"
+git clone https://github.com/longbridge/skills.git
+cd skills
+for d in skills/*; do
+  ln -sfn "$PWD/$d" ~/.claude/skills/$(basename $d)
 done
 ```
 
-### Prerequisites
+📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
 
-| Tier | Needs |
+---
+
+## What you can ask
+
+Once installed, talk to your AI assistant naturally. Examples:
+
+- *"NVDA 现在多少钱"* / *"What's NVDA's price?"* / *"700.HK 報價"*
+- *"我的持仓表现如何"* / *"How is my portfolio doing this month?"*
+- *"贵州茅台估值贵不贵"* / *"Is GOOG expensive vs history?"*
+- *"NVDA AMD 哪个增速快"* / *"Compare AAPL vs MSFT vs GOOG"*
+- *"今天有什么要关注的"* / *"Give me my morning briefing"*
+- *"特斯拉最近怎么了"* / *"Recent news on TSLA"*
+
+The right skill is picked automatically based on your question, in the language you used.
+
+---
+
+## What's inside
+
+| Group | Skills |
 |---|---|
-| Read tier (12 skills) | `longbridge` CLI installed + `longbridge login` (with trade scope for account skills); Python 3.8+ |
-| Analysis tier (5 skills) | `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` |
+| **Foundation** | [`longbridge`](./skills/longbridge) — Longbridge CLI / Python SDK / Rust SDK / MCP integration reference |
+| **Live market data** | [`longbridge-quote`](./skills/longbridge-quote) · [`longbridge-kline`](./skills/longbridge-kline) · [`longbridge-depth`](./skills/longbridge-depth) · [`longbridge-capital-flow`](./skills/longbridge-capital-flow) · [`longbridge-market-temp`](./skills/longbridge-market-temp) · [`longbridge-derivatives`](./skills/longbridge-derivatives) · [`longbridge-security-list`](./skills/longbridge-security-list) |
+| **Your account** | [`longbridge-positions`](./skills/longbridge-positions) · [`longbridge-orders`](./skills/longbridge-orders) · [`longbridge-watchlist`](./skills/longbridge-watchlist) · [`longbridge-watchlist-admin`](./skills/longbridge-watchlist-admin) · [`longbridge-subscriptions`](./skills/longbridge-subscriptions) |
+| **Smart analysis** | [`longbridge-valuation`](./skills/longbridge-valuation) · [`longbridge-fundamental`](./skills/longbridge-fundamental) · [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) · [`longbridge-portfolio`](./skills/longbridge-portfolio) · [`longbridge-news`](./skills/longbridge-news) · [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) |
 
-## Skill family
+Click any name above to see what it can do.
 
-### Foundation (1) — Longbridge platform reference
+---
 
-| Skill | Purpose |
-|---|---|
-| [`longbridge`](./skills/longbridge) | Platform foundation: CLI subcommands, Python / Rust SDK, MCP server, LLM/RAG integration. Reference docs live under `references/{cli,python-sdk,rust-sdk,mcp,setup,llm}.md` |
+## Prerequisites
 
-### Read tier (12) — wraps the local `longbridge` CLI; MCP fallback
+You need one or both of these set up:
 
-| Skill | Purpose |
-|---|---|
-| [`longbridge-quote`](./skills/longbridge-quote) | Real-time quotes, static info, valuation indices |
-| [`longbridge-kline`](./skills/longbridge-kline) | Candlestick (1m → year) + intraday |
-| [`longbridge-depth`](./skills/longbridge-depth) | 5-level orderbook + brokers (HK) + tick trades |
-| [`longbridge-capital-flow`](./skills/longbridge-capital-flow) | Capital flow + large/medium/small order distribution |
-| [`longbridge-market-temp`](./skills/longbridge-market-temp) | Market temperature + sessions + trading days |
-| [`longbridge-derivatives`](./skills/longbridge-derivatives) | Options + warrants + chain |
-| [`longbridge-security-list`](./skills/longbridge-security-list) | Securities catalog + broker participants |
-| [`longbridge-positions`](./skills/longbridge-positions) | Stock / fund holdings + balance + max-buy quantity |
-| [`longbridge-orders`](./skills/longbridge-orders) | Today / history orders + executions + cash flow |
-| [`longbridge-watchlist`](./skills/longbridge-watchlist) | Read-only watchlist groups |
-| [`longbridge-watchlist-admin`](./skills/longbridge-watchlist-admin) | Watchlist mutations (with dry-run + confirm) |
-| [`longbridge-subscriptions`](./skills/longbridge-subscriptions) | Active WebSocket subscriptions |
+- **Longbridge CLI** (for live quotes, your holdings, watchlist) — install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal), then run `longbridge login`.
+- **Longbridge MCP** (for valuation / news / fundamentals / portfolio analysis) — `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`.
 
-### Analysis tier (6) — `prompt-only`, **requires longbridge MCP**
+Both authenticate with your Longbridge account. Pick "trade" permission during login if you want account-level skills (positions, orders, P&L).
 
-| Skill | High-frequency questions |
-|---|---|
-| [`longbridge-valuation`](./skills/longbridge-valuation) | "Is X expensive?" PE/PB historical + industry percentiles |
-| [`longbridge-fundamental`](./skills/longbridge-fundamental) | "How is X's business?" 5-dimension KPIs |
-| [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) | "X vs Y vs Z?" 2–5 symbol matrix |
-| [`longbridge-portfolio`](./skills/longbridge-portfolio) | "How is my account?" account-level analysis (trade scope) |
-| [`longbridge-news`](./skills/longbridge-news) | "What's the news on X?" classified news + filings + community |
-| [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) | "What should I watch today?" incremental morning / evening briefing across the watchlist; 7-dimension catalyst scan |
+---
 
-## Architecture
+## Notes
 
-Two cross-cutting design decisions are documented in [docs/architecture.md](./docs/architecture.md):
+- **No investment advice.** Skills surface data, never recommend buy/sell.
+- **Your data stays yours.** Account values are private and only shown to you.
+- **Languages:** ask in 简体中文 / 繁體中文 / English — answers come back in the same language.
 
-- **Trilingual support** (Simplified Chinese / Traditional Chinese / English) — implemented entirely in prompt: triggers in `description`, `Response language` directive at top of each SKILL.md body, three-column field & error tables. Zero i18n code.
-- **CLI vs MCP routing** — when each skill prefers `cli.py` (local subprocess) vs the official MCP server, plus four exception classes (security-list, subscriptions, analysis-tier, watchlist-admin dry-run).
+---
 
-## Validate
+## For developers
 
-```bash
-python3 scripts/validate-skills.py
-```
+- [docs/architecture.md](./docs/architecture.md) — how the multilingual triggers + CLI/MCP routing work under the hood
+- [docs/install.md](./docs/install.md) — every install path, verification, troubleshooting
+- `python3 scripts/validate-skills.py` — sanity-check all 19 skills locally
 
-Checks:
-- Each SKILL.md frontmatter conforms to spec (slug, description ≤ 1024)
-- `name` matches the parent directory name
-- All read-tier `scripts/test_cli.py` pass
-
-Errors block (exit 1); soft warnings (e.g. SKILL.md body > 500 lines) return exit 2.
-
-## Output policy (all skills)
-
-- **Data attribution**: cite "Longbridge Securities" / "数据来源:长桥证券" / "數據來源:長橋證券" when quoting prices, P&L, or valuation figures.
-- **No investment advice**: analysis-tier skills end with "not investment advice" / "不构成投资建议". Read-tier may report numbers without the disclaim, but never recommend buy/sell.
-- **Symbol convention**: `<CODE>.<MARKET>`, e.g. `NVDA.US`, `700.HK`, `600519.SH`, `300750.SZ`, `D05.SG`.
-- **Response language**: each skill responds in the user's input language.
-
-## Mutating skills
-
-`longbridge-watchlist-admin` modifies the user's watchlist (no money, but persistent state). All mutations require `--confirm` plus a dry-run preview. See the skill's [SKILL.md](./skills/longbridge-watchlist-admin/SKILL.md).
-
-A `longbridge-trading` skill (place / cancel / replace orders) is **designed but intentionally not implemented** in this release; it requires further risk gating and a deployment-time soft cap.
-
-## License
-
-MIT — see [LICENSE](./LICENSE).
+License: [MIT](./LICENSE).

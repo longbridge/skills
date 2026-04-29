@@ -44,44 +44,61 @@
 
 ---
 
-## 三种安装方式 / Three install paths
+## 四种安装方式 / Four install paths
 
-### 方式 A:Claude Code 插件市场(推荐 — 一次装齐 17 个)
+### 方式 A:`npx` / `bun`(推荐,最简)
 
-#### A1. 远程仓库(已 push 到 GitHub 后)
+**装全部 19 个 skill**:
 
 ```bash
-# 在 Claude Code 内
+npx skills add longbridge/skills            # 用 npx
+bunx skills add longbridge/skills           # 用 bun(等价于 npx)
+```
+
+**只装某几个**:
+
+```bash
+npx skills add longbridge/skills --skill longbridge-quote
+npx skills add longbridge/skills --skill longbridge-portfolio --skill longbridge-news
+```
+
+会下载到 `~/.claude/skills/`(默认),Claude Code 重开会话就能用。
+
+> `npx skills` / `bunx skills` 是社区通用的 Agent Skills 安装器,支持任何符合 Agent Skills 规约的 GitHub 仓库。详见 [agentskills.io](https://agentskills.io)。
+
+---
+
+### 方式 B:Claude Code 插件市场(整套带 marketplace 元信息)
+
+**B1. 远程仓库**:
+
+```text
 /plugin marketplace add longbridge/skills
 /plugin install longbridge@longbridge-skills
 ```
 
-#### A2. 本地路径(开发 / 内测期间)
+**B2. 本地路径(开发 / 内测期)**:
 
-仓库还没 push 到 GitHub?直接指本地目录:
-
-```bash
-# 在 Claude Code 内(替换为你机器上的实际路径)
+```text
 /plugin marketplace add /Users/hogan/work/longbridge/longbridge-skills
 /plugin install longbridge@longbridge-skills
 ```
 
 > `longbridge` 是插件名(对应 `.claude-plugin/marketplace.json` 里的 `plugins[0].name`);`longbridge-skills` 是 marketplace 名(对应顶层 `name` 字段)。
 
-#### A3. 验证已安装
+**B3. 验证已安装**:
 
-```bash
+```text
 /plugin list
-# 应能看到 longbridge@longbridge-skills 已 enabled
 ```
 
-新开 Claude Code 会话后,问一句 *"NVDA 现在多少钱"* 验证 skill 触发。
+应能看到 `longbridge@longbridge-skills` 已 enabled。新开会话后问一句 *"NVDA 现在多少钱"* 验证 skill 触发。
 
 ---
 
-### 方式 B:Symlink 单独 skill 到 `~/.claude/skills/`(挑用)
+### 方式 C:Symlink 单独 skill 到 `~/.claude/skills/`(挑用,要求先 clone 仓库)
 
-适合只想装其中几个 skill 而不是全部 17 个。
+适合只想装其中几个 skill 而不是全部 19 个。
 
 ```bash
 mkdir -p ~/.claude/skills
@@ -97,7 +114,7 @@ ln -s /Users/hogan/work/longbridge/longbridge-skills/skills/longbridge-kline \
 # ... 按需复制其它
 ```
 
-**批量软链全部 17 个**:
+**批量软链全部 19 个**:
 
 ```bash
 SRC="/Users/hogan/work/longbridge/longbridge-skills/skills"
@@ -115,7 +132,7 @@ ls -la ~/.claude/skills/ | grep longbridge-
 **`longbridge-watchlist-admin`** 会改用户的自选股状态。批量软链脚本会装它,但它依赖 SKILL.md 里的 dry-run + confirm 双步流程才安全。如果手动审计觉得不放心,可以**先不装它**:
 
 ```bash
-# 装其它 11 个,跳过 watchlist-admin
+# 装其它 18 个,跳过 watchlist-admin
 SRC="/Users/hogan/work/longbridge/longbridge-skills/skills"
 for d in "$SRC"/*; do
   slug=$(basename "$d")
@@ -128,7 +145,7 @@ done
 
 ---
 
-### 方式 C:其它 agent 产品
+### 方式 D:其它 agent 产品
 
 skill 文件是纯 Markdown + Python,可直接拷到任何兼容 Agent Skills 规约的 agent。只是默认目录不同:
 
@@ -210,17 +227,24 @@ LLM 应在回答里包含 *"数据来源:长桥证券"* / *"Source: Longbridge S
 
 ## 卸载 / Uninstall
 
-### 方式 A 装的(插件市场)
+### 方式 A(npx / bun)装的
 
 ```bash
+npx skills remove longbridge/skills            # 全卸
+npx skills remove longbridge/skills --skill longbridge-quote   # 卸某个
+```
+
+### 方式 B(插件市场)装的
+
+```text
 /plugin uninstall longbridge@longbridge-skills
 /plugin marketplace remove longbridge-skills          # 可选,移除市场注册
 ```
 
-### 方式 B 装的(symlink)
+### 方式 C(symlink)装的
 
 ```bash
-rm ~/.claude/skills/longbridge-*
+rm ~/.claude/skills/longbridge ~/.claude/skills/longbridge-*
 # 验证已清理
 ls ~/.claude/skills/
 ```
