@@ -195,10 +195,23 @@ Each reply should include "Source: Longbridge Securities" / "数据来源:长桥
 
 ### Path A (npx / bun) installs
 
+`npx skills remove` expects the **installed skill name** (e.g. `longbridge-quote`), not the GitHub repo path used at install. List first, then remove by name:
+
 ```bash
-npx skills remove longbridge/skills                              # remove all
-npx skills remove longbridge/skills --skill longbridge-quote     # remove one
+# Inspect what's installed
+npx skills list
+
+# Remove one
+npx skills remove longbridge-quote
+
+# Remove several at once
+npx skills remove longbridge longbridge-quote longbridge-kline longbridge-depth ...
+
+# Remove all longbridge-* skills in one shot
+npx skills list 2>/dev/null | grep -E '^longbridge(-|$)' | xargs -r npx skills remove
 ```
+
+If `npx skills remove` ever misbehaves, the cleanest fallback is plain `rm` — see Path C below.
 
 ### Path B (plugin marketplace) installs
 
@@ -207,12 +220,14 @@ npx skills remove longbridge/skills --skill longbridge-quote     # remove one
 /plugin marketplace remove longbridge-skills          # optional — drop the marketplace registration
 ```
 
-### Path C (symlink) installs
+### Path C (symlink) installs / fallback when other methods misbehave
 
 ```bash
-rm ~/.claude/skills/longbridge ~/.claude/skills/longbridge-*
+rm -rf ~/.claude/skills/longbridge ~/.claude/skills/longbridge-*
 ls ~/.claude/skills/                                  # verify
 ```
+
+This works regardless of how the skills were originally installed (npx / bun / marketplace / manual symlink) since they all live under `~/.claude/skills/`.
 
 ### Revoke Longbridge CLI authorisation
 
