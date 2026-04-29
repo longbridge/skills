@@ -53,12 +53,12 @@ Format: `<TICKER><YYMMDD><C|P><STRIKE×1000, 8 digits>`. Example: `AAPL240119C19
 ## CLI
 
 ```bash
-python3 scripts/cli.py option-quote   AAPL250117C190000 AAPL250117P190000
-python3 scripts/cli.py option-chain   AAPL.US
-python3 scripts/cli.py option-chain   AAPL.US --date 2025-01-17
-python3 scripts/cli.py warrant-quote  12345.HK
-python3 scripts/cli.py warrant-list   700.HK
-python3 scripts/cli.py warrant-issuers
+longbridge option-quote   AAPL250117C190000 AAPL250117P190000  --format json
+longbridge option-chain   AAPL.US                              --format json
+longbridge option-chain   AAPL.US --date 2025-01-17            --format json
+longbridge warrant-quote  12345.HK                             --format json
+longbridge warrant-list   700.HK                               --format json
+longbridge warrant-issuers                                     --format json
 ```
 
 ## Output (per subcommand)
@@ -95,12 +95,13 @@ MCP-only extensions: `mcp__longbridge__option_volume`, `mcp__longbridge__option_
 - Underlying candlesticks → `longbridge-kline`
 - Underlying orderbook depth → `longbridge-depth`
 
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. *"no quote access"* on `option-quote` indicates the account lacks the options market-data subscription — surface the message verbatim and tell the user to upgrade quote permissions on Longbridge.
+
 ## File layout
 
 ```
 longbridge-derivatives/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

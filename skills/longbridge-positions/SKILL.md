@@ -21,67 +21,70 @@ Read-only account snapshot — what the user holds, how much cash, what they can
 
 ## Subcommands
 
-| Subcommand | Returns |
+| CLI command | Returns |
 |---|---|
-| `portfolio` | Combined `{positions, fund_positions, balance}` in one call. |
-| `positions` | Stock holdings array. |
-| `funds` | Fund holdings array. |
-| `balance [--currency USD|HKD|CNY|SGD]` | Cash balance + financing limits per currency. |
-| `margin-ratio <symbol>` | Initial / maintenance / forced-liquidation factors. |
-| `max-qty <symbol> --side buy|sell [--price <p>] [--order-type LO|MO|ELO|ALO]` | Estimated max purchasable / sellable quantity (cash vs margin). |
+| `longbridge portfolio --format json` | Combined holdings + funds + balance + P/L distribution. |
+| `longbridge positions --format json` | Stock holdings array. |
+| `longbridge fund-positions --format json` | Fund holdings array. |
+| `longbridge balance [--currency USD\|HKD\|CNY\|SGD] --format json` | Cash balance + financing limits per currency. |
+| `longbridge margin-ratio <SYMBOL> --format json` | Initial / maintenance / forced-liquidation factors. |
+| `longbridge max-qty <SYMBOL> --side buy\|sell [--price <p>] [--order-type LO\|MO\|ELO\|ALO] --format json` | Estimated max purchasable / sellable quantity (cash vs margin). |
 
 ## When to use
 
 - *"我的持仓"*, *"我有什么股票"*, *"我的持倉"* → `positions`
 - *"账户余额"*, *"我有多少美金 / 港币"*, *"current USD balance"* → `balance --currency USD`
-- *"我的基金持仓"* → `funds`
-- *"NVDA 我能买多少股"*, *"how many TSLA can I buy"* → `max-qty <s> --side buy --price <current>` (limit) or `--order-type MO` (market)
+- *"我的基金持仓"* → `fund-positions`
+- *"NVDA 我能买多少股"*, *"how many TSLA can I buy"* → `max-qty <SYMBOL> --side buy --price <current>` (limit) or `--order-type MO` (market)
 - *"茅台保证金率"* → `margin-ratio 600519.SH`
 - *"看一下我的账户全貌"*, *"account snapshot"* → `portfolio`
 - *"我的浮盈"* → `positions`, then LLM computes `(last - cost) × qty` from quote (chain to `longbridge-quote` for live last)
 
 ## max-qty workflow
 
-1. **Limit order (default LO)**: first call `longbridge-quote -s <symbol>` for current last price → use as `--price`.
+1. **Limit order (default LO)**: first call `longbridge quote <SYMBOL> --format json` for the current last price → pass it as `--price`.
 2. **Market order**: skip price; pass `--order-type MO`.
-3. Response includes `cash_max_qty` (cash only) and `margin_max_qty` (with financing). Always disclose the difference and remind that financing has interest cost + forced-liquidation risk.
+3. The response includes `cash_max_qty` (cash only) and `margin_max_qty` (with financing). Always disclose both numbers and remind the user that financing carries interest cost + forced-liquidation risk.
 
 ## CLI
 
 ```bash
-python3 scripts/cli.py portfolio
-python3 scripts/cli.py positions
-python3 scripts/cli.py balance --currency USD
-python3 scripts/cli.py margin-ratio TSLA.US
-python3 scripts/cli.py max-qty TSLA.US --side buy --price 250
+longbridge portfolio                                              --format json
+longbridge positions                                              --format json
+longbridge fund-positions                                         --format json
+longbridge balance --currency USD                                 --format json
+longbridge margin-ratio TSLA.US                                   --format json
+longbridge max-qty TSLA.US --side buy --price 250                 --format json
 ```
 
 ## Output
 
-Per subcommand, `success / source / skill / skill_version / subcommand` plus:
-
-- `portfolio`: `datas {positions, fund_positions, balance}`
-- `positions / funds`: `datas` array
-- `balance`: `datas` array (per currency); `currency` top-level field when filtered
-- `margin-ratio`: `symbol / datas {im_factor, mm_factor, fm_factor}`
-- `max-qty`: `symbol / side / order_type / [price] / datas {cash_max_qty, margin_max_qty}`
+- `portfolio`: combined object with positions, fund_positions, balance, P/L distribution.
+- `positions` / `fund-positions`: array of holding rows.
+- `balance`: array of balances per currency.
+- `margin-ratio`: `{im_factor, mm_factor, fm_factor}`.
+- `max-qty`: `{cash_max_qty, margin_max_qty}`.
 
 ## OAuth scope
 
-Requires the trade scope on the OAuth token. If the token lacks it, both CLI and MCP return `auth_expired` (stderr contains `authorized scope`). Tell the user to re-authorise with the trade scope checked.
+Requires the trade scope on the OAuth token. If the token lacks it, both CLI and MCP fail with `unauthorized` / `not in authorized scope`. Tell the user to re-authorise with the trade scope checked: `longbridge logout && longbridge login`.
+
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. If stderr contains `unauthorized` / `not in authorized scope`, the OAuth token lacks trade scope — guide the user through re-auth (see "OAuth scope" above). Other stderr messages relay verbatim.
 
 ## MCP fallback
 
 | CLI subcommand | MCP tool |
 |---|---|
 | `positions` | `mcp__longbridge__stock_positions` |
-| `funds` | `mcp__longbridge__fund_positions` |
+| `fund-positions` | `mcp__longbridge__fund_positions` |
 | `balance` | `mcp__longbridge__account_balance` |
 | `margin-ratio` | `mcp__longbridge__margin_ratio` |
 | `max-qty` | `mcp__longbridge__estimate_max_purchase_quantity` |
 | `portfolio` | merge `stock_positions` + `fund_positions` + `account_balance` (no combined MCP tool) |
 
-MCP-only extensions: `mcp__longbridge__profit_analysis` / `profit_analysis_detail` (P/L analysis), `mcp__longbridge__exchange_rate` (currency conversion). For "how is my P&L this month?" route to `longbridge-portfolio`.
+MCP-only extensions: `mcp__longbridge__profit_analysis` / `profit_analysis_detail` (P/L analysis), `mcp__longbridge__exchange_rate` (currency conversion). For *"how is my P&L this month?"* route to `longbridge-portfolio`.
 
 ## Related skills
 
@@ -93,8 +96,5 @@ MCP-only extensions: `mcp__longbridge__profit_analysis` / `profit_analysis_detai
 
 ```
 longbridge-positions/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

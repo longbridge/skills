@@ -19,19 +19,13 @@ Read-only listing of watchlist groups and member symbols. For mutations use `lon
 >
 > **Privacy**: a watchlist reveals trading interest. Only return detailed lists in direct conversation.
 
-## Filter flags
-
-| Flag | Effect |
-|---|---|
-| (none) | All groups |
-| `--group <id>` | Single group by id |
-| `--group-name <name>` | Single group by exact name |
-
 ## When to use
 
-- *"我的自选股"*, *"watchlist contents"* → no flag
-- *"我的「科技股」分组"*, *"my Tech group"* → `--group-name`
-- *"分组 ID 12345 里有什么"* → `--group`
+- *"我的自选股"*, *"watchlist contents"* → list everything
+- *"我的「科技股」分组"*, *"my Tech group"* → list everything, then filter by group name
+- *"分组 ID 12345 里有什么"* → list everything, then filter by group id
+
+The CLI returns all groups in one call; the LLM filters in-memory based on the user's intent.
 
 ## Chained workflows (very common)
 
@@ -41,32 +35,25 @@ After getting symbols from this skill, route to other skills for the actual data
 |---|---|
 | *"我自选股的港股涨幅"* | this skill → filter `.HK` → `longbridge-quote` (batch) |
 | *"我自选最近一周走势"* | this skill → all symbols → `longbridge-kline` (loop) |
-| *"我自选的总市值"* | this skill → all symbols → `longbridge-quote --include-static` |
+| *"我自选的总市值"* | this skill → all symbols → `longbridge-quote` with `--include-static` |
 
-**Get symbols here, then route the data query to the appropriate skill.** Don't try to compute change rates / charts inside this skill.
+**Get symbols here, then route the data query to the appropriate skill.** Do not try to compute change rates or charts inside this skill.
 
 ## CLI
 
 ```bash
-python3 scripts/cli.py
-python3 scripts/cli.py --group-name 科技
-python3 scripts/cli.py --group 12345
+longbridge watchlist --format json
 ```
+
+This lists every watchlist group plus the securities inside each group.
 
 ## Output
 
-```json
-{
-  "success": true, "source": "longbridge", "skill": "longbridge-watchlist", "skill_version": "1.0.0",
-  "group_count": 3, "total_symbol_count": 42,
-  "datas": [
-    { "id": "12345", "name": "科技股", "securities": [{"symbol": "NVDA.US", "name": "..."}, ...] },
-    ...
-  ]
-}
-```
+Array of group objects, each with `{id, name, securities: [{symbol, name, ...}]}`. No matching filter (after LLM-side filtering) → empty array.
 
-No matching group → `success: true`, `group_count: 0`, `total_symbol_count: 0`, `datas: []`.
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. The watchlist read endpoint does not require trade scope, only login — if stderr says `not logged in`, tell the user to run `longbridge login`.
 
 ## MCP fallback
 
@@ -85,8 +72,5 @@ MCP-only extensions: `mcp__longbridge__sharelist_*` — community-shared watchli
 
 ```
 longbridge-watchlist/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

@@ -52,22 +52,18 @@ Use today's date from the system context.
 ## CLI
 
 ```bash
-python3 scripts/cli.py orders
-python3 scripts/cli.py orders --history --start 2025-01-01 --end 2025-04-01 --symbol TSLA.US
-python3 scripts/cli.py order 20240101-123456789
-python3 scripts/cli.py executions --history --start 2025-01-01 --end 2025-04-01
-python3 scripts/cli.py cash-flow --start 2025-04-01 --end 2025-04-30
+longbridge orders                                                                  --format json
+longbridge orders --history --start 2025-01-01 --end 2025-04-01 --symbol TSLA.US   --format json
+longbridge order 20240101-123456789                                                --format json
+longbridge executions --history --start 2025-01-01 --end 2025-04-01                --format json
+longbridge cash-flow --start 2025-04-01 --end 2025-04-30                           --format json
 ```
-
-For long history ranges, raise `--timeout 60`+.
 
 ## Output
 
-`success / source / skill / skill_version / subcommand`, plus:
-
-- `orders / executions`: `history` boolean + optional `start / end / symbol` + `datas` array
-- `order`: `order_id` + `datas` (full object). Returns `error_kind: empty_result` if id not found.
-- `cash-flow`: optional `start / end` + `datas` array
+- `orders` / `executions`: array of order / fill rows.
+- `order`: full single-order object (status history, fees). Empty result → "order not found".
+- `cash-flow`: array of cash-flow events.
 
 Status translation (LLM should map):
 
@@ -81,7 +77,11 @@ Status translation (LLM should map):
 
 ## OAuth scope
 
-Same as `longbridge-positions`: needs trade scope. Lacking scope → both CLI and MCP return `auth_expired`.
+Same as `longbridge-positions`: needs trade scope. Lacking it → both CLI and MCP return `unauthorized`. Tell the user to re-auth.
+
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. Long history ranges may take a while — surface progress to the user. Other stderr messages relay verbatim.
 
 ## MCP fallback
 
@@ -105,8 +105,5 @@ MCP-only extensions: `mcp__longbridge__statement_*` (account statements / report
 
 ```
 longbridge-orders/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

@@ -19,51 +19,39 @@ Today's capital flow time-series and order-size distribution for a single securi
 
 ## Subcommands
 
-| Flag | Returns |
+| CLI command | Returns |
 |---|---|
-| (default) | `flow`: today's main-capital net inflow/outflow time series |
-| `--include-dist` | adds `distribution`: cross-section of large / medium / small / super-large order buy & sell amounts |
+| `longbridge capital-flow <SYMBOL> --format json` | Today's main-capital net inflow / outflow time series |
+| `longbridge capital-dist <SYMBOL> --format json` | Cross-section: large / medium / small / super-large order buy & sell amounts |
 
-**Single symbol per call** (the underlying CLI is per-symbol). Today's data only — no historical range.
+**Single symbol per call.** Today's data only — no historical range.
 
 ## When to use
 
-- *"今天 NVDA 主力净流入"*, *"今日資金流"* → default flow
-- *"看下 TSLA 大单分布"*, *"大單/中單/小單"* → add `--include-dist`
-- *"看一下 700 资金面"* (combined) → `--include-dist`
-- *"过去 30 天资金流"* → unsupported, redirect to `longbridge-kline` (volume) or `longbridge-quote --index volume`
+- *"今天 NVDA 主力净流入"*, *"今日資金流"* → `capital-flow` only
+- *"看下 TSLA 大单分布"*, *"大單/中單/小單"* → `capital-dist` only
+- *"看一下 700 资金面"* (combined) → call both and merge
+- *"过去 30 天资金流"* → unsupported, redirect to `longbridge-kline` (volume) or `longbridge-quote` (`--index volume`)
 - *"今天哪些股票主力大幅流入"* (screener) → unsupported; ask user for a specific symbol
 
 ## Workflow
 
 1. Resolve a single symbol to `<CODE>.<MARKET>`.
-2. Decide flag: default (flow only) or `--include-dist` (flow + distribution).
-3. Run via local CLI (preferred) or MCP fallback.
-4. Summarise: net inflow direction (▲/▼), accumulated total, distribution skew. Cite Longbridge Securities.
+2. Decide which subcommand(s) to call: `capital-flow` (time series), `capital-dist` (distribution snapshot), or both.
+3. Call the Longbridge CLI directly (preferred) or fall back to MCP.
+4. Summarise: net inflow direction (▲ / ▼), accumulated total, distribution skew. Cite Longbridge Securities.
 
 ## CLI
 
 ```bash
-python3 scripts/cli.py -s NVDA.US
-python3 scripts/cli.py -s TSLA.US --include-dist
-python3 scripts/cli.py -s 600519.SH
+longbridge capital-flow NVDA.US        --format json
+longbridge capital-dist TSLA.US        --format json
+# Combined view → call both and merge in the LLM
 ```
 
 ## Output
 
-```json
-{
-  "success": true,
-  "source": "longbridge",
-  "skill": "longbridge-capital-flow",
-  "skill_version": "1.0.0",
-  "symbol": "TSLA.US",
-  "datas": {
-    "flow": [ ... ],
-    "distribution": { /* only with --include-dist */ }
-  }
-}
-```
+`capital-flow` returns a time-series array; `capital-dist` returns a cross-section object.
 
 Field translations (LLM should map):
 
@@ -74,18 +62,18 @@ Field translations (LLM should map):
 | `small_in / small_out` | 小单流入/流出 | 小單流入/流出 | Small order in/out |
 | `super_in / super_out` | 超大单流入/流出 | 超大單流入/流出 | Super-large order in/out |
 
-(Field names follow Longbridge JSON; `cli.py` does no rewrite.)
+(Field names follow Longbridge JSON; LLM maps to the user's language.)
 
 ## Error handling
 
-Standard envelope. Multiple `-s` flags trigger `invalid_input_format` with hint *"this skill takes one symbol"*.
+If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed verbatim (auth issues → `longbridge login`; invalid symbol → re-check format).
 
 ## MCP fallback
 
-| CLI behaviour | MCP tool |
+| CLI subcommand | MCP tool |
 |---|---|
-| default (flow only) | `mcp__longbridge__capital_flow` |
-| `--include-dist` | `mcp__longbridge__capital_flow` + `mcp__longbridge__capital_distribution` (LLM merges) |
+| `capital-flow` | `mcp__longbridge__capital_flow` |
+| `capital-dist` | `mcp__longbridge__capital_distribution` |
 
 ## Related skills
 
@@ -97,8 +85,5 @@ Standard envelope. Multiple `-s` flags trigger `invalid_input_format` with hint 
 
 ```
 longbridge-capital-flow/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

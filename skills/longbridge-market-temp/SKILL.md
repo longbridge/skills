@@ -13,17 +13,17 @@ metadata:
 
 # longbridge-market-temp
 
-Market-level state: open/close, calendar, sentiment temperature. Symbol-level questions belong in `longbridge-quote`.
+Market-level state: open / close, calendar, sentiment temperature. Symbol-level questions belong in `longbridge-quote`.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## Subcommands
 
-| Subcommand | Returns |
+| CLI command | Returns |
 |---|---|
-| `temp` | Today's market temperature (0–100). With `--history --start --end`, returns the time series. |
-| `session` | Trading sessions for all markets (open / close times). |
-| `days` | Trading day calendar for `--market HK | US | CN | SG`, optional `--start` / `--end`. |
+| `longbridge market-temp --market <M> --format json` | Today's market temperature (0–100). Add `--history --start --end` for a time series. |
+| `longbridge trading-session --format json` | Trading sessions for all markets (open / close times). |
+| `longbridge trading-days --market <M> [--start --end] --format json` | Trading day calendar with half-days. |
 
 ## Market mapping
 
@@ -32,54 +32,56 @@ LLM maps colloquial names to `--market`:
 | User says | `--market` |
 |---|---|
 | 美股 / US / Nasdaq / S&P / Dow | `US` |
-| 港股 / HK / Hang Seng / 恒生 | `HK` |
+| 港股 / HK / Hang Seng / 恒生 / 恆生 | `HK` |
 | A 股 / 沪 / 深 / 上证 / 深证 / SH / SZ | `CN` |
-| 新加坡 / SG / Straits / 海峡 | `SG` |
+| 新加坡 / SG / Straits / 海峡 / 海峽 | `SG` |
 
-`session` does not need `--market`; it returns all markets.
+`trading-session` does not need `--market`; it returns all markets.
 
 ## When to use
 
-- *"今天美股开盘了吗"*, *"is HK open?"* — combine `session` + local time inference (US = UTC-5/-4 DST, HK/CN/SG = UTC+8)
-- *"几点开盘"* → `session`
-- *"下个交易日"*, *"this week's trading days"* → `days`
-- *"圣诞节港股开市吗"* → `days --market HK --start <Christmas> --end <Christmas>`
-- *"市场情绪"*, *"温度多少"* → `temp --market <X>`
-- *"今年港股市场情绪走势"* → `temp --market HK --history --start ... --end ...`
+- *"今天美股开盘了吗"*, *"is HK open?"* — call `trading-session`, then reason against current local time and the user's target market.
+- *"几点开盘"* → `trading-session`
+- *"下个交易日"*, *"this week's trading days"* → `trading-days`
+- *"圣诞节港股开市吗"* → `trading-days --market HK --start <date> --end <date>`
+- *"市场情绪"*, *"温度多少"* → `market-temp --market <X>`
+- *"今年港股市场情绪走势"* → `market-temp --market HK --history --start ... --end ...`
 
 ## Workflow
 
-1. Pick subcommand (table above).
+1. Pick the subcommand (table above).
 2. Resolve `--market` if needed.
-3. For "is the market open?" — call `session`, then reason against current local time and the user's target market.
-4. Run via local CLI (preferred) or MCP fallback.
-5. Translate `temp` value into wording: 0–30 *偏空*, 30–50 *中性偏空*, 50–70 *中性偏多*, 70–100 *偏多* (translate into user's language).
+3. For "is the market open?" — call `trading-session`, then reason against the current local time (US = UTC-5/-4 DST, HK / CN / SG = UTC+8) and the user's target market.
+4. Call the Longbridge CLI directly (preferred) or fall back to MCP.
+5. Translate the `market-temp` value into wording: 0–30 *偏空*, 30–50 *中性偏空*, 50–70 *中性偏多*, 70–100 *偏多* (translate into the user's language).
 
 ## CLI
 
 ```bash
-python3 scripts/cli.py temp    --market HK
-python3 scripts/cli.py session
-python3 scripts/cli.py days    --market US --start 2026-04-28 --end 2026-05-31
-python3 scripts/cli.py temp    --market HK --history --start 2026-01-01 --end 2026-04-28
+longbridge market-temp     --market HK                                    --format json
+longbridge trading-session                                                --format json
+longbridge trading-days    --market US --start 2026-04-28 --end 2026-05-31 --format json
+longbridge market-temp     --market HK --history --start 2026-01-01 --end 2026-04-28 --format json
 ```
 
 ## Output
 
-`success / source / skill / skill_version / subcommand`, plus:
+- `market-temp` (snapshot): single object with the temperature value. With `--history`, an array of historical points.
+- `trading-session`: array spanning all markets.
+- `trading-days`: `{trading_days, half_trading_days}` arrays for the selected market.
 
-- `temp`: `market` + `datas` (snapshot object); with `--history`, additional `start / end`, `datas` is an array.
-- `session`: `datas` is an array spanning all markets.
-- `days`: `market` + `datas` `{trading_days, half_trading_days}`.
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed verbatim to the user.
 
 ## MCP fallback
 
 | CLI subcommand | MCP tool |
 |---|---|
-| `temp` (snapshot) | `mcp__longbridge__market_temperature` |
-| `temp --history` | `mcp__longbridge__history_market_temperature` |
-| `session` | `mcp__longbridge__trading_session` |
-| `days` | `mcp__longbridge__trading_days` |
+| `market-temp` (snapshot) | `mcp__longbridge__market_temperature` |
+| `market-temp --history` | `mcp__longbridge__history_market_temperature` |
+| `trading-session` | `mcp__longbridge__trading_session` |
+| `trading-days` | `mcp__longbridge__trading_days` |
 
 MCP-only extensions: `mcp__longbridge__market_status` (finer state), `mcp__longbridge__finance_calendar` (earnings / dividends / IPO / macro).
 
@@ -92,8 +94,5 @@ MCP-only extensions: `mcp__longbridge__market_status` (finer state), `mcp__longb
 
 ```
 longbridge-market-temp/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

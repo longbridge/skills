@@ -41,27 +41,31 @@ Catalog lookups: full listed-securities lists per market, and the HK broker_id �
 ## CLI
 
 ```bash
-python3 scripts/cli.py securities --market HK --timeout 60   # large payload, raise timeout
-python3 scripts/cli.py securities --market US
-python3 scripts/cli.py participants
+longbridge security-list HK   --format json
+longbridge security-list US   --format json
+longbridge participants       --format json
 ```
 
-The default 30s timeout may be tight for `securities` — prefer `--timeout 60`.
+`security-list` returns a large payload (HK ≈ 2.5k rows, CN ≈ 5k+); allow extra time for the call.
 
 ## Output
 
-- `securities`: `market / count / datas` (rows `{symbol, name_en, name_cn}`)
-- `participants`: `datas` (rows `{broker_id, name_en, name_cn}`)
+- `security-list`: array of `{symbol, name_en, name_cn}`.
+- `participants`: array of `{broker_id, name_en, name_cn}`.
 
 ## Path-selection note
 
-`participants` → CLI is preferred (local subprocess, faster). `securities` → **MCP is preferred** because the current `longbridge` CLI has an intermittent `param_error` for the security-list endpoint; MCP bypasses the CLI middle layer via direct SDK calls.
+`participants` → CLI is preferred (local subprocess, faster). `security-list` → **MCP is preferred** because the current `longbridge` CLI has an intermittent `param_error` for that endpoint; MCP bypasses the CLI by calling the SDK directly.
+
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. On `security-list`, if stderr includes `param_error`, switch to `mcp__longbridge__security_list` instead — this is a known CLI issue.
 
 ## MCP fallback / preferred
 
 | CLI subcommand | MCP tool | Note |
 |---|---|---|
-| `securities` | `mcp__longbridge__security_list` | **Prefer MCP** if available |
+| `security-list` | `mcp__longbridge__security_list` | **Prefer MCP** if available |
 | `participants` | `mcp__longbridge__participants` | CLI fine |
 
 ## Related skills
@@ -73,8 +77,5 @@ The default 30s timeout may be tight for `securities` — prefer `--timeout 60`.
 
 ```
 longbridge-security-list/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```

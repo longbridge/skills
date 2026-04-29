@@ -21,10 +21,9 @@ Orderbook depth, broker queue (HK-only), and tick-by-tick trades.
 
 | Subcommand | Returns |
 |---|---|
-| `depth` | 5/10-level orderbook: per-level price / volume / order_num |
-| `brokers` | Per-level broker_id queue (**HK only**). For non-HK symbols, tell the user this is unavailable. |
-| `trades` | Latest N trades: time / price / volume / direction / type. `--count 1..1000`. |
-| `all` | depth + brokers (if HK) + trades, in one call. |
+| `depth` | 5 / 10-level orderbook: per-level price / volume / order_num |
+| `brokers` | Per-level broker_id queue (**HK only**). Tell the user the queue is HK-only when they ask about a non-HK symbol. |
+| `trades` | Latest N trades: time / price / volume / direction / type. Pass `--count 1..1000`. |
 
 `broker_id` integers can be translated to names via `longbridge-security-list` → `participants`.
 
@@ -33,36 +32,34 @@ Orderbook depth, broker queue (HK-only), and tick-by-tick trades.
 - *"看下 700.HK 的盘口"*, *"TSLA 5 档买卖盘"* → `depth`
 - *"茅台经纪商队列"* — non-HK symbol → tell user *"broker queue is HK-only"* and switch to `depth`
 - *"NVDA 最近 50 笔成交"*, *"腾讯 tick 数据"* → `trades --count 50`
-- *"700 全部盘口"*, *"microstructure overview"* → `all`
+- *"700 全部盘口"*, *"microstructure overview"* → call `depth`, `brokers` (if HK), and `trades` and merge the results
 
 ## Workflow
 
-1. Resolve symbol to `<CODE>.<MARKET>`.
-2. Pick subcommand by user intent (table above).
-3. **Off-hours warning**: outside trading hours, `depth` is the closing snapshot and `trades` are the last N of the previous session — **call this out explicitly** when responding.
-4. Run via local CLI (preferred) or MCP fallback.
-5. Render `depth` as a bid/ask table; describe `trades` as direction summary (buy-dominant / sell-dominant) plus the latest few rows. Cite Longbridge Securities.
+1. Resolve the symbol to `<CODE>.<MARKET>`.
+2. Pick the subcommand by user intent (table above). For an "overview" intent, run `depth` + `brokers` (HK-only) + `trades` and merge.
+3. **Off-hours warning**: outside trading hours, `depth` is the closing snapshot and `trades` are the last N of the previous session — call this out explicitly when responding.
+4. Call the Longbridge CLI directly (preferred) or fall back to MCP.
+5. Render `depth` as a bid / ask table; describe `trades` as a direction summary (buy-dominant / sell-dominant) plus the latest few rows. Cite Longbridge Securities.
 
 ## CLI
 
 ```bash
-python3 scripts/cli.py depth   700.HK
-python3 scripts/cli.py brokers 700.HK              # HK-only
-python3 scripts/cli.py trades  700.HK --count 50
-python3 scripts/cli.py all     700.HK
+longbridge depth   700.HK                  --format json
+longbridge brokers 700.HK                  --format json   # HK-only
+longbridge trades  700.HK --count 50       --format json
 ```
+
+Always pass `--format json` so the output is machine-parseable.
 
 ## Output
 
-Per-subcommand `datas`:
-
-- `depth` / `brokers`: `{asks: [...], bids: [...]}` (`brokers[i]` includes `broker_id` array)
-- `trades`: array (top-level `count`)
-- `all`: `{depth, brokers, trades}` (`brokers: null` for non-HK)
+- `depth` / `brokers`: `{asks: [...], bids: [...]}` (`brokers[i]` includes a `broker_id` array)
+- `trades`: array of trade rows (`time / price / volume / direction / type`)
 
 ## Error handling
 
-Standard envelope. `invalid_input_format` includes the broker-queue HK constraint message.
+If `longbridge` is missing, fall back to MCP. If stderr surfaces *"broker queue not supported"* / *"non-HK"* on a `brokers` call, explain that broker queues are HK-only and switch to `depth`. Other stderr messages (auth / invalid symbol) get relayed verbatim.
 
 ## MCP fallback
 
@@ -71,7 +68,6 @@ Standard envelope. `invalid_input_format` includes the broker-queue HK constrain
 | `depth` | `mcp__longbridge__depth` |
 | `brokers` | `mcp__longbridge__brokers` |
 | `trades` | `mcp__longbridge__trades` |
-| `all` | call the above three sequentially and merge in the LLM (no combined MCP tool) |
 
 MCP-only extensions: `mcp__longbridge__short_positions`, `mcp__longbridge__option_volume`, `mcp__longbridge__option_volume_daily`.
 
@@ -79,14 +75,11 @@ MCP-only extensions: `mcp__longbridge__short_positions`, `mcp__longbridge__optio
 
 - Quote / static / indices → `longbridge-quote`
 - Capital flow / large-order distribution → `longbridge-capital-flow`
-- Broker_id → name lookup → `longbridge-security-list`
+- broker_id → name lookup → `longbridge-security-list`
 
 ## File layout
 
 ```
 longbridge-depth/
-├── SKILL.md
-└── scripts/
-    ├── cli.py
-    └── test_cli.py
+└── SKILL.md          # prompt-only, no scripts/
 ```
