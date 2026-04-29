@@ -160,26 +160,7 @@ done
 
 ## Verify
 
-### 1. Repo self-test
-
-From the repo root:
-
-```bash
-python3 scripts/validate-skills.py
-```
-
-Expected output:
-
-```
-Inspected 19 skill(s).
-All clean ✓
-```
-
-The validator checks:
-- Every SKILL.md frontmatter conforms to spec (`name` is a valid slug, `description` ≤ 1024 chars).
-- `name` matches the parent directory name.
-
-### 2. Real-account smoke test (only if you've installed the longbridge CLI and run `longbridge login`)
+### 1. Real-account smoke test (only if you've installed the longbridge CLI and run `longbridge login`)
 
 ```bash
 # Quote
@@ -194,7 +175,7 @@ longbridge watchlist --format json
 
 Each call should return JSON. If you're unsure of an exact flag, run `longbridge <subcommand> --help` first — every subcommand self-documents.
 
-### 3. End-to-end through Claude Code
+### 2. End-to-end through Claude Code
 
 Open a new session and try one prompt per skill family:
 
@@ -253,7 +234,7 @@ claude mcp remove longbridge                          # remove the MCP registrat
 ### A skill never triggers after install
 
 1. Check that the trigger keywords cover what the user typed — see [`docs/architecture.md` §1.1](./architecture.md).
-2. Check that the directory name is a valid lowercase ASCII slug — run `python3 scripts/validate-skills.py`.
+2. Check that the directory name is a valid lowercase ASCII slug (matches `^[a-z0-9]+(-[a-z0-9]+)*$`) and equals the `name:` field in `SKILL.md` frontmatter.
 3. Claude Code scans `~/.claude/skills/` once per session start. Restart the session if you installed while a session was open.
 
 ### `auth_expired`

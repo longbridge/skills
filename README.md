@@ -87,8 +87,8 @@ Both authenticate with your Longbridge account. Pick "trade" permission during l
 
 ## For developers
 
+- [CLAUDE.md](./CLAUDE.md) — repo-level instructions for Claude Code when developing inside this repo
 - [docs/architecture.md](./docs/architecture.md) — how the multilingual triggers + CLI/MCP routing work under the hood
 - [docs/install.md](./docs/install.md) — every install path, verification, troubleshooting
-- `python3 scripts/validate-skills.py` — sanity-check all 19 skills locally
 
 License: [MIT](./LICENSE).
