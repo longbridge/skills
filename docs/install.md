@@ -1,299 +1,292 @@
-# 安装指南 / Install Guide
+# Install guide
 
-## 先决条件 / Prerequisites
+## Prerequisites
 
-不同 tier 的 skill 依赖的底层工具不同 — 按需安装。
+Different tiers of skills have different runtime dependencies — install only what you need.
 
-### 必装(读取层 12 个 skill)
+### Required (read-tier — 12 skills)
 
-1. **longbridge CLI**(Rust 二进制,本机进程):
+1. **Longbridge CLI** (Rust binary, runs in-process):
 
    ```bash
-   # macOS / Linux — 详见 https://github.com/longportapp/longbridge-terminal
+   # macOS / Linux — see https://github.com/longportapp/longbridge-terminal
    brew install longportapp/tap/longbridge          # macOS Homebrew
-   # 或下载 release 二进制放 PATH
+   # Or download a release binary onto your PATH
    ```
 
-   验证:`longbridge --version` 应输出版本号。
+   Verify with `longbridge --version` — it should print a version string.
 
-2. **登录长桥账户**(OAuth token 缓存到 `~/.longbridge/terminal/.openapi-session`):
+2. **Log in to your Longbridge account** (the OAuth token is cached at `~/.longbridge/terminal/.openapi-session`):
 
    ```bash
    longbridge login
    ```
 
-   浏览器会开授权页;**勾"交易"权限**才能用账户类 skill(`positions / orders / watchlist / watchlist-admin`)。只勾"行情"够用市场只读。
+   A browser opens for authorisation. **Tick the "Trade" permission** if you want the account-tier skills (`positions / orders / watchlist / watchlist-admin`). Quote-only access is sufficient for market-data skills.
 
-3. **Python 3.8+**(`scripts/cli.py` 用标准库,无第三方依赖):
+3. **Python 3.8+** (`scripts/cli.py` is stdlib-only, no third-party dependencies):
 
    ```bash
    python3 --version  # ≥ 3.8
    ```
 
-### 选装(分析层 5 个 skill 必装)
+### Optional (required for the analysis tier — 5 skills)
 
-4. **长桥官方 MCP**(分析层 valuation / fundamental / news / peer-comparison / portfolio 完全依赖此项):
+4. **Longbridge MCP server** (the analysis-tier skills `valuation / fundamental / news / peer-comparison / portfolio` depend entirely on this):
 
    ```bash
    claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
    ```
 
-   首次工具调用触发浏览器 OAuth 授权;`portfolio` 一定要勾"交易"权限,其它 4 个分析 skill 只需"行情"。
+   The first MCP tool call triggers an OAuth flow in your browser. `portfolio` requires the **Trade** permission; the other four analysis skills only need the **Quote** permission.
 
-   验证:`claude mcp list` 应包含 `longbridge`。
+   Verify with `claude mcp list` — `longbridge` should appear in the output.
 
 ---
 
-## 四种安装方式 / Four install paths
+## Four install paths
 
-### 方式 A:`npx` / `bun`(推荐,最简)
+### Path A — `npx` / `bun` (recommended; simplest)
 
-**装全部 19 个 skill**:
+**Install all 19 skills**:
 
 ```bash
-npx skills add longbridge/skills            # 用 npx
-bunx skills add longbridge/skills           # 用 bun(等价于 npx)
+npx skills add longbridge/skills            # via npx
+bunx skills add longbridge/skills           # via bun (equivalent)
 ```
 
-**只装某几个**:
+**Install just a few**:
 
 ```bash
 npx skills add longbridge/skills --skill longbridge-quote
 npx skills add longbridge/skills --skill longbridge-portfolio --skill longbridge-news
 ```
 
-会下载到 `~/.claude/skills/`(默认),Claude Code 重开会话就能用。
+The skills land in `~/.claude/skills/` by default. Restart your Claude Code session and they're ready to use.
 
-> `npx skills` / `bunx skills` 是社区通用的 Agent Skills 安装器,支持任何符合 Agent Skills 规约的 GitHub 仓库。详见 [agentskills.io](https://agentskills.io)。
+> `npx skills` / `bunx skills` is a community installer that works for any Agent-Skills-compatible GitHub repo. See [agentskills.io](https://agentskills.io) for the spec.
 
 ---
 
-### 方式 B:Claude Code 插件市场(整套带 marketplace 元信息)
+### Path B — Claude Code plugin marketplace (carries marketplace metadata)
 
-**B1. 远程仓库**:
+**B1. Remote repo:**
 
 ```text
 /plugin marketplace add longbridge/skills
 /plugin install longbridge@longbridge-skills
 ```
 
-**B2. 本地路径(开发 / 内测期)**:
+**B2. Local path (during development / testing):**
 
 ```text
-/plugin marketplace add /Users/hogan/work/longbridge/longbridge-skills
+/plugin marketplace add <path-to-the-cloned-repo>
 /plugin install longbridge@longbridge-skills
 ```
 
-> `longbridge` 是插件名(对应 `.claude-plugin/marketplace.json` 里的 `plugins[0].name`);`longbridge-skills` 是 marketplace 名(对应顶层 `name` 字段)。
+> `longbridge` is the plugin name (matches `plugins[0].name` in `.claude-plugin/marketplace.json`); `longbridge-skills` is the marketplace name (matches the top-level `name` field).
 
-**B3. 验证已安装**:
+**B3. Verify:**
 
 ```text
 /plugin list
 ```
 
-应能看到 `longbridge@longbridge-skills` 已 enabled。新开会话后问一句 *"NVDA 现在多少钱"* 验证 skill 触发。
+You should see `longbridge@longbridge-skills` enabled. Open a new Claude Code session and ask *"NVDA 现在多少钱"* to check that the skill triggers.
 
 ---
 
-### 方式 C:Symlink 单独 skill 到 `~/.claude/skills/`(挑用,要求先 clone 仓库)
+### Path C — Symlink individual skills to `~/.claude/skills/` (cherry-pick; clone first)
 
-适合只想装其中几个 skill 而不是全部 19 个。
+Useful when you want only a few skills out of the 19. Clone the repo first, then create symlinks from your local checkout into `~/.claude/skills/`.
 
 ```bash
+# Clone the repo locally (anywhere is fine)
+git clone https://github.com/longbridge/skills.git
+cd skills
 mkdir -p ~/.claude/skills
 
-# 行情查询
-ln -s /Users/hogan/work/longbridge/longbridge-skills/skills/longbridge-quote \
-      ~/.claude/skills/longbridge-quote
+# Single skill
+ln -s "$PWD/skills/longbridge-quote" ~/.claude/skills/longbridge-quote
 
-# K 线
-ln -s /Users/hogan/work/longbridge/longbridge-skills/skills/longbridge-kline \
-      ~/.claude/skills/longbridge-kline
-
-# ... 按需复制其它
+# Or another individual skill
+ln -s "$PWD/skills/longbridge-kline"  ~/.claude/skills/longbridge-kline
 ```
 
-**批量软链全部 19 个**:
+**Batch-symlink all 19**:
 
 ```bash
-SRC="/Users/hogan/work/longbridge/longbridge-skills/skills"
-for d in "$SRC"/*; do
-  slug=$(basename "$d")
-  ln -sfn "$d" "$HOME/.claude/skills/$slug"
+for d in "$PWD"/skills/*; do
+  ln -sfn "$d" "$HOME/.claude/skills/$(basename "$d")"
 done
-ls -la ~/.claude/skills/ | grep longbridge-
+ls -la ~/.claude/skills/ | grep longbridge
 ```
 
-> **为什么用 symlink 而不是 cp**:仓库本身就是开发版,改 SKILL.md 后立即生效,不用每次都重新部署。生产分发可换成 `cp -R`。
+> **Why symlink and not `cp`?** The repo itself is the live source — edits to a SKILL.md take effect immediately, with no redeploy. For production distribution, swap `ln -s` for `cp -R`.
 
-#### ⚠️ 写入类 skill 的特殊安装规约
+#### ⚠️ Special case: the mutating skill
 
-**`longbridge-watchlist-admin`** 会改用户的自选股状态。批量软链脚本会装它,但它依赖 SKILL.md 里的 dry-run + confirm 双步流程才安全。如果手动审计觉得不放心,可以**先不装它**:
+**`longbridge-watchlist-admin`** modifies the user's watchlist state. The batch script above will install it; the SKILL.md enforces a dry-run + confirm protocol, so it's safe by default. If you'd rather audit it before enabling, install the other 18 first and skip this one:
 
 ```bash
-# 装其它 18 个,跳过 watchlist-admin
-SRC="/Users/hogan/work/longbridge/longbridge-skills/skills"
-for d in "$SRC"/*; do
+for d in "$PWD"/skills/*; do
   slug=$(basename "$d")
   [[ "$slug" == "longbridge-watchlist-admin" ]] && continue
   ln -sfn "$d" "$HOME/.claude/skills/$slug"
 done
 ```
 
-需要装的时候单独跑 `ln -s`。
+Run a separate `ln -s` for `longbridge-watchlist-admin` once you're ready.
 
 ---
 
-### 方式 D:其它 agent 产品
+### Path D — Other agent products
 
-skill 文件是纯 Markdown + Python,可直接拷到任何兼容 Agent Skills 规约的 agent。只是默认目录不同:
+Skills are pure Markdown + Python and portable to any Agent-Skills-compatible product. Only the install directory differs:
 
-| Agent 产品 | 默认 skill 目录 |
+| Agent product | Default skill directory |
 |---|---|
 | Claude Code | `~/.claude/skills/` |
 | Gemini CLI | `~/.gemini/skills/` |
 | OpenCode | `~/.opencode/skills/` |
-| Codex(OpenAI) | 见各自文档 |
+| OpenAI Codex | see vendor docs |
 
-例(Gemini CLI):
+Example (Gemini CLI), assuming the repo is cloned locally:
 
 ```bash
 mkdir -p ~/.gemini/skills
-SRC="/Users/hogan/work/longbridge/longbridge-skills/skills"
-for d in "$SRC"/*; do
-  ln -sfn "$d" "$HOME/.gemini/skills/$(basename $d)"
+for d in "$PWD"/skills/*; do
+  ln -sfn "$d" "$HOME/.gemini/skills/$(basename "$d")"
 done
 ```
 
-> 注意:不同 agent 对 frontmatter 字段的支持度不同(`compatibility` / `allowed-tools` 是实验性的)。本仓库 skill 用的字段都是 spec 规定的标准字段,跨 agent 应该都能识别。
+> Different products implement different parts of the spec — `compatibility` and `allowed-tools` are experimental. Every field used in this repo is part of the canonical Agent Skills spec, so cross-product portability should be safe.
 
 ---
 
-## 验证 / Verify
+## Verify
 
-### 1. 仓库自检
+### 1. Repo self-test
 
-在仓库根目录跑:
+From the repo root:
 
 ```bash
 python3 scripts/validate-skills.py
 ```
 
-应输出:
+Expected output:
 
 ```
-Inspected 17 skill(s).
+Inspected 19 skill(s).
 All clean ✓
 ```
 
-会校验:
-- 每个 SKILL.md frontmatter 合规(`name` slug、`description` ≤ 1024 字符)
-- `name` 与父目录名严格一致
-- 所有读取层 skill 的 `scripts/test_cli.py` 全绿(单测,~1s/skill)
+The validator checks:
+- Every SKILL.md frontmatter conforms to spec (`name` is a valid slug, `description` ≤ 1024 chars).
+- `name` matches the parent directory name.
+- All read-tier `scripts/test_cli.py` files pass (~1 s per skill).
 
-### 2. 真账户烟测(有 longbridge CLI 已登录的话)
+### 2. Real-account smoke test (only if you've installed the longbridge CLI and run `longbridge login`)
+
+From the repo root:
 
 ```bash
-SK="/Users/hogan/work/longbridge/longbridge-skills/skills"
+# Quote
+python3 skills/longbridge-quote/scripts/cli.py -s NVDA.US
 
-# 行情查询
-python3 $SK/longbridge-quote/scripts/cli.py -s NVDA.US
+# 5 daily candles
+python3 skills/longbridge-kline/scripts/cli.py kline NVDA.US --period day --count 5
 
-# K 线 5 根日 K
-python3 $SK/longbridge-kline/scripts/cli.py kline NVDA.US --period day --count 5
-
-# 自选股
-python3 $SK/longbridge-watchlist/scripts/cli.py
+# Watchlist
+python3 skills/longbridge-watchlist/scripts/cli.py
 ```
 
-输出 JSON envelope 的 `success: true` 即成功。
+Each call should return a JSON envelope with `"success": true`.
 
-### 3. Claude Code 端到端
+### 3. End-to-end through Claude Code
 
-新开会话,用以下问句验证(每条覆盖一类 skill):
+Open a new session and try one prompt per skill family:
 
-| 问句 | 应触发 skill |
+| Prompt | Expected skill |
 |---|---|
 | *"NVDA 现在多少钱"* | `longbridge-quote` |
 | *"特斯拉过去一年走势"* | `longbridge-kline` |
 | *"700.HK 盘口"* | `longbridge-depth` |
 | *"我的自选股"* | `longbridge-watchlist` |
-| *"NVDA 估值贵不贵"* | `longbridge-valuation`(分析层,需 MCP) |
+| *"NVDA 估值贵不贵"* | `longbridge-valuation` (analysis tier — needs MCP) |
 
-LLM 应在回答里包含 *"数据来源:长桥证券"* / *"Source: Longbridge Securities"* 字样。
+Each reply should include "Source: Longbridge Securities" / "数据来源:长桥证券".
 
 ---
 
-## 卸载 / Uninstall
+## Uninstall
 
-### 方式 A(npx / bun)装的
+### Path A (npx / bun) installs
 
 ```bash
-npx skills remove longbridge/skills            # 全卸
-npx skills remove longbridge/skills --skill longbridge-quote   # 卸某个
+npx skills remove longbridge/skills                              # remove all
+npx skills remove longbridge/skills --skill longbridge-quote     # remove one
 ```
 
-### 方式 B(插件市场)装的
+### Path B (plugin marketplace) installs
 
 ```text
 /plugin uninstall longbridge@longbridge-skills
-/plugin marketplace remove longbridge-skills          # 可选,移除市场注册
+/plugin marketplace remove longbridge-skills          # optional — drop the marketplace registration
 ```
 
-### 方式 C(symlink)装的
+### Path C (symlink) installs
 
 ```bash
 rm ~/.claude/skills/longbridge ~/.claude/skills/longbridge-*
-# 验证已清理
-ls ~/.claude/skills/
+ls ~/.claude/skills/                                  # verify
 ```
 
-### 撤销 longbridge CLI 授权
+### Revoke Longbridge CLI authorisation
 
 ```bash
-longbridge logout                                     # 清本机 token
+longbridge logout                                     # clears the local token
 ```
 
-### 撤销 longbridge MCP 授权
+### Revoke Longbridge MCP authorisation
 
 ```bash
-claude mcp logout longbridge                          # 撤 OAuth scope
-claude mcp remove longbridge                          # 删 MCP 注册
+claude mcp logout longbridge                          # revoke the OAuth scope
+claude mcp remove longbridge                          # remove the MCP registration
 ```
 
 ---
 
-## 常见问题 / FAQ
+## FAQ
 
-### 装好后 skill 没触发
+### A skill never triggers after install
 
-1. 检查 frontmatter triggers 是否覆盖你说的关键词 — 看 [`docs/architecture.md` §1.1](./architecture.md)
-2. 检查目录名是否符合 lowercase ASCII slug — 用 `python3 scripts/validate-skills.py` 验
-3. Claude Code 启动后才扫 skill,如果是装完后才打开会话不需要重启;但如果 Claude Code 已经在跑,**重启会话**让它重新扫 `~/.claude/skills/`
+1. Check that the trigger keywords cover what the user typed — see [`docs/architecture.md` §1.1](./architecture.md).
+2. Check that the directory name is a valid lowercase ASCII slug — run `python3 scripts/validate-skills.py`.
+3. Claude Code scans `~/.claude/skills/` once per session start. Restart the session if you installed while a session was open.
 
-### `auth_expired` 错
+### `auth_expired`
 
-- 读取层市场行情(quote / kline / depth ...)只需 `longbridge login` 时勾**行情**权限
-- 账户类(positions / orders / watchlist) **必须勾交易权限** —
+- Read-tier market-data skills (quote / kline / depth / …) only need the **Quote** permission at `longbridge login`.
+- Account-tier skills (positions / orders / watchlist) **require the Trade permission**:
   ```bash
-  longbridge logout && longbridge login   # 重授,浏览器里勾「交易」
+  longbridge logout && longbridge login   # re-authorise; tick "Trade" in the browser
   ```
-- MCP 同理:`claude mcp logout longbridge` 后下次任意 MCP 调用重新授权
+- MCP behaves the same — `claude mcp logout longbridge` and re-authorise on the next MCP tool call.
 
 ### `binary_not_found`
 
-cli.py 找不到 `longbridge` 二进制。两种解法:
+`cli.py` cannot locate the `longbridge` binary. Two fixes:
 
-- **解法 1**(推荐):装 [longbridge-terminal](https://github.com/longportapp/longbridge-terminal)
-- **解法 2**:装 MCP(`claude mcp add ...`),让 LLM 自动走 MCP 兜底路径
+- **Recommended:** install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal).
+- **Alternative:** install MCP (`claude mcp add ...`) so the LLM falls back automatically.
 
 ### `param_error` on `security-list securities`
 
-底层 longbridge CLI 已知 bug。SKILL.md 让 LLM 自动改走 `mcp__longbridge__security_list`,**不需要你手动干预**。
+A known issue in the underlying Longbridge CLI. The SKILL.md tells the LLM to switch to `mcp__longbridge__security_list` automatically — **no manual intervention required**.
 
-### 分析层 skill 报"this skill has no CLI fallback"
+### Analysis-tier skill says "this skill has no CLI fallback"
 
-正常 — 分析层 5 个 skill(valuation / fundamental / news / peer-comparison / portfolio)是 prompt-only,**只走 MCP**。先 `claude mcp add longbridge ...` 然后授权交易权限(portfolio 必需,其它 4 个只需行情权限)。
+Expected. The five analysis-tier skills (valuation / fundamental / news / peer-comparison / portfolio) are prompt-only and **MCP-only**. Run `claude mcp add longbridge ...` and authorise — `portfolio` needs Trade scope, the other four only need Quote scope.
 
-详见 [docs/architecture.md §2 — CLI vs MCP 工具选择](./architecture.md)。
+For the design rationale, see [docs/architecture.md §2 — CLI vs MCP tool selection](./architecture.md).
