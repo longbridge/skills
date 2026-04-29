@@ -1,11 +1,15 @@
 ---
 name: longbridge-earnings
 description: >
-  Post-earnings analysis skill. Generates institutional-grade earnings update reports (8-12 pages DOCX)
-  and structured conversation summaries for companies under coverage. Covers beat/miss analysis,
-  segment breakdown, margin trends, guidance assessment, updated estimates, and valuation.
-  Supports US, HK, and A-share markets. Triggers on "earnings update", "quarterly results",
-  "财报分析", "业绩更新", "Q1/Q2/Q3/Q4 results", or post-earnings report requests.
+  Post-earnings analysis skill — generates institutional-grade earnings update reports
+  (8–12 page DOCX) and structured conversation summaries for companies under coverage.
+  Covers beat/miss analysis, segment breakdown, margin trends, guidance assessment,
+  updated estimates, and valuation. Supports US, HK, and A-share markets.
+  Use this skill whenever the user wants a post-earnings analysis or quarterly-results
+  writeup, even if they do not say "earnings update" verbatim. Triggers: "earnings update",
+  "quarterly results", "Q1/Q2/Q3/Q4 results", "earnings report", "post-earnings analysis",
+  "beat/miss", "guidance update", "财报分析", "业绩更新", "季度业绩", "季报", "年报",
+  "盈利分析", "财报点评", "財報分析", "業績更新", "季度業績", "季報", "年報", "財報點評".
 ---
 
 # Earnings Update Skill
