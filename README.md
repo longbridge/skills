@@ -2,7 +2,7 @@
 
 Make your AI assistant fluent in [Longbridge Securities](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-19 skills covering quotes, charts, fundamentals, valuation, news, and portfolio analysis across HK / US / A-share / Singapore markets.
+20 skills covering quotes, charts, fundamentals, valuation, earnings, news, and portfolio analysis across HK / US / A-share / Singapore markets.
 
 ---
 
@@ -62,7 +62,7 @@ The right skill is picked automatically based on your question, in the language 
 | **Foundation** | [`longbridge`](./skills/longbridge) — Longbridge CLI / Python SDK / Rust SDK / MCP integration reference |
 | **Live market data** | [`longbridge-quote`](./skills/longbridge-quote) · [`longbridge-kline`](./skills/longbridge-kline) · [`longbridge-depth`](./skills/longbridge-depth) · [`longbridge-capital-flow`](./skills/longbridge-capital-flow) · [`longbridge-market-temp`](./skills/longbridge-market-temp) · [`longbridge-derivatives`](./skills/longbridge-derivatives) · [`longbridge-security-list`](./skills/longbridge-security-list) |
 | **Your account** | [`longbridge-positions`](./skills/longbridge-positions) · [`longbridge-orders`](./skills/longbridge-orders) · [`longbridge-watchlist`](./skills/longbridge-watchlist) · [`longbridge-watchlist-admin`](./skills/longbridge-watchlist-admin) · [`longbridge-subscriptions`](./skills/longbridge-subscriptions) |
-| **Smart analysis** | [`longbridge-valuation`](./skills/longbridge-valuation) · [`longbridge-fundamental`](./skills/longbridge-fundamental) · [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) · [`longbridge-portfolio`](./skills/longbridge-portfolio) · [`longbridge-news`](./skills/longbridge-news) · [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) |
+| **Smart analysis** | [`longbridge-valuation`](./skills/longbridge-valuation) · [`longbridge-fundamental`](./skills/longbridge-fundamental) · [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) · [`longbridge-portfolio`](./skills/longbridge-portfolio) · [`longbridge-news`](./skills/longbridge-news) · [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) · [`longbridge-earnings`](./skills/longbridge-earnings) |
 
 Click any name above to see what it can do.
 
