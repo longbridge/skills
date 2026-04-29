@@ -113,3 +113,33 @@ Add Longbridge API docs to IDE/RAG       LLMs.txt / Markdown API
 - **LLMs & Markdown** — llms.txt, `open.longbridge.com` doc Markdown, `longbridge.com` live news/quote pages (`.md` suffix + Accept header), Cursor/IDE integration: [references/llm.md](references/llm.md)
 
 Load specific reference files on demand — do not load all at once.
+
+---
+
+## Related skills
+
+The skills below are siblings in the `longbridge/skills` family. If they're installed, defer to them for the listed user intents — they're more specialised and produce better-formatted output. If they're **not** installed, this skill's own CLI workflow above can handle the same queries with less specialised formatting; the foundation skill remains usable standalone.
+
+| If the user wants … | Use |
+|---|---|
+| Live quote / static reference / valuation indices for a single name | [`longbridge-quote`](../longbridge-quote) |
+| Candlestick / intraday chart | [`longbridge-kline`](../longbridge-kline) |
+| Orderbook depth / brokers / tick trades | [`longbridge-depth`](../longbridge-depth) |
+| Capital flow / large-order distribution | [`longbridge-capital-flow`](../longbridge-capital-flow) |
+| Market-level state — open / close, sentiment temperature, calendar | [`longbridge-market-temp`](../longbridge-market-temp) |
+| Options / warrants | [`longbridge-derivatives`](../longbridge-derivatives) |
+| US overnight-eligible securities catalog / HK broker dictionary | [`longbridge-security-list`](../longbridge-security-list) |
+| Stock + fund holdings, multi-currency assets, margin ratio, max-buy quantity | [`longbridge-positions`](../longbridge-positions) |
+| Today's / historical orders, executions, cash flow | [`longbridge-orders`](../longbridge-orders) |
+| Read-only watchlist groups | [`longbridge-watchlist`](../longbridge-watchlist) |
+| Watchlist mutations (create / rename / add / remove) | [`longbridge-watchlist-admin`](../longbridge-watchlist-admin) |
+| Active real-time WebSocket subscription diagnostics | [`longbridge-subscriptions`](../longbridge-subscriptions) |
+| "Is X expensive?" — historical PE / PB percentile, industry context | [`longbridge-valuation`](../longbridge-valuation) |
+| 5-dimension fundamentals (KPIs, dividends, consensus, ratings) | [`longbridge-fundamental`](../longbridge-fundamental) |
+| 2–5 symbol comparison matrix | [`longbridge-peer-comparison`](../longbridge-peer-comparison) |
+| Account-level P&L and contribution analysis | [`longbridge-portfolio`](../longbridge-portfolio) |
+| Classified news + filings + community sentiment for a single name | [`longbridge-news`](../longbridge-news) |
+| Daily incremental briefing across the watchlist | [`longbridge-catalyst-radar`](../longbridge-catalyst-radar) |
+| Institutional-grade post-earnings DOCX report (8–12 pages) | [`longbridge-earnings`](../longbridge-earnings) |
+
+This skill (`longbridge`) stays in scope when the user asks about: SDK syntax (Python / Rust), MCP server setup, LLMs.txt / IDE / RAG integration, raw CLI subcommand discovery, or anything cross-cutting that doesn't map cleanly to one specialised skill.
