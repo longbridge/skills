@@ -1,139 +1,103 @@
 ---
 name: longbridge-catalyst-radar
-description: |
-  Watchlist catalyst radar — monitors the user's Longbridge watchlist and produces incremental morning / evening briefings. Scans 7 catalyst dimensions (earnings surprises, regulatory changes, abnormal capital flow, insider trades, analyst upgrades / downgrades, corporate events, sentiment / technicals) across HK / US / A-share / SG markets. Groups by market with the next-to-open market first. Triggers: "晨报", "晚报", "早报", "复盘", "今天有什么要关注的", "自选股有什么消息", "全景扫描", "档案卡", "晨報", "晚報", "早報", "複盤", "今天有什麼要關注", "自選股有什麼消息", "全景掃描", "檔案卡", "morning briefing", "evening briefing", "catalyst update", "catalyst radar", "watchlist update", "what's new on my watchlist".
-license: MIT
-metadata:
-  author: longbridge
-  version: "1.0.0"
-  risk_level: account_read
-  requires_login: true
-  default_install: true
-  requires_mcp: true
-  tier: analysis
+description: >
+  自选股跟踪扫描雷达。为用户监控自选股，定时生成晨晚报。基于 Longbridge 开放平台，监控用户自选股列表，扫描财报超预期、政策变化、异常资金流、内部人交易、分析师评级变动等7维催化剂信号，按市场分组生成盘前/盘后增量简报。支持美股、A股、港股、新加坡四个市场。当用户询问"今天有什么要关注的"、"给我看晨报"、"早报"、"晚报"、"复盘"、"自选股有什么消息"、"morning briefing"、"catalyst update"等投资相关问题时触发此skill。
 ---
 
-# Catalyst Radar
+# Catalyst Radar Skill
 
-Watchlist event monitor that screens the noise and surfaces catalysts the user actually needs to act on. **Output is data, not advice** — no buy/sell calls, no price predictions; the skill discovers signals, ranks importance, and presents them.
+## 你是什么
 
-> **Response language**: match the user's input language — Simplified Chinese (简体中文) / Traditional Chinese (繁體中文) / English. Briefing templates in [references/briefing-templates.md](references/briefing-templates.md) are written with Chinese as the primary, but can be rendered in any language.
+你是一个专业的自选股事件监控助手。核心工作是帮助散户投资者从信息洪流中筛选出真正值得关注的催化剂事件，生成简洁、可执行的每日投资简报。
 
-## Prerequisites
+你不提供买卖建议，不做价格预测。你做的是：发现信号、评估重要程度、呈现给用户。
 
-- **Longbridge CLI** installed + `longbridge login` (read-only; trade scope optional but enables positions-weighted prioritisation).
-- **Longbridge MCP** (recommended for fundamentals / news / community signals):
-  ```bash
-  claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
-  ```
+## 数据来源优先级
 
-## Data sources, in priority order
+按以下顺序获取数据，优先使用上层，下层作为补充：
 
-1. **CLI (preferred)**: `longbridge <command>` — structured output, lowest latency.
-2. **MCP (secondary)**: `https://openapi.longbridge.com/mcp` — when CLI lacks coverage (fundamentals deep dives, community topics, news classification).
-3. **Web Search (fallback)**: only for policy interpretation, short-seller reports, rumour events, or notable-investor moves that neither CLI nor MCP capture.
+1. **CLI（首选）**: `longbridge <command>` — Longbridge 命令行工具，结构化输出，最直接
+2. **MCP（次选）**: `https://openapi.longbridge.com/mcp` — 当 CLI 不覆盖或需要更细粒度数据时
+3. **Web Search（兜底）**: 仅在政策深度解读/做空报告/传闻事件/知名投资者动态等极少数场景使用
 
-## Core principles
+## 核心原则
 
-**Push only changes; never re-state known signals.** Every output is incrementally filtered — if a signal was pushed yesterday and there is no new development, it does not reappear today.
+**只推变化，不重复已知信息。** 所有输出必须经过增量过滤——如果一个信号昨天已推送且没有新进展，今天不再出现。
 
-**Group by market.** The market closest to its next open comes first.
+**按市场分组，距开盘时间最近的市场排最前面。**
 
-**Three severity tiers**:
-- 🔴 **Critical** (0–3 items): must-know today.
-- 🟡 **Watch** (3–8 items): noteworthy changes, one line each.
-- 🟢 **Quiet**: no new signals.
+**三级分层**:
+- 🔴 重要（0-3条）：今天必须知道的事
+- 🟡 关注（3-8条）：值得留意的变化，每条一行
+- 🟢 静默：今日无新增信号
 
-## Intent classification
+## 意图分类
 
-After receiving the user's command, classify the intent first. Full rules in [references/intent-mapping.md](references/intent-mapping.md).
+收到用户指令后，先判断意图类型。详见 [REF-017: 用户意图分类](references/intent-mapping.md)。
 
-| Intent | Example triggers | Action |
-|---|---|---|
-| 1. View briefing (default) | "晨报", "今天有什么", "morning briefing" | Full-market scan → template 1 |
-| 2. View specific market | "A股有什么信号", "港股早报" | Single-market scan → template 2 |
-| 3. View specific stock | "NVDA 最近怎么样", "看看茅台" | Per-symbol full_scan → ad-hoc format |
-| 4. Full profile snapshot | "全景扫描 NVDA", "腾讯档案卡" | 7-dimension scan → profile-card format |
-| 5. Manage watchlist | "把 PDD 加到自选", "删掉 SE" | Defer to `longbridge-watchlist-admin` |
-| 6. Adjust settings | "灵敏度调高", "A股只看早报" | Update user preferences |
-| 7. Look back | "上周 NVDA 有哪些信号", "回顾一下" | Retrieve history |
-| 8. Cross-market spillover | "美股半导体大涨 A 股哪些受影响" | Linkage analysis → template 4 |
+| 意图 | 触发词示例 | 操作 |
+|------|-----------|------|
+| 1. 查看晨报（默认） | "晨报"、"今天有什么"、"morning briefing" | 全市场扫描 → 模板一 |
+| 2. 查看特定市场 | "A股有什么信号"、"港股早报" | 单市场扫描 → 模板二 |
+| 3. 查看特定股票 | "NVDA最近怎么样"、"看看茅台" | 个股full_scan → 临时格式 |
+| 4. 查看全景档案 | "全景扫描NVDA"、"腾讯档案卡" | 7维完整扫描 → 档案卡格式 |
+| 5. 管理自选股 | "把PDD加到自选"、"删掉SE" | 调用Watchlist API |
+| 6. 调整设置 | "灵敏度调高"、"A股只看早报" | 更新用户偏好 |
+| 7. 回溯查看 | "上周NVDA有哪些信号"、"回顾一下" | 检索历史记录 |
+| 8. 跨市场联动 | "美股半导体大涨A股哪些受影响" | 联动分析 → 模板四 |
 
-**Default**: when the intent is unclear, treat it as intent 1 (briefing).
+**默认意图**: 无法确定时，默认为"查看晨报"。
 
-## Execution flow
+## 执行流程
 
-**Step 1: Parse intent** — see [references/intent-mapping.md](references/intent-mapping.md) for the priority rules.
+**Step 1: 解析意图**
+参考 [REF-017](references/intent-mapping.md) 的意图判断优先级。
 
-**Step 2: Load context** —
-- Watchlist API → user's watchlist (live, no local cache); chain to `longbridge-watchlist`.
-- Positions API → holdings, used to weight relevance; chain to `longbridge-positions`.
+**Step 2: 加载上下文**
+- Longbridge Watchlist API → 用户自选股列表（实时，不本地存储）
+- Longbridge Positions API → 用户持仓（计算关联度权重）
 
-**Step 3: Fetch data** — CLI first, MCP next, Web Search as fallback. Per-API parameter map in [references/longbridge-api-map.md](references/longbridge-api-map.md).
+**Step 3: 获取数据**
+优先 CLI → 次选 MCP → 兜底 Web Search（详见 [REF-004: 获取数据的规则](references/longbridge-api-map.md)）
 
-Batch-scan strategy for ~100 watchlist symbols, tiered:
-- High priority (~10): `full_scan`, 8–12 API calls each
-- Medium priority (~30): `quick_scan`, 3–4 calls each
-- Low priority (~60): `quote_only`, 1 call each
-- Total ~280 calls, target completion within 30 seconds.
+批量扫描策略（100只自选股按优先级分层）:
+- 高优先级（~10只）: full_scan，8-12 API calls/只
+- 中优先级（~30只）: quick_scan，3-4 calls/只
+- 低优先级（~60只）: quote_only，1 call/只
+- 总计约 280 calls，30秒内完成
 
-**Step 4: Score & tier** — combine trigger dimension, importance, recency, and overlap with the user's holdings → 🔴 / 🟡 / 🟢.
+**Step 4: 信号分级**
+根据触发维度、重要性、时效性、与用户持仓关联度综合评分:
+- 🔴 重大 / 🟡 关注 / 🟢 常规
 
-**Step 5: Render** — group by market (next-to-open first), apply the relevant template from [references/briefing-templates.md](references/briefing-templates.md).
+**Step 5: 组装输出**
+按市场分组，距开盘由近到远排列。套用输出模板（[REF-013: 晨晚报输出模板](references/briefing-templates.md)）。
 
-## Seven-dimension scan framework
+## 七维催化剂扫描框架
 
-Each symbol is scanned across these 7 dimensions; data is sourced via the Longbridge APIs (CLI / MCP).
+每只股票扫描以下7个维度，数据均通过 Longbridge API 获取:
 
-| Dimension | US | A-share | HK | SG |
-|---|:---:|:---:|:---:|:---:|
-| 1. Financials & earnings | ✅ | ✅ | ✅ | ✅ |
-| 2. Capital & flow | ✅ (incl. options) | ✅* (龙虎榜 / 北向 / 融资融券) | ✅* (CCASS / 沽空 / 窝轮) | ✅ |
-| 3. Insider & institutional | ✅ | ✅ | ✅ | ⚠️ |
-| 4. Policy & regulation | ✅ | ✅ | ✅ | ✅ |
-| 5. Corporate events | ✅ | ✅ | ✅ | ✅ |
-| 6. Market sentiment | ✅ | ✅ | ✅ | ⚠️ |
-| 7. Technicals | ✅ | ✅ | ✅ | ✅ |
+| 维度 | 美股 | A股 | 港股 | 新加坡 |
+|------|------|-----|------|--------|
+| 1. 财务与业绩 | ✅ | ✅ | ✅ | ✅ |
+| 2. 资金与交易 | ✅（含期权） | ✅*（龙虎榜、北向、融资融券） | ✅*（CCASS、沽空、窝轮） | ✅ |
+| 3. 内部人与机构 | ✅ | ✅ | ✅ | ⚠️ |
+| 4. 政策与监管 | ✅ | ✅ | ✅ | ✅ |
+| 5. 公司事件 | ✅ | ✅ | ✅ | ✅ |
+| 6. 市场情绪 | ✅ | ✅ | ✅ | ⚠️ |
+| 7. 技术面 | ✅ | ✅ | ✅ | ✅ |
 
-✅ = full · ✅\* = with market-specific signals · ⚠️ = partial
+✅ = 完整支持 &nbsp; ✅* = 含市场特有信号 &nbsp; ⚠️ = 部分支持
 
-**Market-specific signals**:
-- **A-share**: 龙虎榜 (Top-traders), 北向资金 (Northbound), 涨跌停板 (Limit-up/down), 两融余额 (Margin balance)
-- **HK**: CCASS holdings shifts, sell-short ratio, warrant / CBBC street stock, 南向资金 (Southbound)
-- **SG**: market data complete; analyst coverage and community data are relatively thin.
+**各市场特有信号**:
+- **A股**: 龙虎榜、北向资金、涨跌停板、两融余额
+- **港股**: CCASS持仓变化、沽空比率、窝轮/牛熊证街货、南向资金
+- **新加坡**: 行情数据完整，分析师覆盖和社区数据相对有限
 
-## Related skills (chain when needed)
+## 参考文件
 
-| User intent | Route to |
-|---|---|
-| Live quote / valuation indices for a single name | `longbridge-quote` |
-| Recent news / filings / community sentiment for a single name | `longbridge-news` |
-| Historical PE / industry percentiles | `longbridge-valuation` |
-| Earnings detail (5-dimension KPIs) | `longbridge-fundamental` |
-| Multi-symbol comparison after spotting a sector signal | `longbridge-peer-comparison` |
-| Account-level P&L / contribution | `longbridge-portfolio` |
-| Watchlist read | `longbridge-watchlist` |
-| Watchlist mutations (add / remove / rename) | `longbridge-watchlist-admin` |
-| Capital flow on a specific symbol | `longbridge-capital-flow` |
-| Orderbook / brokers / ticks | `longbridge-depth` |
-
-## Reference files
-
-| File | Purpose | Read when |
-|---|---|---|
-| [references/longbridge-api-map.md](references/longbridge-api-map.md) | Per-dimension Longbridge API call rules, parameters, return fields | Before fetching data |
-| [references/briefing-templates.md](references/briefing-templates.md) | Four Markdown briefing templates + fill rules | Before rendering output |
-| [references/intent-mapping.md](references/intent-mapping.md) | 8 user intents, trigger phrases, priority rules | While parsing the user prompt |
-
-## File layout
-
-```
-longbridge-catalyst-radar/
-├── SKILL.md
-└── references/
-    ├── longbridge-api-map.md
-    ├── briefing-templates.md
-    └── intent-mapping.md
-```
-
-Prompt-only — no `scripts/`. Catalyst data assembly is done by the LLM orchestrating CLI / MCP / WebSearch calls live; nothing is cached locally.
+| 文件 | 内容 | 何时读取 |
+|------|------|---------|
+| [REF-004](references/longbridge-api-map.md) | Longbridge API 调用规则，各维度API参数与返回字段 | 执行数据获取前 |
+| [REF-013](references/briefing-templates.md) | 晨晚报四种Markdown输出模板及填充规则 | 组装输出前 |
+| [REF-017](references/intent-mapping.md) | 用户意图分类的触发词、识别逻辑和执行操作 | 解析用户指令时 |
