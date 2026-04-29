@@ -1,7 +1,7 @@
 ---
 name: longbridge-security-list
 description: |
-  Securities directory and HK broker participant directory via Longbridge Securities — full listed-stock catalog (symbol, English name, Chinese name) per market, and HK broker_id ↔ name lookup. Triggers: "港股一共多少只", "美股 listed", "经纪商 ID", "broker_id", "全部股票列表", "港股全部股票", "港股一共多少", "經紀商 ID", "list of stocks", "all listed stocks", "broker directory", "participant lookup".
+  US overnight-eligible securities directory and HK broker participant directory via Longbridge Securities. `security-list` covers the US overnight-trading catalog only (the Longbridge OpenAPI exposes only that category). `participants` is the HK broker_id ↔ name dictionary. For non-US listed-stock lookups, route the user to `longbridge-quote` for individual symbol queries. Triggers: "美股 listed", "美股 overnight", "经纪商 ID", "broker_id", "港股经纪商", "港股經紀商", "經紀商 ID", "list of US stocks", "overnight tradable", "broker directory", "participant lookup".
 license: MIT
 metadata:
   author: longbridge
@@ -13,60 +13,56 @@ metadata:
 
 # longbridge-security-list
 
-Catalog lookups: full listed-securities lists per market, and the HK broker_id → name dictionary.
+Catalog lookups: US overnight-eligible securities, and the HK broker_id → name dictionary.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## Subcommands
 
-| Subcommand | Returns |
+> Run `longbridge <subcommand> --help` to confirm the current flag spelling and defaults.
+
+| CLI command | Returns |
 |---|---|
-| `longbridge security-list <MARKET> --format json` | All listed securities `[{symbol, name_en, name_cn}]`. Large payload (HK ≈ 2.5k, CN ≈ 5k+). The `<MARKET>` argument is **positional** (`HK | US | CN | SG`, default `HK`). |
+| `longbridge security-list --format json` | US overnight-eligible securities `[{symbol, name_en, name_cn}]`. |
 | `longbridge participants --format json` | HK broker directory `[{broker_id, name_en, name_cn}]`. |
+
+> ⚠️ **Scope**: `security-list` only exposes the US Overnight category (the Longbridge OpenAPI does not expose full HK / A-share / SG catalogs through this endpoint). The CLI returns `Error: Only US market is supported for security-list ...` if you pass `HK / CN / SG`. For non-US listed lookups, route the user to `longbridge-quote` for per-symbol queries.
 
 ## When to use
 
-- *"港股一共有多少只股票"*, *"US listed count"* → `security-list <MARKET>`
+- *"美股 overnight 哪些股票"*, *"US overnight tradable count"* → `security-list`
 - *"经纪商 ID 9000 是谁"*, *"broker 0001"* → `participants`
 - *"翻译一下经纪商列表"* → `participants`
-- *"列出 A 股全部股票"* → ask user to narrow scope (industry, name search) and route to `longbridge-quote` for individual lookups
+- *"港股 / A 股一共多少只"*, *"list of HK / CN stocks"* → not in scope; explain the scope limit and offer per-symbol lookup via `longbridge-quote`.
 
 ## Usage rules
 
-- Reply with `count` for "how many" questions; do **not** dump full `datas`.
-- For broker_id translation, grep `datas` for the specific id.
-- For the full broker directory, list up to 100 rows; for more, return total count and ask user which IDs to translate.
-- For "list all stocks" requests, ask the user to filter (industry / market / name search) and route them to `longbridge-quote`.
+- For "how many" questions, reply with the array length; do **not** dump the full payload.
+- For broker_id translation, find the matching row instead of dumping the whole directory.
+- For "list all stocks" requests in non-US markets, ask the user to narrow scope (industry, name search) and route them to `longbridge-quote`.
 
 ## CLI
 
 ```bash
-longbridge security-list HK   --format json
-longbridge security-list US   --format json
+longbridge security-list      --format json
 longbridge participants       --format json
 ```
 
-`security-list` returns a large payload (HK ≈ 2.5k rows, CN ≈ 5k+); allow extra time for the call.
-
 ## Output
 
-- `security-list`: array of `{symbol, name_en, name_cn}`.
-- `participants`: array of `{broker_id, name_en, name_cn}`.
-
-## Path-selection note
-
-`participants` → CLI is preferred (local subprocess, faster). `security-list` → **MCP is preferred** because the current `longbridge` CLI has an intermittent `param_error` for that endpoint; MCP bypasses the CLI by calling the SDK directly.
+- `security-list`: array of `{symbol, name_en, name_cn}` for US overnight-eligible names.
+- `participants`: array of `{broker_id, name_en, name_cn}` for HK brokers.
 
 ## Error handling
 
-If `longbridge` is missing, fall back to MCP. On `security-list`, if stderr includes `param_error`, switch to `mcp__longbridge__security_list` instead — this is a known CLI issue.
+If `longbridge` is missing, fall back to MCP. If stderr says *"Only US market is supported for security-list"* on a non-US market query, explain the scope limit to the user and offer per-symbol lookup via `longbridge-quote`. Other stderr messages relay verbatim.
 
-## MCP fallback / preferred
+## MCP fallback
 
-| CLI subcommand | MCP tool | Note |
-|---|---|---|
-| `security-list` | `mcp__longbridge__security_list` | **Prefer MCP** if available |
-| `participants` | `mcp__longbridge__participants` | CLI fine |
+| CLI subcommand | MCP tool |
+|---|---|
+| `security-list` | `mcp__longbridge__security_list` |
+| `participants` | `mcp__longbridge__participants` |
 
 ## Related skills
 

@@ -112,12 +112,7 @@ A `<skill>/commands/<name>.md` file declares a `/<name>` slash command that trig
 
 ### 6. Path selection: CLI vs MCP
 
-Default rule: `longbridge <subcmd> --format json` first; fall back to `mcp__longbridge__*` when:
-
-- Shell `command not found: longbridge` (binary not installed)
-- A specific subcommand has known issues (e.g. `security-list` `param_error`)
-
-Mark exceptions in the SKILL.md explicitly:
+Default rule: `longbridge <subcmd> --format json` first; fall back to `mcp__longbridge__*` when the shell returns `command not found: longbridge` (binary not installed).
 
 - **Analysis tier** (valuation / fundamental / news / peer-comparison / portfolio / catalyst-radar): MCP-only, no CLI equivalent. Frontmatter `requires_mcp: true`. `## Prerequisite` section tells the user to run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`.
 - **Mutating** (`longbridge-watchlist-admin`): two-turn protocol — preview the action in plain language, wait for explicit confirmation (`确认`/`yes`/`是的`/`confirm`), then execute. Never combine into one turn.

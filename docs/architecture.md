@@ -139,11 +139,10 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
 >
 > When a SKILL.md is uncertain about exact flag names, defaults, or argument order (because the underlying CLI may have evolved), it instructs the LLM to run `longbridge <subcommand> --help` first — the CLI's built-in help is the canonical source.
 
-### Four exceptions (each `SKILL.md` overrides the default explicitly)
+### Three exceptions (each `SKILL.md` overrides the default explicitly)
 
 | Exception | Default flips to | Why | Where it's written |
 |---|---|---|---|
-| **`longbridge-security-list securities`** | **MCP-preferred** | The current `longbridge` CLI hits an intermittent `param_error` on the security-list endpoint; MCP calls the SDK directly and avoids the CLI middle layer | [security-list/SKILL.md `## Path-selection note`](../skills/longbridge-security-list/SKILL.md) |
 | **`longbridge-subscriptions`** | **CLI-only** | MCP is stateless HTTP — there is **no WebSocket session concept**, hence no equivalent tool | [subscriptions/SKILL.md `## Local-only`](../skills/longbridge-subscriptions/SKILL.md) |
 | **Six analysis-tier skills** (valuation / fundamental / news / peer-comparison / portfolio / catalyst-radar) | **MCP-only** | `requires_mcp: true` in frontmatter; they invoke MCP-only tools (`valuation_history` / `profit_analysis` / `news` / `topic`, …) that the CLI does not expose | each analysis-tier SKILL.md `## Prerequisite` |
 | **`longbridge-watchlist-admin`** | **Two-turn protocol** | Mutating writes need an explicit confirmation gate. The SKILL preview the action in plain language and waits for user confirmation before issuing `longbridge watchlist <create / update / delete>` (or the MCP equivalent). The CLI's `delete` subcommand also has its own built-in confirmation prompt | [watchlist-admin/SKILL.md `## Two-step protocol`](../skills/longbridge-watchlist-admin/SKILL.md) |
@@ -166,9 +165,7 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
   │                 (or the equivalent MCP write tool)
   │    └─ no ──→ continue
   ↓
-  ┌─ Skill declares MCP-preferred? (security-list securities)
-  │    └─ yes ──→ go to MCP directly
-  │    └─ no ──→ run `longbridge <subcommand> ... --format json` directly
+  Run `longbridge <subcommand> ... --format json` directly
   ↓
   Result handling
        ├─ exit 0, JSON returned ──→ use the result
@@ -219,7 +216,6 @@ For prompt-only skills (the default style — no `scripts/cli.py` between the LL
 |---|---|
 | Shell `command not found` (CLI binary missing) | **Path-switch signal** — try MCP |
 | stderr contains `unauthorized` / `not in authorized scope` | Tell user to run `longbridge auth logout && longbridge auth login` (MCP shares the same OAuth — switching path won't fix scope) |
-| stderr contains `param_error` (rare; see `security-list`) | If a known CLI bug, switch to MCP; otherwise surface to user |
 | Other stderr / non-zero exit | Surface verbatim — never silently retry |
 | Exit 0, empty JSON `[]` | Empty result is success in some skills, ambiguous in others — see each SKILL.md |
 
@@ -236,12 +232,11 @@ When adding or rewriting a skill, follow these:
 3. **Field tables and error tables are three columns** — never "Chinese / English"; always 3 columns (Simplified / Traditional / English).
 4. **Path rules are declared in SKILL.md according to category**:
    - Default read-tier → `## CLI` + `## MCP fallback`
-   - MCP-preferred → add `## Path-selection note` explaining why
    - CLI-only → add `## Local-only` explaining why MCP has no equivalent
    - MCP-only (analysis tier) → frontmatter `requires_mcp: true` + `## Prerequisite` mentioning `claude mcp add longbridge ...`
    - Mutating → add `## Two-step protocol (mandatory)` describing the dry-run + confirm flow
-5. **No Python wrappers** — point the LLM at the raw `longbridge <subcommand>` and tell it to run `longbridge <subcommand> --help` whenever flag names might have evolved. Hard-coding flag names in code (or a SKILL.md cheat sheet) creates version-coupling that we explicitly avoid.
-6. **Shell `command not found` is the path-switch signal** — when `longbridge` isn't on `PATH`, the LLM falls back to MCP (or asks the user to install longbridge-terminal). Other stderr (auth / param / etc.) is surfaced verbatim — no silent retries.
+5. **Default to prompt-only** — point the LLM at the raw `longbridge <subcommand>` and tell it to run `longbridge <subcommand> --help` whenever flag names might have evolved. `scripts/<helper>.py` is allowed when there's a clear runtime need (DOCX/chart generation, format helper, safety gate) but should stay narrow and never re-wrap the longbridge CLI by hard-coding its flags.
+6. **Shell `command not found` is the path-switch signal** — when `longbridge` isn't on `PATH`, the LLM falls back to MCP (or asks the user to install longbridge-terminal). Other stderr (auth / etc.) is surfaced verbatim — no silent retries.
 
 ---
 

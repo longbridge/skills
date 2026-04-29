@@ -279,9 +279,9 @@ The shell cannot locate the `longbridge` binary. Two fixes:
 - **Recommended:** install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal).
 - **Alternative:** install MCP (`claude mcp add ...`) so the LLM falls back automatically.
 
-### `param_error` on `security-list securities`
+### `Only US market is supported for security-list`
 
-A known issue in the underlying Longbridge CLI. The SKILL.md tells the LLM to switch to `mcp__longbridge__security_list` automatically — **no manual intervention required**.
+Expected. The `longbridge security-list` endpoint exposes only the US Overnight category. For non-US listed-stock lookups, ask the LLM about a specific symbol (it will route to `longbridge-quote`).
 
 ### Analysis-tier skill says "this skill has no CLI fallback"
 
