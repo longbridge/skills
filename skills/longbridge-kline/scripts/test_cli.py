@@ -136,7 +136,7 @@ class TestKlineHappyPath(unittest.TestCase):
             self.assertEqual(out["subcommand"], "kline")
             self.assertEqual(out["symbol"], "NVDA.US")
             self.assertEqual(len(out["datas"]), 2)
-            self.assertEqual(out["skill"], "K线查询")
+            self.assertEqual(out["skill"], "longbridge-kline")
         finally:
             os.unlink(bin_path)
 

@@ -21,7 +21,7 @@ import subprocess
 import sys
 
 
-SKILL_NAME = "资金流向"
+SKILL_NAME = "longbridge-capital-flow"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {

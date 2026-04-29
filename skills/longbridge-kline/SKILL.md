@@ -1,165 +1,101 @@
 ---
-name: K线查询
-description: 查询股票历史 K 线和分时图(OHLCV、5 分钟/日/周/月 K、今日分时)。当用户询问股票走势、历史价格、最近一周/一月/一年走势、日 K、月 K、分时图等场景必须使用此技能。支持港股(.HK)、美股(.US)、A 股(.SH/.SZ)、新加坡(.SG),不支持期权/窝轮/指数。
-license: Complete terms in LICENSE.txt
-version: 1.0.0
-risk_level: read_only
-requires_login: false
-default_install: true
+name: longbridge-kline
+description: |
+  Candlestick / OHLCV data and intraday minute series for stocks listed in HK / US / A-share / Singapore via Longbridge Securities. Supports 1m / 5m / 15m / 30m / 1h / day / week / month / year periods, history by date range, and today's intraday curve. Triggers: "K线", "K 线", "走势", "历史价格", "日K", "月K", "周K", "分时图", "近一周走势", "K線", "走勢", "歷史價格", "日K", "月K", "週K", "分時圖", "candlestick", "candles", "OHLCV", "intraday chart", "price history", "weekly chart", "monthly chart", "1-year chart", "前复权", "前復權", "forward adjusted".
+license: MIT
+metadata:
+  author: longbridge
+  version: "1.0.0"
+  risk_level: read_only
+  requires_login: false
+  default_install: true
 ---
 
-# K线查询 使用指南
+# longbridge-kline
 
-## 版本
+Historical candlesticks and today's intraday curve for Longbridge-supported securities (HK / US / A-share / Singapore). Does **not** support options, warrants, or indices — defer to `longbridge-derivatives` (derivatives) or `longbridge-quote` (indices).
 
-`1.0.0`
+> **Response language**: respond in the user's input language — Simplified Chinese, Traditional Chinese, or English.
 
-## 技能概述
+## Subcommands
 
-本技能查询长桥证券的历史 K 线 + 今日分时:
-
-- **kline**:近 N 根 K 线(默认日 K 100 根),支持 1m/5m/15m/30m/1h/day/week/month/year
-- **history**:指定起止日期的历史 K 线
-- **intraday**:今日分时图(逐分钟价格 + 成交)
-
-数据来源:**长桥证券**(https://longbridge.com)
-
-不支持:期权、窝轮、指数 — 这些请用「期权与窝轮」或行情查询(指数走 quote 接口)。
-
-## 何时使用本技能
-
-- "NVDA 最近一周走势"、"茅台过去一年 K 线"
-- "看下 TSLA 5 分钟 K"、"近 100 根 5 分钟"
-- "今天 700.HK 分时图"、"AAPL 今日走势"
-- "AAPL 2024 年 1-12 月日 K"(明确日期 → history)
-- "贵州茅台月 K"、"季 K"
-- "前复权日 K"
-
-## 核心处理流程
-
-### 步骤 1:识别标的
-
-抽取股票名称或代码,补全为 `<CODE>.<MARKET>`(规则同行情查询 skill)。
-
-### 步骤 2:决定子命令
-
-| 用户语义 | 子命令 |
+| Subcommand | Use when |
 |---|---|
-| "最近 X 天 / 最近一周一月一年 / 默认走势" | `kline` |
-| "X 分钟 K / 月 K / 季 K"(无日期窗) | `kline` |
-| "**X 月 X 日 至 X 月 X 日 / X 年走势 / 具体日期段**" | `history` |
-| "今天分时 / 今日走势 / intraday" | `intraday` |
+| `kline` | Latest N candles (default 100 daily). Periods: `1m / 5m / 15m / 30m / 1h / day / week / month / year`. |
+| `history` | OHLCV across an explicit date range (`--start`, `--end`). |
+| `intraday` | Today's per-minute curve (price + volume + avg_price). |
 
-### 步骤 3:确定参数
+Period aliases: `minute=1m`, `hour=1h`, `d/1d=day`, `w=week`, `m/1mo=month`, `y=year`. `--adjust no_adjust` (default) or `forward_adjust` (前复权 / 前復權).
 
-| 用户语义 | period | count | start/end |
-|---|---|---|---|
-| "最近一周" | day | 7 | — |
-| "最近一年" | day | 252 | — |
-| "近 100 根 5 分钟" | 5m | 100 | — |
-| "月 K" | month | 100(默认) | — |
-| "2024 年走势" | day | — | 2024-01-01 / 2024-12-31 |
-| "周 K" | week | 100 | — |
+## When to use
 
-period 别名:longbridge 接受 `minute=1m`、`hour=1h`、`d/1d=day`、`w=week`、`m/1mo=month`、`y=year`(全部 case-insensitive),cli.py 不二次映射,直传给 longbridge。
+- *"NVDA 最近一周走势"*, *"近一年走勢"*, *"AAPL 1-month chart"* → `kline --period day`
+- *"TSLA 5 分钟 K"*, *"近 100 根 5 分钟"* → `kline --period 5m --count 100`
+- *"今天 700.HK 分时图"*, *"AAPL today's intraday"* → `intraday`
+- *"AAPL 2024 年 1-12 月日 K"* (explicit dates) → `history --start --end`
+- *"前复权日 K"* → add `--adjust forward_adjust`
 
-`adjust`:`no_adjust`(默认)/ `forward_adjust`。"前复权" → `forward_adjust`。
+## Workflow
 
-### 步骤 4:调用工具(CLI 优先,必要时改 MCP)
+1. Resolve symbol to `<CODE>.<MARKET>` (rules in `longbridge-quote`).
+2. Pick the subcommand:
+   - Has explicit start/end dates → `history`.
+   - "Today" / "intraday" → `intraday`.
+   - Otherwise → `kline` with sensible defaults (day / 100).
+3. Map natural-language windows to (`period`, `count`) — examples: "最近一周" → `day,7`, "最近一年" → `day,252`, "月 K" → `month,100`.
+4. Run via local CLI (preferred) or MCP fallback.
+5. Translate datasets into prose (range high/low, net move, volume note); use ▲/▼ for direction. Cite Longbridge Securities.
 
-**路径选择**:
-- 本机有 longbridge CLI → 默认 `python3 scripts/cli.py`(快)
-- 本机无 CLI / cli.py 报 `binary_not_found` → 改用末尾「MCP 备选」段的 `mcp__longbridge__candlesticks` / `history_candlesticks_*` / `intraday`
-- 期权 / 窝轮 / 指数的 K 线本 skill 不包,引导到「期权与窝轮」或行情查询(指数走 quote)
+## CLI
 
 ```bash
-# 默认 cli.py 调用
-python3 scripts/cli.py kline NVDA.US --period day --count 100
-python3 scripts/cli.py history NVDA.US --start 2025-01-01 --end 2025-12-31
+python3 scripts/cli.py kline    NVDA.US --period day --count 100
+python3 scripts/cli.py kline    700.HK  --period 5m  --count 100 --adjust forward_adjust
+python3 scripts/cli.py history  NVDA.US --start 2025-01-01 --end 2025-12-31
 python3 scripts/cli.py intraday 700.HK
 ```
 
-### 步骤 5:解析返回的 JSON
+## Output
 
 ```json
 {
   "success": true,
   "source": "longbridge",
-  "skill": "K线查询",
+  "skill": "longbridge-kline",
   "skill_version": "1.0.0",
   "subcommand": "kline",
   "symbol": "NVDA.US",
   "period": "day",
-  "count": 5,
+  "count": 100,
   "adjust": "no_adjust",
   "datas": [{"time": "...", "open": "...", "high": "...", "low": "...", "close": "...", "volume": "...", "turnover": "..."}, ...]
 }
 ```
 
-`history` 多 `start` `end` 字段;`intraday` datas 元素为 `{time, price, volume, turnover, avg_price}`。
+`history` adds `start` / `end`. `intraday`'s `datas[i]` is `{time, price, volume, turnover, avg_price}`.
 
-错误时返回标准 envelope(见错误处理)。
+## Error handling
 
-### 步骤 6:回答用户
+Standard `error_kind` envelope: `binary_not_found / auth_expired / subprocess_failed / no_input / invalid_input_format`. See `longbridge-quote` for response phrasing.
 
-- **必须**强调"数据来源于长桥证券"
-- 走势用文字描述(涨/跌区间、最高/最低、成交量),涨跌用 ▲/▼ 标记
-- 不要把 datas 数组原样塞给用户,翻译成自然语言
-- intraday 回答时说明是哪个 trading session(从 datas[0].time 推断当前/上一交易日)
+## MCP fallback
 
-## CLI 接口文档
-
-### 子命令
-
-```
-python3 cli.py kline      <symbol> [--period day] [--count 100] [--adjust no_adjust]
-python3 cli.py history    <symbol> --start YYYY-MM-DD --end YYYY-MM-DD [--period day] [--adjust no_adjust]
-python3 cli.py intraday   <symbol>
-```
-
-通用参数(三个子命令都有):`--longbridge-bin` `--format json` `--timeout 30`。
-
-### 退出码
-
-- `0` 业务成功
-- `1` 业务错误(参数错、登录态过期、空结果)
-- `2` 系统错误(找不到 longbridge、subprocess 异常)
-
-## 输出 JSON Schema
-
-见步骤 5。`history` 与 `kline` 几乎相同,只多了 `start` `end`;`intraday` datas 形态不同。
-
-## 数据来源标注
-
-- 引用任何 K 线 / 分时数据时,**必须**强调"数据来源于长桥证券"
-- 没查到数据时,引导用户去 https://longbridge.com 或长桥 App 确认
-
-## 错误处理
-
-| `error_kind` | 用户侧话术 |
-|---|---|
-| `binary_not_found` | "长桥 CLI 工具未安装,请先安装 longbridge-terminal: https://github.com/longportapp/longbridge-terminal" |
-| `auth_expired` | "长桥登录态过期了,请在终端跑 `longbridge login` 重新授权" |
-| `subprocess_failed` | "查询失败:<details.stderr>。可以稍后重试或检查参数。" |
-| `no_input` | "请告诉我要查的标的代码,以及子命令(kline / history / intraday)" |
-| `invalid_input_format` | "代码或日期格式不对:<details>。" |
-
-## MCP 备选
-
-cli.py 返回 `binary_not_found` 时,如果已配置 `claude mcp add longbridge ...`,可改用:
-
-| cli.py 子命令 | 等效 MCP 工具 |
+| CLI subcommand | MCP tool |
 |---|---|
 | `kline` | `mcp__longbridge__candlesticks` |
-| `history` | `mcp__longbridge__history_candlesticks_by_offset` 或 `mcp__longbridge__history_candlesticks_by_date` |
+| `history` | `mcp__longbridge__history_candlesticks_by_offset` or `mcp__longbridge__history_candlesticks_by_date` |
 | `intraday` | `mcp__longbridge__intraday` |
 
-优先 cli.py,本机更快;MCP 仅作回退。
+## Related skills
 
-## 代码结构
+- Quote / static / valuation indices → `longbridge-quote`
+- Orderbook / brokers / ticks → `longbridge-depth`
+- Capital flow → `longbridge-capital-flow`
+
+## File layout
 
 ```
-K线查询/
+longbridge-kline/
 ├── SKILL.md
 └── scripts/
     ├── cli.py

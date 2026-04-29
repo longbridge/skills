@@ -1,127 +1,78 @@
 ---
-name: 证券查找
-description: 查询市场全部上市证券列表,以及港股市场参与者(经纪商 ID 与名字字典)。当用户询问某市场总共有多少只股票、列出全部 X 市场股票、按代码反查名字、经纪商 ID 翻译等场景必须使用此技能。返回原始字典,不做筛选。
-license: Complete terms in LICENSE.txt
-version: 1.0.0
-risk_level: read_only
-requires_login: false
-default_install: true
+name: longbridge-security-list
+description: |
+  Securities directory and HK broker participant directory via Longbridge Securities — full listed-stock catalog (symbol, English name, Chinese name) per market, and HK broker_id ↔ name lookup. Triggers: "港股一共多少只", "美股 listed", "经纪商 ID", "broker_id", "全部股票列表", "港股全部股票", "港股一共多少", "經紀商 ID", "list of stocks", "all listed stocks", "broker directory", "participant lookup".
+license: MIT
+metadata:
+  author: longbridge
+  version: "1.0.0"
+  risk_level: read_only
+  requires_login: false
+  default_install: true
 ---
 
-# 证券查找 使用指南
+# longbridge-security-list
 
-## 版本
+Catalog lookups: full listed-securities lists per market, and the HK broker_id → name dictionary.
 
-`1.0.0`
+> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
-## 技能概述
+## Subcommands
 
-元数据查找:
-
-- **securities**:某市场全部证券列表(symbol + name_en + name_cn)
-- **participants**:港股经纪商参与者字典(broker_id + name)
-
-数据来源:**长桥证券**(https://longbridge.com)
-
-注意:数据量大(港股 ~2.5k 条,A 股 ~5k+),不要把全部 datas 贴给用户,用 count 回答总数,具体股票名字反查取用户关心的子集。
-
-## 何时使用本技能
-
-- "港股一共有多少只股票" / "美股 listed 数量"
-- "经纪商 ID 9000 是谁" / "0001 是哪家券商"
-- "列出 A 股全部股票"(LLM 应反问范围)
-- "翻译一下经纪商列表"(→ participants)
-
-## 核心处理流程
-
-### 步骤 1:决定子命令
-
-| 用户语义 | 子命令 |
+| Subcommand | Returns |
 |---|---|
-| "X 市场多少股票 / listed / 总数" | securities |
-| "经纪商 ID xxx 是谁" / "完整经纪商列表" | participants |
+| `securities --market HK | US | CN | SG` | All listed securities `[{symbol, name_en, name_cn}]`. Large payload (HK ≈ 2.5k, CN ≈ 5k+). |
+| `participants` | HK broker directory `[{broker_id, name_en, name_cn}]`. |
 
-### 步骤 2:市场识别
+## When to use
 
-`securities` 的 `--market`:
-- "美股 / US / 纳斯达克" → US
-- "港股 / HK" → HK
-- "A 股 / 沪深 / SH / SZ" → CN
-- "新加坡 / SG" → SG
+- *"港股一共有多少只股票"*, *"US listed count"* → `securities`
+- *"经纪商 ID 9000 是谁"*, *"broker 0001"* → `participants`
+- *"翻译一下经纪商列表"* → `participants`
+- *"列出 A 股全部股票"* → ask user to narrow scope (industry, name search) and route to `longbridge-quote` for individual lookups
 
-### 步骤 3:调用工具(securities 优先 MCP,participants CLI 优先)
+## Usage rules
 
-**路径选择**:
-- `participants` → cli.py 默认(本机更快)
-- `securities` → **优先走 MCP**(`mcp__longbridge__security_list`),原因:CLI 当前版本对 security-list 偶发后端 param_error,MCP 走 SDK 直连绕过 CLI 中间层
-- 本机无 CLI / `binary_not_found` → 全部改 MCP
+- Reply with `count` for "how many" questions; do **not** dump full `datas`.
+- For broker_id translation, grep `datas` for the specific id.
+- For the full broker directory, list up to 100 rows; for more, return total count and ask user which IDs to translate.
+- For "list all stocks" requests, ask the user to filter (industry / market / name search) and route them to `longbridge-quote`.
+
+## CLI
 
 ```bash
-# participants 默认走 cli.py
-python3 scripts/cli.py participants
-
-# securities 数据量大,如果调用失败优先改走 MCP
-python3 scripts/cli.py securities --market HK --timeout 60
+python3 scripts/cli.py securities --market HK --timeout 60   # large payload, raise timeout
+python3 scripts/cli.py securities --market US
 python3 scripts/cli.py participants
 ```
 
-数据量大,securities 用 `--timeout 60`(默认 30s 可能不够)。
+The default 30s timeout may be tight for `securities` — prefer `--timeout 60`.
 
-### 步骤 4:回答规范
+## Output
 
-| 用户问的 | 回答策略 |
-|---|---|
-| "X 市场多少股票" | 用 count 直接回答,不展示 datas 全部 |
-| "经纪商 ID xxx 是谁" | 在 datas 里 grep,只回该条 |
-| "完整经纪商列表" | 列表 ≤ 100 条可全展示;否则回总数并建议按 ID 反查 |
-| "列出全部股票" | 反问"想找哪只 / 哪个行业",引导到行情查询 skill |
+- `securities`: `market / count / datas` (rows `{symbol, name_en, name_cn}`)
+- `participants`: `datas` (rows `{broker_id, name_en, name_cn}`)
 
-- **必须**强调"数据来源于长桥证券"
+## Path-selection note
 
-## CLI 接口文档
+`participants` → CLI is preferred (local subprocess, faster). `securities` → **MCP is preferred** because the current `longbridge` CLI has an intermittent `param_error` for the security-list endpoint; MCP bypasses the CLI middle layer via direct SDK calls.
 
-```
-python3 cli.py securities    [--market HK|US|CN|SG]
-python3 cli.py participants
-```
+## MCP fallback / preferred
 
-通用参数:`--longbridge-bin / --format json / --timeout 30`(securities 建议 `--timeout 60`)。
+| CLI subcommand | MCP tool | Note |
+|---|---|---|
+| `securities` | `mcp__longbridge__security_list` | **Prefer MCP** if available |
+| `participants` | `mcp__longbridge__participants` | CLI fine |
 
-退出码:`0` 业务成功 / `1` 业务错 / `2` 系统错。
+## Related skills
 
-## 输出 JSON Schema
+- Single quote / static → `longbridge-quote`
+- broker_id appears in → `longbridge-depth` (broker queue)
 
-securities:`market / count / datas`(数组,每条 `{symbol, name_en, name_cn}`)
-
-participants:`datas`(数组,每条 `{broker_id, name_en, name_cn}`)
-
-## 数据来源标注
-
-- 引用任何证券或经纪商列表数据时,**必须**强调"数据来源于长桥证券"
-
-## 错误处理
-
-| `error_kind` | 用户侧话术 |
-|---|---|
-| `binary_not_found` | "长桥 CLI 工具未安装" |
-| `auth_expired` | "长桥登录态过期了,请跑 `longbridge login`" |
-| `subprocess_failed` | "查询失败:<details.stderr>。可能是数据量大超时,试着加 --timeout 60。" |
-| `no_input` | "请告诉我要查什么:securities / participants" |
-| `invalid_input_format` | "市场不支持。可选 HK / US / CN / SG" |
-
-## MCP 备选
-
-| cli.py 子命令 | 等效 MCP 工具 |
-|---|---|
-| `securities` | `mcp__longbridge__security_list` |
-| `participants` | `mcp__longbridge__participants` |
-
-由于 cli.py 在 `securities` 上偶发后端 param_error(longbridge-terminal 当前版本的已知问题),如果失败,**优先**改用 `mcp__longbridge__security_list` —— MCP 走的是直接 SDK 调用,不受 CLI 中间层影响。
-
-## 代码结构
+## File layout
 
 ```
-证券查找/
+longbridge-security-list/
 ├── SKILL.md
 └── scripts/
     ├── cli.py

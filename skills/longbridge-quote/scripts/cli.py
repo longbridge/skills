@@ -19,7 +19,7 @@ import subprocess
 import sys
 
 
-SKILL_NAME = "行情查询"
+SKILL_NAME = "longbridge-quote"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {

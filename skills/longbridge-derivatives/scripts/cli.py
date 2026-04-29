@@ -17,7 +17,7 @@ import subprocess
 import sys
 
 
-SKILL_NAME = "期权与窝轮"
+SKILL_NAME = "longbridge-derivatives"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {"auth_expired", "binary_not_found", "subprocess_failed",

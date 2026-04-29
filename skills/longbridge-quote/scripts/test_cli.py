@@ -63,7 +63,7 @@ class TestNoInput(unittest.TestCase):
         self.assertEqual(out.get("success"), False)
         self.assertEqual(out.get("error_kind"), "no_input")
         self.assertEqual(out.get("source"), "longbridge")
-        self.assertEqual(out.get("skill"), "行情查询")
+        self.assertEqual(out.get("skill"), "longbridge-quote")
 
 
 class TestSymbolValidation(unittest.TestCase):
@@ -107,7 +107,7 @@ class TestQuoteHappyPath(unittest.TestCase):
             self.assertEqual(len(out["datas"]), 2)
             self.assertEqual(out["datas"][0]["symbol"], "NVDA.US")
             self.assertEqual(out["source"], "longbridge")
-            self.assertEqual(out["skill"], "行情查询")
+            self.assertEqual(out["skill"], "longbridge-quote")
             self.assertEqual(out["skill_version"], "1.0.0")
         finally:
             os.unlink(bin_path)

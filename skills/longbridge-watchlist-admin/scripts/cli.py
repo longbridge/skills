@@ -13,7 +13,7 @@ With --confirm: real call to longbridge. Bin must resolve to PATH-found longbrid
 import argparse, json, os, shutil, subprocess, sys
 
 
-SKILL_NAME = "自选股管理"
+SKILL_NAME = "longbridge-watchlist-admin"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {"auth_expired", "binary_not_found", "subprocess_failed",

@@ -22,7 +22,7 @@ import subprocess
 import sys
 
 
-SKILL_NAME = "K线查询"
+SKILL_NAME = "longbridge-kline"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {

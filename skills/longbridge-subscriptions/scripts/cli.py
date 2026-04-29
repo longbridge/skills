@@ -4,7 +4,7 @@
 import argparse, json, os, shutil, subprocess, sys
 
 
-SKILL_NAME = "实时订阅"
+SKILL_NAME = "longbridge-subscriptions"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {"auth_expired", "binary_not_found", "subprocess_failed",

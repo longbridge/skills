@@ -8,7 +8,7 @@
 import argparse, json, os, shutil, subprocess, sys
 
 
-SKILL_NAME = "证券查找"
+SKILL_NAME = "longbridge-security-list"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {"auth_expired", "binary_not_found", "subprocess_failed",

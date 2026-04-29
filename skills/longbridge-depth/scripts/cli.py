@@ -20,7 +20,7 @@ import subprocess
 import sys
 
 
-SKILL_NAME = "盘口深度"
+SKILL_NAME = "longbridge-depth"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {

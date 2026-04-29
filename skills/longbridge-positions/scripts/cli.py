@@ -12,7 +12,7 @@
 import argparse, json, os, re, shutil, subprocess, sys
 
 
-SKILL_NAME = "持仓查询"
+SKILL_NAME = "longbridge-positions"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {"auth_expired", "binary_not_found", "subprocess_failed",

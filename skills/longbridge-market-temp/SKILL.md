@@ -1,136 +1,97 @@
 ---
-name: 市场情绪
-description: 查询市场是否开市、交易时段、交易日历,以及市场情绪温度计(0-100,越高越多头)。当用户询问今天/明天某市场是否开盘、几点开盘几点收盘、下个交易日、市场情绪、牛熊度数等场景必须使用此技能。支持港股、美股、A 股(沪深合并)、新加坡。
-license: Complete terms in LICENSE.txt
-version: 1.0.0
-risk_level: read_only
-requires_login: false
-default_install: true
+name: longbridge-market-temp
+description: |
+  Market-level state from Longbridge Securities — market temperature index (0–100, higher = more bullish), trading session times (open/close), and the trading day calendar (with half-days). Triggers: "今天开盘吗", "今天美股开市吗", "几点开盘", "下个交易日", "市场情绪", "牛熊度数", "温度计", "市场温度", "今天開盤嗎", "幾點開盤", "下個交易日", "市場情緒", "溫度計", "is the market open", "trading hours", "next trading day", "market temperature", "market sentiment".
+license: MIT
+metadata:
+  author: longbridge
+  version: "1.0.0"
+  risk_level: read_only
+  requires_login: false
+  default_install: true
 ---
 
-# 市场情绪 使用指南
+# longbridge-market-temp
 
-## 版本
+Market-level state: open/close, calendar, sentiment temperature. Symbol-level questions belong in `longbridge-quote`.
 
-`1.0.0`
+> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
-## 技能概述
+## Subcommands
 
-市场层面的"是否开市 + 情绪温度"。标的层面在「行情查询」skill。
-
-- **temp**:市场情绪温度计快照(0-100,越高越多头);加 `--history` 查时序
-- **session**:全市场交易时段(开 / 收盘时间)
-- **days**:某市场的交易日历(交易日 + 半日交易日)
-
-数据来源:**长桥证券**(https://longbridge.com)
-
-## 何时使用本技能
-
-- "今天美股开盘了吗" / "现在港股交易吗"
-- "美股几点开盘"
-- "下个交易日是几号" / "这周还有几天交易"
-- "圣诞节港股开市吗"
-- "美股市场温度" / "现在情绪指数多少"
-- "看一下今年港股市场情绪走势"(→ `temp --history`)
-
-## 核心处理流程
-
-### 步骤 1:决定子命令
-
-| 用户语义 | 子命令 |
+| Subcommand | Returns |
 |---|---|
-| "几点开盘 / 收盘" / "X 市场开市时间" | session |
-| "今天 / 明天 X 市场开盘吗" | days |
-| "下个交易日" / "本周交易日" | days |
-| "市场情绪 / 温度 / 牛熊度数" | temp |
-| "X 市场今年情绪走势" | temp --history --start ... --end ... |
+| `temp` | Today's market temperature (0–100). With `--history --start --end`, returns the time series. |
+| `session` | Trading sessions for all markets (open / close times). |
+| `days` | Trading day calendar for `--market HK | US | CN | SG`, optional `--start` / `--end`. |
 
-### 步骤 2:市场识别
+## Market mapping
 
-LLM 把用户口语映射到 `--market`:
+LLM maps colloquial names to `--market`:
 
-- "美股 / US / 纳斯达克 / 道指 / 标普" → `US`
-- "港股 / HK / 恒生" → `HK`
-- "A 股 / 沪 / 深 / 上证 / 深证" → `CN`(也接受 `SH` `SZ` 别名)
-- "新加坡 / SG / 海峡 / 星洲" → `SG`
-- 不明 → 反问
+| User says | `--market` |
+|---|---|
+| 美股 / US / Nasdaq / S&P / Dow | `US` |
+| 港股 / HK / Hang Seng / 恒生 | `HK` |
+| A 股 / 沪 / 深 / 上证 / 深证 / SH / SZ | `CN` |
+| 新加坡 / SG / Straits / 海峡 | `SG` |
 
-`session` 不需要 market(返回所有市场)。
+`session` does not need `--market`; it returns all markets.
 
-### 步骤 3:调用工具(CLI 优先,必要时改 MCP)
+## When to use
 
-**路径选择**:
-- 本机有 CLI → 默认 `python3 scripts/cli.py`
-- 本机无 CLI / `binary_not_found` → 改用 `mcp__longbridge__market_temperature` / `history_market_temperature` / `trading_session` / `trading_days`
-- 用户问财报 / IPO / 宏观日历等"事件维度" → CLI / 本 skill 不包,引导走 MCP 的 `mcp__longbridge__finance_calendar`
+- *"今天美股开盘了吗"*, *"is HK open?"* — combine `session` + local time inference (US = UTC-5/-4 DST, HK/CN/SG = UTC+8)
+- *"几点开盘"* → `session`
+- *"下个交易日"*, *"this week's trading days"* → `days`
+- *"圣诞节港股开市吗"* → `days --market HK --start <Christmas> --end <Christmas>`
+- *"市场情绪"*, *"温度多少"* → `temp --market <X>`
+- *"今年港股市场情绪走势"* → `temp --market HK --history --start ... --end ...`
+
+## Workflow
+
+1. Pick subcommand (table above).
+2. Resolve `--market` if needed.
+3. For "is the market open?" — call `session`, then reason against current local time and the user's target market.
+4. Run via local CLI (preferred) or MCP fallback.
+5. Translate `temp` value into wording: 0–30 *偏空*, 30–50 *中性偏空*, 50–70 *中性偏多*, 70–100 *偏多* (translate into user's language).
+
+## CLI
 
 ```bash
-# 默认 cli.py 调用
-python3 scripts/cli.py temp --market HK
+python3 scripts/cli.py temp    --market HK
 python3 scripts/cli.py session
-python3 scripts/cli.py days --market US --start 2026-04-28 --end 2026-05-31
-python3 scripts/cli.py temp --market HK --history --start 2026-01-01 --end 2026-04-28
+python3 scripts/cli.py days    --market US --start 2026-04-28 --end 2026-05-31
+python3 scripts/cli.py temp    --market HK --history --start 2026-01-01 --end 2026-04-28
 ```
 
-### 步骤 4:解析返回 JSON
+## Output
 
-各子命令的 envelope:`success / source: "longbridge" / skill: "市场情绪" / skill_version / subcommand`,然后:
-- `temp`:`market` + `datas`(快照对象);`--history` 时多 `start` `end`,`datas` 为数组
-- `session`:`datas` 为数组(跨全市场)
-- `days`:`market` + `datas`(对象,含 `trading_days` / `half_trading_days`)
+`success / source / skill / skill_version / subcommand`, plus:
 
-### 步骤 5:回答用户
+- `temp`: `market` + `datas` (snapshot object); with `--history`, additional `start / end`, `datas` is an array.
+- `session`: `datas` is an array spanning all markets.
+- `days`: `market` + `datas` `{trading_days, half_trading_days}`.
 
-- **必须**强调"数据来源于长桥证券"
-- "今天 X 市场是否在交易"是个推理问题:结合本地时间 + trading-session 数据,LLM 自己推理(美股 = UTC-5/-4 夏令时、港股 = UTC+8、A 股 = UTC+8、新加坡 = UTC+8)
-- temp 数值用文字描述:0-30 偏空、30-50 中性偏空、50-70 中性偏多、70-100 偏多
+## MCP fallback
 
-## CLI 接口文档
-
-```
-python3 cli.py temp     [--market HK|US|CN|SG] [--history --start YYYY-MM-DD --end YYYY-MM-DD]
-python3 cli.py session
-python3 cli.py days     [--market HK|US|CN|SG] [--start YYYY-MM-DD] [--end YYYY-MM-DD]
-```
-
-通用参数:`--longbridge-bin / --format json / --timeout 30`。
-
-退出码:`0` 业务成功 / `1` 业务错 / `2` 系统错。
-
-## 输出 JSON Schema
-
-见步骤 4。
-
-## 数据来源标注
-
-- 引用任何市场温度、交易时段、交易日数据时,**必须**强调"数据来源于长桥证券"
-- 没查到数据时,引导用户去 https://longbridge.com 或长桥 App 确认
-
-## 错误处理
-
-| `error_kind` | 用户侧话术 |
+| CLI subcommand | MCP tool |
 |---|---|
-| `binary_not_found` | "长桥 CLI 工具未安装" |
-| `auth_expired` | "长桥登录态过期了,请跑 `longbridge login`" |
-| `subprocess_failed` | "查询失败:<details.stderr>" |
-| `no_input` | "请告诉我要查什么:temp / session / days" |
-| `invalid_input_format` | "市场或日期格式不对:<details>" |
-
-## MCP 备选
-
-| cli.py 子命令 | 等效 MCP 工具 |
-|---|---|
-| `temp`(快照) | `mcp__longbridge__market_temperature` |
+| `temp` (snapshot) | `mcp__longbridge__market_temperature` |
 | `temp --history` | `mcp__longbridge__history_market_temperature` |
 | `session` | `mcp__longbridge__trading_session` |
 | `days` | `mcp__longbridge__trading_days` |
 
-MCP 拓展能力(CLI 没有):`mcp__longbridge__market_status`(更细的市场状态)、`mcp__longbridge__finance_calendar`(财报 / 分红 / IPO / 宏观日历,见「财经日历」skill 路线)。
+MCP-only extensions: `mcp__longbridge__market_status` (finer state), `mcp__longbridge__finance_calendar` (earnings / dividends / IPO / macro).
 
-## 代码结构
+## Related skills
+
+- Single-stock quote / status → `longbridge-quote`
+- Earnings calendar / IPO / macro events → use `mcp__longbridge__finance_calendar` directly
+
+## File layout
 
 ```
-市场情绪/
+longbridge-market-temp/
 ├── SKILL.md
 └── scripts/
     ├── cli.py

@@ -17,7 +17,7 @@ import subprocess
 import sys
 
 
-SKILL_NAME = "市场情绪"
+SKILL_NAME = "longbridge-market-temp"
 SKILL_VERSION = "1.0.0"
 
 ERROR_KINDS = {
