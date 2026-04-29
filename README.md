@@ -34,16 +34,6 @@ bunx skills add longbridge/skills --skill longbridge-quote
 /plugin install longbridge@longbridge-skills
 ```
 
-### manual symlink (clone first)
-
-```bash
-git clone https://github.com/longbridge/skills.git
-cd skills
-for d in skills/*; do
-  ln -sfn "$PWD/$d" ~/.claude/skills/$(basename $d)
-done
-```
-
 📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
 
 ---
