@@ -2,6 +2,26 @@
 
 This document provides detailed step-by-step instructions for each phase of the earnings update process.
 
+## Contents
+
+- [Phase 1: Earnings Data Collection](#phase-1-earnings-data-collection) — Steps 1–4
+  - Step 1: Identify the latest earnings period
+  - Step 2: Gather earnings materials (filings, transcripts, press release)
+  - Step 3: Extract key metrics
+  - Step 4: Identify key themes from the call
+- [Phase 2: Analysis](#phase-2-analysis) — Steps 5–11
+  - Step 5: Beat / miss analysis
+  - Step 6: Segment / geographic / product analysis
+  - Step 7: Margin analysis
+  - Step 8: Guidance analysis
+  - Step 9: Update financial model
+  - Step 10: Update valuation & price target
+  - Step 11: Assess rating impact
+- [Phase 3: Chart Generation](#phase-3-chart-generation) — Step 12
+- [Phase 4: Report Creation](#phase-4-report-creation) — Steps 13–14
+- [Phase 5: Quality Check & Delivery](#phase-5-quality-check--delivery) — Steps 15–16
+- [Phase 6: Conversation Summary](#phase-6-conversation-summary) — Step 17
+
 ## ⚠️ CRITICAL: USE LONGBRIDGE CLI TO IDENTIFY THE LATEST EARNINGS ⚠️
 
 Training data is OUTDATED. Always use `longbridge filing` to find and verify the latest earnings quarter. Do NOT rely on knowledge cutoff or web search as the primary method.

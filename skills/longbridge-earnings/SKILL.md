@@ -32,16 +32,14 @@ Priority: **CLI (primary) → Web Search (supplement)**
 
 Use the Longbridge CLI for all market data. Before using any command, run `longbridge <command> --help` to check available options — the CLI is updated frequently.
 
-**⚠️ CLI + Python pattern — always use temp file, never inline pipe:**
+**CLI + Python pattern**: prefer reading from a file over piping into `python3 -c`. Multi-line JSON with embedded quotes can hit shell-quoting edge cases (especially under zsh's `-c` argument handling), so the safer pattern is:
 
 ```bash
-# CORRECT
 longbridge institution-rating 700.HK --format json > /tmp/rating.json
-python3 -c "import json; d=json.load(open('/tmp/rating.json')); print(d)"
-
-# WRONG — zsh escapes characters inside -c "..." and causes TypeError/SyntaxError
-longbridge institution-rating 700.HK --format json | python3 -c "import json,sys; ..."
+python3 -c "import json; d = json.load(open('/tmp/rating.json')); print(d)"
 ```
+
+If you do prefer pipes, use a heredoc-fed Python script (`python3 <<'PY' ... PY`) or save to a file and run a `.py` file.
 
 **CLI docs**: https://open.longbridge.com/zh-CN/docs/cli/
 **MCP endpoint**: `https://openapi.longbridge.com/mcp`

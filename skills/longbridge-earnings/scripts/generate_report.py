@@ -48,7 +48,7 @@ def make_chart(fig) -> io.BytesIO:
 # ─────────────────────────────────────────────
 # DATA SECTION — fill in before running
 # ─────────────────────────────────────────────
-SYMBOL       = "00700.HK"
+SYMBOL       = "700.HK"
 COMPANY      = "Tencent Holdings"
 QUARTER      = "Q4 2025"
 REPORT_DATE  = "2026-04-29"

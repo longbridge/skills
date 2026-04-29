@@ -2,6 +2,23 @@
 
 This document provides complete page-by-page templates and formatting requirements for the earnings update DOCX report.
 
+## Contents
+
+- [Complete Report Structure](#complete-report-structure) — overview of all 12 pages
+- [PAGE 1: Earnings Summary](#page-1-earnings-summary) — headline + scorecard + verdict
+- [PAGES 2–3: Detailed Results Analysis](#pages-2-3-detailed-results-analysis)
+  - Revenue Analysis · Profitability Analysis
+- [PAGES 4–5: Key Metrics & Guidance](#pages-4-5-key-metrics--guidance)
+  - Business Metrics · Guidance & Outlook
+- [PAGES 6–7: Updated Investment Thesis](#pages-6-7-updated-investment-thesis)
+  - Thesis Impact Assessment · Risks Update
+- [PAGES 8–10: Valuation & Estimates](#pages-8-10-valuation--estimates)
+  - Updated Valuation · Dynamic Weighting · Bear/Base/Bull Range · Sensitivity Table · Sanity Checks · Updated Estimates Detail
+- [PAGES 11–12: Appendix (Optional)](#pages-11-12-appendix-optional)
+  - Detailed Quarterly Models · Call Transcript Highlights · Peer Comparison
+- [Formatting Requirements](#formatting-requirements) — pages, tables, charts, year notation, writing style, hyperlinks
+- [Citation Examples](#citation-examples-for-specific-content) — beat/miss, guidance, key metrics
+
 ## Complete Report Structure
 
 **REPORT STRUCTURE:**
