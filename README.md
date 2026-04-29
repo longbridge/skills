@@ -2,16 +2,17 @@
 
 [Agent Skills](https://agentskills.io/specification) for [Longbridge Securities](https://longbridge.com) — query market quotes, charts, orderbook depth, fundamentals, news, and analyse personal portfolios across HK / US / A-share / SG markets.
 
-**17 skills · multilingual triggers (Simplified Chinese / Traditional Chinese / English) · supports two install paths (single-skill symlink + plugin marketplace).**
+**18 skills · multilingual triggers (Simplified Chinese / Traditional Chinese / English) · supports two install paths (single-skill symlink + plugin marketplace).**
 
 ```text
 longbridge-skills/
 ├── .claude-plugin/marketplace.json     # plugin entry for /plugin install
-├── skills/                             # 17 skill folders, lowercase ASCII slugs
+├── skills/                             # 18 skill folders, lowercase ASCII slugs
 │   ├── longbridge-quote/
 │   ├── longbridge-kline/
 │   ├── ...
-│   └── longbridge-portfolio/
+│   ├── longbridge-portfolio/
+│   └── longbridge-catalyst-radar/
 ├── docs/
 │   ├── architecture.md                 # how multilingual + CLI/MCP routing work
 │   ├── install.md                      # full install / verify / FAQ
@@ -72,7 +73,7 @@ done
 | [`longbridge-watchlist-admin`](./skills/longbridge-watchlist-admin) | Watchlist mutations (with dry-run + confirm) |
 | [`longbridge-subscriptions`](./skills/longbridge-subscriptions) | Active WebSocket subscriptions |
 
-### Analysis tier (5) — `prompt-only`, **requires longbridge MCP**
+### Analysis tier (6) — `prompt-only`, **requires longbridge MCP**
 
 | Skill | High-frequency questions |
 |---|---|
@@ -81,6 +82,7 @@ done
 | [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) | "X vs Y vs Z?" 2–5 symbol matrix |
 | [`longbridge-portfolio`](./skills/longbridge-portfolio) | "How is my account?" account-level analysis (trade scope) |
 | [`longbridge-news`](./skills/longbridge-news) | "What's the news on X?" classified news + filings + community |
+| [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) | "What should I watch today?" incremental morning / evening briefing across the watchlist; 7-dimension catalyst scan |
 
 ## Architecture
 
