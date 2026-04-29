@@ -21,12 +21,12 @@ Catalog lookups: full listed-securities lists per market, and the HK broker_id �
 
 | Subcommand | Returns |
 |---|---|
-| `securities --market HK | US | CN | SG` | All listed securities `[{symbol, name_en, name_cn}]`. Large payload (HK ≈ 2.5k, CN ≈ 5k+). |
-| `participants` | HK broker directory `[{broker_id, name_en, name_cn}]`. |
+| `longbridge security-list <MARKET> --format json` | All listed securities `[{symbol, name_en, name_cn}]`. Large payload (HK ≈ 2.5k, CN ≈ 5k+). The `<MARKET>` argument is **positional** (`HK | US | CN | SG`, default `HK`). |
+| `longbridge participants --format json` | HK broker directory `[{broker_id, name_en, name_cn}]`. |
 
 ## When to use
 
-- *"港股一共有多少只股票"*, *"US listed count"* → `securities`
+- *"港股一共有多少只股票"*, *"US listed count"* → `security-list <MARKET>`
 - *"经纪商 ID 9000 是谁"*, *"broker 0001"* → `participants`
 - *"翻译一下经纪商列表"* → `participants`
 - *"列出 A 股全部股票"* → ask user to narrow scope (industry, name search) and route to `longbridge-quote` for individual lookups

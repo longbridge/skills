@@ -13,18 +13,20 @@ Pick whichever fits your workflow:
 ### with `npx` (one line, no setup)
 
 ```bash
-# Install everything
-npx skills add longbridge/skills
+# Install everything globally (~/.claude/skills/)
+npx skills add longbridge/skills -g
 
-# Or just one skill
-npx skills add longbridge/skills --skill longbridge-quote
+# Or just one skill, globally
+npx skills add longbridge/skills -g --skill longbridge-quote
 ```
+
+> Use `-g` (global) so the skills land in `~/.claude/skills/` and are reachable from any project. Without `-g`, the installer treats the current directory as a project and installs into `<cwd>/.claude/skills/` — which is fine for project-scoped skills but is a common surprise when you later run `npx skills remove` from a different directory.
 
 ### with `bun`
 
 ```bash
-bunx skills add longbridge/skills
-bunx skills add longbridge/skills --skill longbridge-quote
+bunx skills add longbridge/skills -g
+bunx skills add longbridge/skills -g --skill longbridge-quote
 ```
 
 ### inside Claude Code (plugin marketplace)

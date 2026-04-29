@@ -21,14 +21,17 @@ Read-only account snapshot — what the user holds, how much cash, what they can
 
 ## Subcommands
 
+> Run `longbridge <subcommand> --help` to confirm the current flag spelling and defaults if you're unsure.
+
 | CLI command | Returns |
 |---|---|
-| `longbridge portfolio --format json` | Combined holdings + funds + balance + P/L distribution. |
 | `longbridge positions --format json` | Stock holdings array. |
 | `longbridge fund-positions --format json` | Fund holdings array. |
 | `longbridge balance [--currency USD\|HKD\|CNY\|SGD] --format json` | Cash balance + financing limits per currency. |
 | `longbridge margin-ratio <SYMBOL> --format json` | Initial / maintenance / forced-liquidation factors. |
 | `longbridge max-qty <SYMBOL> --side buy\|sell [--price <p>] [--order-type LO\|MO\|ELO\|ALO] --format json` | Estimated max purchasable / sellable quantity (cash vs margin). |
+
+There is **no** single `portfolio` subcommand. For an "account snapshot" question, call `positions` + `fund-positions` + `balance` and merge in the response.
 
 ## When to use
 
@@ -37,7 +40,7 @@ Read-only account snapshot — what the user holds, how much cash, what they can
 - *"我的基金持仓"* → `fund-positions`
 - *"NVDA 我能买多少股"*, *"how many TSLA can I buy"* → `max-qty <SYMBOL> --side buy --price <current>` (limit) or `--order-type MO` (market)
 - *"茅台保证金率"* → `margin-ratio 600519.SH`
-- *"看一下我的账户全貌"*, *"account snapshot"* → `portfolio`
+- *"看一下我的账户全貌"*, *"account snapshot"* → call `positions` + `fund-positions` + `balance` and merge
 - *"我的浮盈"* → `positions`, then LLM computes `(last - cost) × qty` from quote (chain to `longbridge-quote` for live last)
 
 ## max-qty workflow
@@ -49,7 +52,6 @@ Read-only account snapshot — what the user holds, how much cash, what they can
 ## CLI
 
 ```bash
-longbridge portfolio                                              --format json
 longbridge positions                                              --format json
 longbridge fund-positions                                         --format json
 longbridge balance --currency USD                                 --format json
@@ -57,9 +59,10 @@ longbridge margin-ratio TSLA.US                                   --format json
 longbridge max-qty TSLA.US --side buy --price 250                 --format json
 ```
 
+For an account snapshot, run the first three concurrently and merge.
+
 ## Output
 
-- `portfolio`: combined object with positions, fund_positions, balance, P/L distribution.
 - `positions` / `fund-positions`: array of holding rows.
 - `balance`: array of balances per currency.
 - `margin-ratio`: `{im_factor, mm_factor, fm_factor}`.
@@ -82,7 +85,8 @@ If `longbridge` is missing, fall back to MCP. If stderr contains `unauthorized` 
 | `balance` | `mcp__longbridge__account_balance` |
 | `margin-ratio` | `mcp__longbridge__margin_ratio` |
 | `max-qty` | `mcp__longbridge__estimate_max_purchase_quantity` |
-| `portfolio` | merge `stock_positions` + `fund_positions` + `account_balance` (no combined MCP tool) |
+
+For an "account snapshot" through MCP, merge `stock_positions` + `fund_positions` + `account_balance` (no combined tool exists).
 
 MCP-only extensions: `mcp__longbridge__profit_analysis` / `profit_analysis_detail` (P/L analysis), `mcp__longbridge__exchange_rate` (currency conversion). For *"how is my P&L this month?"* route to `longbridge-portfolio`.
 

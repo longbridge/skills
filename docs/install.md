@@ -45,18 +45,22 @@ Different tiers of skills have different runtime dependencies — install only w
 **Install all 19 skills**:
 
 ```bash
-npx skills add longbridge/skills            # via npx
-bunx skills add longbridge/skills           # via bun (equivalent)
+# Global install (lands in ~/.claude/skills/, reachable from any project)
+npx skills add longbridge/skills -g
+bunx skills add longbridge/skills -g
+
+# Project install (lands in <cwd>/.claude/skills/, scoped to this project only)
+npx skills add longbridge/skills
 ```
 
 **Install just a few**:
 
 ```bash
-npx skills add longbridge/skills --skill longbridge-quote
-npx skills add longbridge/skills --skill longbridge-portfolio --skill longbridge-news
+npx skills add longbridge/skills -g --skill longbridge-quote
+npx skills add longbridge/skills -g --skill longbridge-portfolio --skill longbridge-news
 ```
 
-The skills land in `~/.claude/skills/` by default. Restart your Claude Code session and they're ready to use.
+> ⚠️ **Pick scope intentionally** — `npx skills` defaults to **project** scope. Without `-g`, the skills go into the current working directory's `.claude/skills/`, not the user-wide `~/.claude/skills/`. This trips users up later: if you run `npx skills remove` from a different directory, it can't find skills installed under another project. Recommended: use `-g` for global install unless you specifically want project scope.
 
 > `npx skills` / `bunx skills` is a community installer that works for any Agent-Skills-compatible GitHub repo. See [agentskills.io](https://agentskills.io) for the spec.
 
@@ -195,20 +199,27 @@ Each reply should include "Source: Longbridge Securities" / "数据来源:长桥
 
 ### Path A (npx / bun) installs
 
-`npx skills remove` expects the **installed skill name** (e.g. `longbridge-quote`), not the GitHub repo path used at install. List first, then remove by name:
+`npx skills remove` expects the **installed skill name** (e.g. `longbridge-quote`), not the GitHub repo path used at install. It also operates against the same scope as the install:
+
+- **Global installs** (`-g`) → use `npx skills remove -g <name>` or `npx skills ls -g`
+- **Project installs** (no flag) → run from the project root where you originally installed
+
+List first, then remove by name:
 
 ```bash
-# Inspect what's installed
+# Inspect what's installed (add -g for global)
 npx skills list
+npx skills list -g
 
-# Remove one
+# Remove one (add -g if globally installed)
 npx skills remove longbridge-quote
+npx skills remove -g longbridge-quote
 
 # Remove several at once
-npx skills remove longbridge longbridge-quote longbridge-kline longbridge-depth ...
+npx skills remove -g longbridge longbridge-quote longbridge-kline longbridge-depth ...
 
 # Remove all longbridge-* skills in one shot
-npx skills list 2>/dev/null | grep -E '^longbridge(-|$)' | xargs -r npx skills remove
+npx skills list -g 2>/dev/null | grep -E '^longbridge(-|$)' | xargs -r npx skills remove -g
 ```
 
 If `npx skills remove` ever misbehaves, the cleanest fallback is plain `rm` — see Path C below.
