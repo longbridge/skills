@@ -33,7 +33,7 @@ description: >
 
 ## 意图分类
 
-收到用户指令后，先判断意图类型。详见 [REF-017: 用户意图分类](references/intent-mapping.md)。
+收到用户指令后，先判断意图类型。详见 [用户意图分类](references/intent-mapping.md)。
 
 | 意图 | 触发词示例 | 操作 |
 |------|-----------|------|
@@ -51,14 +51,14 @@ description: >
 ## 执行流程
 
 **Step 1: 解析意图**
-参考 [REF-017](references/intent-mapping.md) 的意图判断优先级。
+参考 [intent-mapping](references/intent-mapping.md) 的意图判断优先级。
 
 **Step 2: 加载上下文**
 - Longbridge Watchlist API → 用户自选股列表（实时，不本地存储）
 - Longbridge Positions API → 用户持仓（计算关联度权重）
 
 **Step 3: 获取数据**
-优先 CLI → 次选 MCP → 兜底 Web Search（详见 [REF-004: 获取数据的规则](references/longbridge-api-map.md)）
+优先 CLI → 次选 MCP → 兜底 Web Search（详见 [获取数据的规则](references/longbridge-api-map.md)）
 
 批量扫描策略（100只自选股按优先级分层）:
 - 高优先级（~10只）: full_scan，8-12 API calls/只
@@ -71,7 +71,7 @@ description: >
 - 🔴 重大 / 🟡 关注 / 🟢 常规
 
 **Step 5: 组装输出**
-按市场分组，距开盘由近到远排列。套用输出模板（[REF-013: 晨晚报输出模板](references/briefing-templates.md)）。
+按市场分组，距开盘由近到远排列。套用输出模板（[晨晚报输出模板](references/briefing-templates.md)）。
 
 ## 七维催化剂扫描框架
 
@@ -98,6 +98,6 @@ description: >
 
 | 文件 | 内容 | 何时读取 |
 |------|------|---------|
-| [REF-004](references/longbridge-api-map.md) | Longbridge API 调用规则，各维度API参数与返回字段 | 执行数据获取前 |
-| [REF-013](references/briefing-templates.md) | 晨晚报四种Markdown输出模板及填充规则 | 组装输出前 |
-| [REF-017](references/intent-mapping.md) | 用户意图分类的触发词、识别逻辑和执行操作 | 解析用户指令时 |
+| [longbridge-api-map](references/longbridge-api-map.md) | Longbridge API 调用规则，各维度API参数与返回字段 | 执行数据获取前 |
+| [briefing-templates](references/briefing-templates.md) | 晨晚报四种Markdown输出模板及填充规则 | 组装输出前 |
+| [intent-mapping](references/intent-mapping.md) | 用户意图分类的触发词、识别逻辑和执行操作 | 解析用户指令时 |
