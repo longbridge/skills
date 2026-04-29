@@ -14,6 +14,7 @@ description: >
 
 # Earnings Update Skill
 
+> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English. Both the DOCX report body and the in-chat summary follow the user's language; chart labels, axis titles, and file names always stay in English.
 ## When to Use
 
 | Trigger | Example |
