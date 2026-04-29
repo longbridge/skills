@@ -1,5 +1,5 @@
 ---
-name: earnings-update
+name: longbridge-earnings
 description: >
   Post-earnings analysis skill. Generates institutional-grade earnings update reports (8-12 pages DOCX)
   and structured conversation summaries for companies under coverage. Covers beat/miss analysis,
