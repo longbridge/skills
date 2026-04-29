@@ -113,7 +113,7 @@ Mark exceptions in the SKILL.md explicitly:
 | Situation | LLM response |
 |---|---|
 | Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install longbridge-terminal. |
-| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge login` (with `Trade` permission for account skills). |
+| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge auth login` (with `Trade` permission for account skills). |
 | Other stderr | Surface verbatim — never silently retry. |
 
 ### 8. references/ for overflow

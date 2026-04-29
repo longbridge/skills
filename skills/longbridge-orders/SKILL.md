@@ -13,7 +13,7 @@ metadata:
 
 # longbridge-orders
 
-Read-only orders / executions / cash flow. **Order placement, cancellation, replacement** are not in this skill — those would belong in a separate `longbridge-trading` skill (designed but intentionally not shipped in this release).
+Read-only orders / executions / cash flow. The `order` parent command also has buy / sell / cancel / replace sub-subcommands — **this skill does not place trades**; those belong to a future trading skill that is designed but intentionally not shipped in this release.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 >
@@ -21,12 +21,16 @@ Read-only orders / executions / cash flow. **Order placement, cancellation, repl
 
 ## Subcommands
 
-| Subcommand | Returns |
+> `order` is a parent command with several sub-subcommands. Run `longbridge order --help` to see the full list and current flags.
+
+| CLI command | Returns |
 |---|---|
-| `orders` (default = today) | Today's orders. With `--history --start --end --symbol`, queries history. |
-| `order <order_id>` | Full single-order detail (status history, fees). |
-| `executions` (default = today) | Today's fills. With `--history --start --end --symbol`, queries history. |
-| `cash-flow [--start --end]` | Deposits / withdrawals / dividends / settlements. |
+| `longbridge order --format json` | Today's orders (default mode). |
+| `longbridge order --history --start --end [--symbol] --format json` | Historical orders, filtered. |
+| `longbridge order detail <ORDER_ID> --format json` | Full single-order detail (status history, fees). |
+| `longbridge order executions --format json` | Today's fills (default). |
+| `longbridge order executions --history --start --end [--symbol] --format json` | Historical fills. |
+| `longbridge cash-flow [--start --end] --format json` | Deposits / withdrawals / dividends / settlements. |
 
 ## Time-window inference
 
@@ -43,26 +47,27 @@ Use today's date from the system context.
 
 ## When to use
 
-- *"今天我下了哪些单"* → `orders`
-- *"上个月所有成交"* → `executions --history --start --end`
-- *"TSLA 历史订单"* → `orders --history --symbol TSLA.US --start ... --end ...`
-- *"订单 20240101-123456789 详情"* → `order <id>`
+- *"今天我下了哪些单"* → `order` (default, no `--history`)
+- *"上个月所有成交"* → `order executions --history --start --end`
+- *"TSLA 历史订单"* → `order --history --symbol TSLA.US --start ... --end ...`
+- *"订单 20240101-123456789 详情"* → `order detail <ORDER_ID>`
 - *"近 30 天出入金"*, *"上次分红"* → `cash-flow --start --end`
 
 ## CLI
 
 ```bash
-longbridge orders                                                                  --format json
-longbridge orders --history --start 2025-01-01 --end 2025-04-01 --symbol TSLA.US   --format json
-longbridge order 20240101-123456789                                                --format json
-longbridge executions --history --start 2025-01-01 --end 2025-04-01                --format json
-longbridge cash-flow --start 2025-04-01 --end 2025-04-30                           --format json
+longbridge order                                                                       --format json
+longbridge order --history --start 2025-01-01 --end 2025-04-01 --symbol TSLA.US        --format json
+longbridge order detail 20240101-123456789                                             --format json
+longbridge order executions                                                            --format json
+longbridge order executions --history --start 2025-01-01 --end 2025-04-01              --format json
+longbridge cash-flow --start 2025-04-01 --end 2025-04-30                               --format json
 ```
 
 ## Output
 
-- `orders` / `executions`: array of order / fill rows.
-- `order`: full single-order object (status history, fees). Empty result → "order not found".
+- `order` / `order executions`: array of order / fill rows.
+- `order detail`: full single-order object (status history, fees). Empty result → "order not found".
 - `cash-flow`: array of cash-flow events.
 
 Status translation (LLM should map):
@@ -77,7 +82,7 @@ Status translation (LLM should map):
 
 ## OAuth scope
 
-Same as `longbridge-positions`: needs trade scope. Lacking it → both CLI and MCP return `unauthorized`. Tell the user to re-auth.
+Same as `longbridge-positions`: needs trade scope. Lacking it → both CLI and MCP return `unauthorized`. Tell the user to `longbridge auth logout && longbridge auth login` and tick "Trade".
 
 ## Error handling
 
@@ -87,18 +92,18 @@ If `longbridge` is missing, fall back to MCP. Long history ranges may take a whi
 
 | CLI subcommand | MCP tool |
 |---|---|
-| `orders` (today) | `mcp__longbridge__today_orders` |
-| `orders --history` | `mcp__longbridge__history_orders` |
-| `order <id>` | `mcp__longbridge__order_detail` |
-| `executions` (today) | `mcp__longbridge__today_executions` |
-| `executions --history` | `mcp__longbridge__history_executions` |
+| `order` (today) | `mcp__longbridge__today_orders` |
+| `order --history` | `mcp__longbridge__history_orders` |
+| `order detail <id>` | `mcp__longbridge__order_detail` |
+| `order executions` (today) | `mcp__longbridge__today_executions` |
+| `order executions --history` | `mcp__longbridge__history_executions` |
 | `cash-flow` | `mcp__longbridge__cash_flow` |
 
 MCP-only extensions: `mcp__longbridge__statement_*` (account statements / report exports).
 
 ## Related skills
 
-- Holdings + balance → `longbridge-positions`
+- Holdings + assets → `longbridge-positions`
 - Account-level P&L analysis → `longbridge-portfolio`
 
 ## File layout

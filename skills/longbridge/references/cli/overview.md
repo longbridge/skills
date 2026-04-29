@@ -87,7 +87,7 @@ All commands support `--format json`. Example with `jq`:
 
 ```bash
 longbridge positions --format json | jq '.[] | {symbol, quantity, cost_price}'
-longbridge orders --format json | jq '.[] | select(.status == "New")'
+longbridge order --format json | jq '.[] | select(.status == "New")'
 ```
 
 ## AI Agent Integration

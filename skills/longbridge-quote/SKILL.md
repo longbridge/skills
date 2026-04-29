@@ -108,7 +108,7 @@ Each subcommand returns a JSON array, one object per requested symbol. Missing p
 | Situation | LLM response |
 |---|---|
 | Shell `command not found: longbridge` | Fall back to MCP if configured (see below); otherwise tell the user to install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal). |
-| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge login`. |
+| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge auth login`. |
 | stderr contains `param_error` or "invalid symbol" | Re-check the `<CODE>.<MARKET>` format with the user. |
 | Other stderr | Surface verbatim — never silently retry. |
 

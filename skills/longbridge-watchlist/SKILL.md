@@ -53,7 +53,7 @@ Array of group objects, each with `{id, name, securities: [{symbol, name, ...}]}
 
 ## Error handling
 
-If `longbridge` is missing, fall back to MCP. The watchlist read endpoint does not require trade scope, only login — if stderr says `not logged in`, tell the user to run `longbridge login`.
+If `longbridge` is missing, fall back to MCP. The watchlist read endpoint does not require trade scope, only login — if stderr says `not logged in`, tell the user to run `longbridge auth login`.
 
 ## MCP fallback
 

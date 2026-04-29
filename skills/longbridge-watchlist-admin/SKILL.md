@@ -74,13 +74,13 @@ Examples:
 | Situation | LLM response |
 |---|---|
 | Shell `command not found: longbridge` | Tell the user to install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal); MCP fallback can apply (see below) but **only after user confirmation** — never use MCP to bypass the preview / confirm protocol. |
-| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge login` (this account requires trade scope; re-auth and tick "Trade"). |
+| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge auth login` (this account requires trade scope; re-auth and tick "Trade"). |
 | Bad `group_id` | Re-run the read skill (`longbridge-watchlist`) and re-check the id. |
 | Other stderr | Surface verbatim. **Do not silently retry** — if a mutating call failed, ask the user before any second attempt. |
 
 ## OAuth scope
 
-Mutating operations require the **trade scope**. Without it, both CLI and MCP fail with `unauthorized` / `not in authorized scope`. Tell the user to `longbridge logout && longbridge login` and tick "Trade" in the browser.
+Mutating operations require the **trade scope**. Without it, both CLI and MCP fail with `unauthorized` / `not in authorized scope`. Tell the user to `longbridge auth logout && longbridge auth login` and tick "Trade" in the browser.
 
 ## MCP fallback (only after confirmation)
 

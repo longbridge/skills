@@ -69,7 +69,7 @@ Each read-tier skill's `## Error handling` section maps a class of failure (reco
 | Situation | LLM response |
 |---|---|
 | Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal). |
-| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge login`. |
+| stderr contains `not logged in` / `unauthorized` | Tell the user to run `longbridge auth login`. |
 | stderr contains `param_error` or "invalid symbol" | Re-check the `<CODE>.<MARKET>` format with the user. |
 ```
 
@@ -111,7 +111,7 @@ Each capability (quote, positions, capital flow, …) is reachable through two p
 
 | Path | Interface | Latency | Dependency |
 |---|---|:---:|---|
-| **Local CLI** | subprocess into the `longbridge` binary | Fast (in-process, ~50 ms) | User has installed longbridge-terminal and run `longbridge login` |
+| **Local CLI** | subprocess into the `longbridge` binary | Fast (in-process, ~50 ms) | User has installed longbridge-terminal and run `longbridge auth login` |
 | **Official MCP** | HTTP + OAuth (Anthropic MCP transport) | Slow (network + auth, ~500 ms+) | User has run `claude mcp add longbridge ...` |
 
 Every `SKILL.md` tells the LLM the same rule: **default to CLI; fall back to MCP under specific conditions.**
@@ -173,7 +173,7 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
   Result handling
        ├─ exit 0, JSON returned ──→ use the result
        ├─ shell `command not found` ──→ fall back to MCP if configured; otherwise prompt user to install CLI
-       ├─ stderr contains "unauthorized" / "not in authorized scope" ──→ tell user to re-run `longbridge login` (MCP shares the same OAuth)
+       ├─ stderr contains "unauthorized" / "not in authorized scope" ──→ tell user to re-run `longbridge auth login` (MCP shares the same OAuth)
        └─ other stderr ──→ surface verbatim; never silently retry
 ```
 
@@ -204,9 +204,9 @@ Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the 
 | Dimension | CLI | MCP |
 |---|---|---|
 | **Latency** | Local subprocess, ~50 ms | HTTP + OAuth, ~500 ms+ |
-| **Network** | Not required (token cached after `longbridge login`) | Requires public reachability to `openapi.longbridge.com` |
+| **Network** | Not required (token cached after `longbridge auth login`) | Requires public reachability to `openapi.longbridge.com` |
 | **Session state** | CLI maintains the WebSocket connection — push / subscribe usable | Stateless HTTP |
-| **OAuth scope** | Decided at `longbridge login` on the user's machine | Decided when the user authorises in the browser after `claude mcp add` (re-authorisable for trade scope) |
+| **OAuth scope** | Decided at `longbridge auth login` on the user's machine | Decided when the user authorises in the browser after `claude mcp add` (re-authorisable for trade scope) |
 | **Cross-skill consistency** | Same `--format json` flag across all subcommands; behaviour is documented per skill | MCP responses are whatever the MCP server returns; varies per tool |
 
 In short: **when the local CLI is installed, it is faster than MCP.** MCP exists to (a) widen capability (analysis / history / async topics) and (b) act as a fallback when CLI is unavailable.
@@ -218,7 +218,7 @@ For the 17 skills with no Python wrapper, the LLM reads:
 | Signal | LLM response |
 |---|---|
 | Shell `command not found` (CLI binary missing) | **Path-switch signal** — try MCP |
-| stderr contains `unauthorized` / `not in authorized scope` | Tell user to run `longbridge logout && longbridge login` (MCP shares the same OAuth — switching path won't fix scope) |
+| stderr contains `unauthorized` / `not in authorized scope` | Tell user to run `longbridge auth logout && longbridge auth login` (MCP shares the same OAuth — switching path won't fix scope) |
 | stderr contains `param_error` (rare; see `security-list`) | If a known CLI bug, switch to MCP; otherwise surface to user |
 | Other stderr / non-zero exit | Surface verbatim — never silently retry |
 | Exit 0, empty JSON `[]` | Empty result is success in some skills, ambiguous in others — see each SKILL.md |

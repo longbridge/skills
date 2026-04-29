@@ -19,39 +19,41 @@ Today's capital flow time-series and order-size distribution for a single securi
 
 ## Subcommands
 
+> A single `capital` command handles both modes — distribution snapshot (default) and time-series (`--flow`). Run `longbridge capital --help` to confirm.
+
 | CLI command | Returns |
 |---|---|
-| `longbridge capital-flow <SYMBOL> --format json` | Today's main-capital net inflow / outflow time series |
-| `longbridge capital-dist <SYMBOL> --format json` | Cross-section: large / medium / small / super-large order buy & sell amounts |
+| `longbridge capital <SYMBOL> --format json` | Cross-section snapshot: large / medium / small / super-large order buy & sell amounts. |
+| `longbridge capital <SYMBOL> --flow --format json` | Today's main-capital net inflow / outflow time series. |
 
 **Single symbol per call.** Today's data only — no historical range.
 
 ## When to use
 
-- *"今天 NVDA 主力净流入"*, *"今日資金流"* → `capital-flow` only
-- *"看下 TSLA 大单分布"*, *"大單/中單/小單"* → `capital-dist` only
-- *"看一下 700 资金面"* (combined) → call both and merge
-- *"过去 30 天资金流"* → unsupported, redirect to `longbridge-kline` (volume) or `longbridge-quote` (`--index volume`)
+- *"今天 NVDA 主力净流入"*, *"今日資金流"* → `capital --flow`
+- *"看下 TSLA 大单分布"*, *"大單/中單/小單"* → `capital` (default snapshot)
+- *"看一下 700 资金面"* (combined) → call both (with and without `--flow`) and merge
+- *"过去 30 天资金流"* → unsupported; redirect to `longbridge-kline` (volume) or `longbridge-quote` (`--index volume`)
 - *"今天哪些股票主力大幅流入"* (screener) → unsupported; ask user for a specific symbol
 
 ## Workflow
 
 1. Resolve a single symbol to `<CODE>.<MARKET>`.
-2. Decide which subcommand(s) to call: `capital-flow` (time series), `capital-dist` (distribution snapshot), or both.
+2. Decide which mode: distribution snapshot (default), time-series (`--flow`), or both.
 3. Call the Longbridge CLI directly (preferred) or fall back to MCP.
 4. Summarise: net inflow direction (▲ / ▼), accumulated total, distribution skew. Cite Longbridge Securities.
 
 ## CLI
 
 ```bash
-longbridge capital-flow NVDA.US        --format json
-longbridge capital-dist TSLA.US        --format json
+longbridge capital NVDA.US                  --format json     # snapshot
+longbridge capital TSLA.US --flow           --format json     # time series
 # Combined view → call both and merge in the LLM
 ```
 
 ## Output
 
-`capital-flow` returns a time-series array; `capital-dist` returns a cross-section object.
+The default snapshot returns a cross-section object; `--flow` returns a time-series array.
 
 Field translations (LLM should map):
 
@@ -66,14 +68,14 @@ Field translations (LLM should map):
 
 ## Error handling
 
-If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed verbatim (auth issues → `longbridge login`; invalid symbol → re-check format).
+If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed verbatim (auth issues → `longbridge auth login`; invalid symbol → re-check format).
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
+| CLI usage | MCP tool |
 |---|---|
-| `capital-flow` | `mcp__longbridge__capital_flow` |
-| `capital-dist` | `mcp__longbridge__capital_distribution` |
+| `capital <SYMBOL>` (snapshot) | `mcp__longbridge__capital_distribution` |
+| `capital <SYMBOL> --flow` (time series) | `mcp__longbridge__capital_flow` |
 
 ## Related skills
 

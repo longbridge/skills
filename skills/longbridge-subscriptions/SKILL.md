@@ -41,7 +41,7 @@ If `longbridge` is not installed, tell the user this skill is local-only and the
 
 ## Error handling
 
-If `longbridge` is missing, surface the message — there is no MCP fallback. If stderr says `not logged in`, tell the user to run `longbridge login`.
+If `longbridge` is missing, surface the message — there is no MCP fallback. If stderr says `not logged in`, tell the user to run `longbridge auth login`.
 
 ## File layout
 

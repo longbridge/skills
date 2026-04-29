@@ -99,7 +99,7 @@ async fn main() -> anyhow::Result<()> {
 
 The Python SDK does not expose a `ContentContext`. For news/filings/topics in Python, use:
 
-1. **CLI** — `longbridge news SYMBOL`, `longbridge filings SYMBOL`, `longbridge topics SYMBOL`
+1. **CLI** — `longbridge news SYMBOL`, `longbridge filing SYMBOL`, `longbridge topic SYMBOL`
 2. **HttpClient** — raw HTTP calls to `/v1/content/{symbol}/news`, `/v1/content/{symbol}/topics`, `/v1/quote/filings`
 3. **MCP** — `news`, `topics`, `filings` tools
 

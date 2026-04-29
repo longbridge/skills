@@ -24,8 +24,8 @@ Market-level state: open / close, calendar, sentiment temperature. Symbol-level 
 | CLI command | Returns |
 |---|---|
 | `longbridge market-temp <MARKET> --format json` | Today's market temperature (0–100). Add `--history --start --end` for a time series. Default market = `HK`. |
-| `longbridge trading-session --format json` | Trading sessions for all markets (open / close times). |
-| `longbridge trading-days <MARKET> [--start --end] --format json` | Trading day calendar with half-days. Default market = `HK`. |
+| `longbridge trading session --format json` | Trading sessions for all markets (open / close times). |
+| `longbridge trading days <MARKET> [--start --end] --format json` | Trading day calendar with half-days. Default market = `HK`. |
 
 ## Market mapping
 
@@ -38,14 +38,14 @@ LLM maps colloquial names to the positional `<MARKET>`:
 | A 股 / 沪 / 深 / 上证 / 深证 / SH / SZ | `CN` (aliases: `SH`, `SZ`) |
 | 新加坡 / SG / Straits / 海峡 / 海峽 | `SG` |
 
-`trading-session` does not take a market argument; it returns all markets in one call.
+`trading session` does not take a market argument; it returns all markets in one call.
 
 ## When to use
 
-- *"今天美股开盘了吗"*, *"is HK open?"* — call `trading-session`, then reason against current local time and the user's target market.
-- *"几点开盘"* → `trading-session`
-- *"下个交易日"*, *"this week's trading days"* → `trading-days <MARKET>`
-- *"圣诞节港股开市吗"* → `trading-days HK --start <date> --end <date>`
+- *"今天美股开盘了吗"*, *"is HK open?"* — call `trading session`, then reason against current local time and the user's target market.
+- *"几点开盘"* → `trading session`
+- *"下个交易日"*, *"this week's trading days"* → `trading days <MARKET>`
+- *"圣诞节港股开市吗"* → `trading days HK --start <date> --end <date>`
 - *"市场情绪"*, *"温度多少"* → `market-temp <MARKET>`
 - *"今年港股市场情绪走势"* → `market-temp HK --history --start ... --end ...`
 
@@ -53,7 +53,7 @@ LLM maps colloquial names to the positional `<MARKET>`:
 
 1. Pick the subcommand (table above).
 2. Resolve the positional `<MARKET>` if needed.
-3. For "is the market open?" — call `trading-session`, then reason against the current local time (US = UTC-5/-4 DST, HK / CN / SG = UTC+8) and the user's target market.
+3. For "is the market open?" — call `trading session`, then reason against the current local time (US = UTC-5/-4 DST, HK / CN / SG = UTC+8) and the user's target market.
 4. Call the Longbridge CLI directly (preferred) or fall back to MCP.
 5. Translate the `market-temp` value into wording: 0–30 *偏空*, 30–50 *中性偏空*, 50–70 *中性偏多*, 70–100 *偏多* (translate into the user's language).
 
@@ -61,16 +61,16 @@ LLM maps colloquial names to the positional `<MARKET>`:
 
 ```bash
 longbridge market-temp     HK                                          --format json
-longbridge trading-session                                              --format json
-longbridge trading-days    US --start 2026-04-28 --end 2026-05-31       --format json
+longbridge trading session                                              --format json
+longbridge trading days    US --start 2026-04-28 --end 2026-05-31       --format json
 longbridge market-temp     HK --history --start 2026-01-01 --end 2026-04-28 --format json
 ```
 
 ## Output
 
 - `market-temp` (snapshot): single object with the temperature value. With `--history`, an array of historical points.
-- `trading-session`: array spanning all markets.
-- `trading-days`: `{trading_days, half_trading_days}` arrays for the selected market.
+- `trading session`: array spanning all markets.
+- `trading days`: `{trading_days, half_trading_days}` arrays for the selected market.
 
 ## Error handling
 
@@ -82,8 +82,8 @@ If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed 
 |---|---|
 | `market-temp` (snapshot) | `mcp__longbridge__market_temperature` |
 | `market-temp --history` | `mcp__longbridge__history_market_temperature` |
-| `trading-session` | `mcp__longbridge__trading_session` |
-| `trading-days` | `mcp__longbridge__trading_days` |
+| `trading session` | `mcp__longbridge__trading_session` |
+| `trading days` | `mcp__longbridge__trading_days` |
 
 MCP-only extensions: `mcp__longbridge__market_status` (finer state), `mcp__longbridge__finance_calendar` (earnings / dividends / IPO / macro).
 

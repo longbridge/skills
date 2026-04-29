@@ -16,13 +16,13 @@ Different tiers of skills have different runtime dependencies — install only w
 
    Verify with `longbridge --version` — it should print a version string.
 
-2. **Log in to your Longbridge account** (the OAuth token is cached at `~/.longbridge/terminal/.openapi-session`):
+2. **Log in to your Longbridge account** (the OAuth token is cached locally and shared with the TUI):
 
    ```bash
-   longbridge login
+   longbridge auth login
    ```
 
-   A browser opens for authorisation. **Tick the "Trade" permission** if you want the account-tier skills (`positions / orders / watchlist / watchlist-admin`). Quote-only access is sufficient for market-data skills.
+   A browser opens for authorisation. **Tick the "Trade" permission** if you want the account-tier skills (`positions / orders / watchlist / watchlist-admin`). Quote-only access is sufficient for market-data skills. Use `longbridge auth status` to confirm you're signed in.
 
 ### Optional (required for the analysis tier — 6 skills)
 
@@ -164,7 +164,7 @@ done
 
 ## Verify
 
-### 1. Real-account smoke test (only if you've installed the longbridge CLI and run `longbridge login`)
+### 1. Real-account smoke test (only if you've installed the longbridge CLI and run `longbridge auth login`)
 
 ```bash
 # Quote
@@ -243,7 +243,7 @@ This works regardless of how the skills were originally installed (npx / bun / m
 ### Revoke Longbridge CLI authorisation
 
 ```bash
-longbridge logout                                     # clears the local token
+longbridge auth logout                                # clears the local token
 ```
 
 ### Revoke Longbridge MCP authorisation
@@ -265,10 +265,10 @@ claude mcp remove longbridge                          # remove the MCP registrat
 
 ### `auth_expired`
 
-- Read-tier market-data skills (quote / kline / depth / …) only need the **Quote** permission at `longbridge login`.
+- Read-tier market-data skills (quote / kline / depth / …) only need the **Quote** permission at `longbridge auth login`.
 - Account-tier skills (positions / orders / watchlist) **require the Trade permission**:
   ```bash
-  longbridge logout && longbridge login   # re-authorise; tick "Trade" in the browser
+  longbridge auth logout && longbridge auth login   # re-authorise; tick "Trade" in the browser
   ```
 - MCP behaves the same — `claude mcp logout longbridge` and re-authorise on the next MCP tool call.
 

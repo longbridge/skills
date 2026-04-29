@@ -1,7 +1,7 @@
 ---
 name: longbridge-derivatives
 description: |
-  Options (US / HK) and Hong Kong warrants (callable bull/bear, call warrants, put warrants) via Longbridge Securities — option quote, option chain by underlying / expiry, warrant quote / list / issuers. Returns IV, Greeks, strikes, expiries. Triggers: "期权", "option", "call", "put", "认购", "认沽", "行权价", "到期日", "IV", "希腊字母", "delta", "gamma", "窝轮", "牛熊证", "认购证", "认沽证", "認購", "認沽", "行權價", "到期日", "窩輪", "牛熊證", "option chain", "options expiry", "warrant", "CBBC", "callable bull bear contract".
+  Options (US / HK) and Hong Kong warrants (callable bull/bear, call warrants, put warrants) via Longbridge Securities — option quote, option chain by underlying / expiry, option volume, warrant quote / list / issuers. Returns IV, Greeks, strikes, expiries. Triggers: "期权", "option", "call", "put", "认购", "认沽", "行权价", "到期日", "IV", "希腊字母", "delta", "gamma", "窝轮", "牛熊证", "认购证", "认沽证", "認購", "認沽", "行權價", "到期日", "窩輪", "牛熊證", "option chain", "options expiry", "warrant", "CBBC", "callable bull bear contract".
 license: MIT
 metadata:
   author: longbridge
@@ -19,14 +19,17 @@ Options (US / HK) and HK warrants. Underlying-stock quotes belong in `longbridge
 
 ## Subcommands
 
-| Subcommand | Returns |
+> `option` and `warrant` are **parent commands**; each has its own sub-subcommands. Run `longbridge option --help` / `longbridge warrant --help` to see the current sub-subcommand list and their flags.
+
+| CLI command | Returns |
 |---|---|
-| `option-quote <contract> [<contract>...]` | Quote(s) for one or more option contracts (OCC symbols). Includes IV, delta, strike, expiry. |
-| `option-chain <underlying>` | Available expiry dates for the underlying. |
-| `option-chain <underlying> --date YYYY-MM-DD` | Strikes for a specific expiry — each row gives `call_symbol` and `put_symbol` OCC codes. |
-| `warrant-quote <warrant> [<warrant>...]` | Quote(s) for HK warrants (leverage, IV, etc.). |
-| `warrant-list <underlying>` | Warrants on a Hong Kong underlying (`underlying` must be `.HK`). |
-| `warrant-issuers` | Directory of HK warrant issuers. |
+| `longbridge option quote <CONTRACT>... --format json` | Quote(s) for one or more option contracts (OCC symbols). Includes IV, delta, strike, expiry. |
+| `longbridge option chain <UNDERLYING> --format json` | Available expiry dates for the underlying. |
+| `longbridge option chain <UNDERLYING> --date YYYY-MM-DD --format json` | Strikes for a specific expiry — each row gives `call_symbol` and `put_symbol` OCC codes. |
+| `longbridge option volume <UNDERLYING> --format json` | Real-time call / put volume snapshot (use `longbridge option volume daily ...` for historical). |
+| `longbridge warrant <UNDERLYING> --format json` | Default warrants list for an underlying (HK only). |
+| `longbridge warrant quote <WARRANT>... --format json` | Quote(s) for HK warrants (leverage, IV, etc.). |
+| `longbridge warrant issuers --format json` | Directory of HK warrant issuers. |
 
 ## OCC option symbol
 
@@ -36,9 +39,9 @@ Format: `<TICKER><YYMMDD><C|P><STRIKE×1000, 8 digits>`. Example: `AAPL240119C19
 
 | User input | Strategy |
 |---|---|
-| Full OCC symbol | `option-quote <symbol>` directly |
-| Underlying + expiry + strike + call/put | `option-chain <ul> --date <d>` to find OCC code → `option-quote` |
-| Underlying + window only | `option-chain <ul>` to list expiries; ask user to pick |
+| Full OCC symbol | `option quote <symbol>` directly |
+| Underlying + expiry + strike + call/put | `option chain <UL> --date <d>` to find OCC code → `option quote` |
+| Underlying + window only | `option chain <UL>` to list expiries; ask user to pick |
 
 ## Term mapping
 
@@ -53,22 +56,24 @@ Format: `<TICKER><YYMMDD><C|P><STRIKE×1000, 8 digits>`. Example: `AAPL240119C19
 ## CLI
 
 ```bash
-longbridge option-quote   AAPL250117C190000 AAPL250117P190000  --format json
-longbridge option-chain   AAPL.US                              --format json
-longbridge option-chain   AAPL.US --date 2025-01-17            --format json
-longbridge warrant-quote  12345.HK                             --format json
-longbridge warrant-list   700.HK                               --format json
-longbridge warrant-issuers                                     --format json
+longbridge option quote     AAPL250117C190000 AAPL250117P190000  --format json
+longbridge option chain     AAPL.US                              --format json
+longbridge option chain     AAPL.US --date 2025-01-17            --format json
+longbridge option volume    AAPL.US                              --format json
+longbridge warrant          700.HK                               --format json
+longbridge warrant quote    12345.HK                             --format json
+longbridge warrant issuers                                       --format json
 ```
 
 ## Output (per subcommand)
 
-- `option-quote`: `count / contracts / datas` (each row: IV, delta, strike, expiry, …)
-- `option-chain` (no date): `underlying / datas` — array of `{expiry_date}` objects
-- `option-chain --date`: `underlying / date / datas` — rows of `{strike, call_symbol, put_symbol, standard}`
-- `warrant-quote`: `count / warrants / datas`
-- `warrant-list`: `underlying / datas` (array of `{symbol, name, type, expiry, last, leverage_ratio}`)
-- `warrant-issuers`: `datas` (array of `{id, name_(cn), name_(en)}`)
+- `option quote`: array of contract rows (each: IV, delta, strike, expiry, …).
+- `option chain` (no date): array of `{expiry_date}`.
+- `option chain --date`: array of `{strike, call_symbol, put_symbol, standard}`.
+- `option volume`: real-time call / put volume snapshot.
+- `warrant <UNDERLYING>`: array of warrant rows for that underlying.
+- `warrant quote`: array of quote rows.
+- `warrant issuers`: array of `{id, name_(cn), name_(en)}`.
 
 ## When to clarify
 
@@ -80,24 +85,23 @@ longbridge warrant-issuers                                     --format json
 
 | CLI subcommand | MCP tool |
 |---|---|
-| `option-quote` | `mcp__longbridge__option_quote` |
-| `option-chain` (no date) | `mcp__longbridge__option_chain_expiry_date_list` |
-| `option-chain --date` | `mcp__longbridge__option_chain_info_by_date` |
-| `warrant-quote` | `mcp__longbridge__warrant_quote` |
-| `warrant-list` | `mcp__longbridge__warrant_list` |
-| `warrant-issuers` | `mcp__longbridge__warrant_issuers` |
+| `option quote` | `mcp__longbridge__option_quote` |
+| `option chain` (no date) | `mcp__longbridge__option_chain_expiry_date_list` |
+| `option chain --date` | `mcp__longbridge__option_chain_info_by_date` |
+| `option volume` | `mcp__longbridge__option_volume` / `mcp__longbridge__option_volume_daily` |
+| `warrant quote` | `mcp__longbridge__warrant_quote` |
+| `warrant <UNDERLYING>` (list) | `mcp__longbridge__warrant_list` |
+| `warrant issuers` | `mcp__longbridge__warrant_issuers` |
 
-MCP-only extensions: `mcp__longbridge__option_volume`, `mcp__longbridge__option_volume_daily` (option volume analysis — not in CLI).
+## Error handling
+
+If `longbridge` is missing, fall back to MCP. *"no quote access"* on `option quote` indicates the account lacks the options market-data subscription — surface the message verbatim and tell the user to upgrade quote permissions on Longbridge.
 
 ## Related skills
 
 - Underlying quote / static → `longbridge-quote`
 - Underlying candlesticks → `longbridge-kline`
 - Underlying orderbook depth → `longbridge-depth`
-
-## Error handling
-
-If `longbridge` is missing, fall back to MCP. *"no quote access"* on `option-quote` indicates the account lacks the options market-data subscription — surface the message verbatim and tell the user to upgrade quote permissions on Longbridge.
 
 ## File layout
 

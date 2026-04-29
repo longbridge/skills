@@ -19,27 +19,29 @@ Historical candlesticks and today's intraday curve for Longbridge-supported secu
 
 ## Subcommands
 
-| Subcommand | Use when |
-|---|---|
-| `kline` | Latest N candles (default 100 daily). Periods: `1m / 5m / 15m / 30m / 1h / day / week / month / year`. |
-| `kline-history` | OHLCV across an explicit date range (`--start`, `--end`). |
-| `intraday` | Today's per-minute curve (price + volume + avg_price). |
+> Run `longbridge kline --help` to confirm current period values, defaults, and aliases.
 
-Period aliases: `minute=1m`, `hour=1h`, `d/1d=day`, `w=week`, `m/1mo=month`, `y=year`. `--adjust no_adjust` (default) or `--adjust forward_adjust` (前复权 / 前復權).
+| CLI command | Use when |
+|---|---|
+| `longbridge kline <SYMBOL> --period <P> --count <N> --format json` | Latest N candles. Periods: `1m / 5m / 15m / 30m / 1h / day / week / month / year`. |
+| `longbridge kline history <SYMBOL> --start YYYY-MM-DD --end YYYY-MM-DD --period <P> --format json` | OHLCV across an explicit date range (sub-subcommand). |
+| `longbridge intraday <SYMBOL> --format json` | Today's per-minute curve (price + volume + avg_price). |
+
+Period aliases: `minute=1m`, `hour=1h`, `d/1d=day`, `w=week`, `m/1mo=month`, `y=year`. `--adjust none` (default) or `--adjust forward` for 前复权 / 前復權.
 
 ## When to use
 
 - *"NVDA 最近一周走势"*, *"近一年走勢"*, *"AAPL 1-month chart"* → `kline --period day`
 - *"TSLA 5 分钟 K"*, *"近 100 根 5 分钟"* → `kline --period 5m --count 100`
 - *"今天 700.HK 分时图"*, *"AAPL today's intraday"* → `intraday`
-- *"AAPL 2024 年 1-12 月日 K"* (explicit dates) → `kline-history --start --end`
-- *"前复权日 K"* → add `--adjust forward_adjust`
+- *"AAPL 2024 年 1-12 月日 K"* (explicit dates) → `kline history --start --end`
+- *"前复权日 K"* → add `--adjust forward`
 
 ## Workflow
 
 1. Resolve the symbol to `<CODE>.<MARKET>` (see `longbridge-quote` for the rules).
-2. Pick the subcommand:
-   - Explicit start/end dates → `kline-history`.
+2. Pick the form:
+   - Explicit start/end dates → `kline history`.
    - "Today" / "intraday" → `intraday`.
    - Otherwise → `kline` with sensible defaults (`--period day --count 100`).
 3. Map natural-language windows to (`period`, `count`). Examples: "最近一周" → `day,7`, "最近一年" → `day,252`, "月 K" → `month,100`.
@@ -49,17 +51,15 @@ Period aliases: `minute=1m`, `hour=1h`, `d/1d=day`, `w=week`, `m/1mo=month`, `y=
 ## CLI
 
 ```bash
-longbridge kline         NVDA.US --period day --count 100               --format json
-longbridge kline         700.HK  --period 5m  --count 100 --adjust forward_adjust --format json
-longbridge kline-history NVDA.US --start 2025-01-01 --end 2025-12-31    --format json
-longbridge intraday      700.HK                                         --format json
+longbridge kline         NVDA.US --period day --count 100             --format json
+longbridge kline         700.HK  --period 5m  --count 100 --adjust forward --format json
+longbridge kline history NVDA.US --start 2025-01-01 --end 2025-12-31  --format json
+longbridge intraday      700.HK                                       --format json
 ```
-
-Always pass `--format json` so the output is machine-parseable.
 
 ## Output
 
-`longbridge ... --format json` returns a list of OHLCV rows:
+`longbridge kline ... --format json` returns a list of OHLCV rows:
 
 ```json
 [
@@ -73,7 +73,7 @@ Always pass `--format json` so the output is machine-parseable.
 
 If `longbridge` is not installed, the shell returns a `command not found` error → fall back to MCP (see below) or tell the user to install longbridge-terminal. If `longbridge` prints `Error: ...` to stderr, surface the message to the user — common causes:
 
-- `Error: not logged in` / `unauthorized` → user runs `longbridge login`.
+- `Error: not logged in` / `unauthorized` → user runs `longbridge auth login`.
 - `Error: invalid symbol` / `param_error` → re-check the `<CODE>.<MARKET>` format.
 
 ## MCP fallback
@@ -81,7 +81,7 @@ If `longbridge` is not installed, the shell returns a `command not found` error 
 | CLI subcommand | MCP tool |
 |---|---|
 | `kline` | `mcp__longbridge__candlesticks` |
-| `kline-history` | `mcp__longbridge__history_candlesticks_by_offset` or `mcp__longbridge__history_candlesticks_by_date` |
+| `kline history` | `mcp__longbridge__history_candlesticks_by_offset` or `mcp__longbridge__history_candlesticks_by_date` |
 | `intraday` | `mcp__longbridge__intraday` |
 
 ## Related skills
