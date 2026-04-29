@@ -2,12 +2,13 @@
 
 [Agent Skills](https://agentskills.io/specification) for [Longbridge Securities](https://longbridge.com) — query market quotes, charts, orderbook depth, fundamentals, news, and analyse personal portfolios across HK / US / A-share / SG markets.
 
-**18 skills · multilingual triggers (Simplified Chinese / Traditional Chinese / English) · supports two install paths (single-skill symlink + plugin marketplace).**
+**19 skills · multilingual triggers (Simplified Chinese / Traditional Chinese / English) · supports two install paths (single-skill symlink + plugin marketplace).**
 
 ```text
 longbridge-skills/
 ├── .claude-plugin/marketplace.json     # plugin entry for /plugin install
-├── skills/                             # 18 skill folders, lowercase ASCII slugs
+├── skills/                             # 19 skill folders, lowercase ASCII slugs
+│   ├── longbridge/                     # platform foundation (SDK / CLI / MCP / LLM integration)
 │   ├── longbridge-quote/
 │   ├── longbridge-kline/
 │   ├── ...
@@ -54,6 +55,12 @@ done
 | Analysis tier (5 skills) | `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` |
 
 ## Skill family
+
+### Foundation (1) — Longbridge platform reference
+
+| Skill | Purpose |
+|---|---|
+| [`longbridge`](./skills/longbridge) | Platform foundation: CLI subcommands, Python / Rust SDK, MCP server, LLM/RAG integration. Reference docs live under `references/{cli,python-sdk,rust-sdk,mcp,setup,llm}.md` |
 
 ### Read tier (12) — wraps the local `longbridge` CLI; MCP fallback
 
