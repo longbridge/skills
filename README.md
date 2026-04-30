@@ -2,7 +2,7 @@
 
 Make your AI assistant fluent in [Longbridge Securities](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-20 skills covering quotes, charts, fundamentals, valuation, earnings, news, and portfolio analysis across HK / US / A-share / Singapore markets.
+30 skills covering market data, fundamentals, valuation, earnings, news, corporate ownership, institutional flows, account management, and automation across HK / US / A-share / Singapore markets.
 
 ---
 
@@ -60,9 +60,9 @@ The right skill is picked automatically based on your question, in the language 
 | Group | Skills |
 |---|---|
 | **Foundation** | [`longbridge`](./skills/longbridge) — Longbridge CLI / Python SDK / Rust SDK / MCP integration reference |
-| **Live market data** | [`longbridge-quote`](./skills/longbridge-quote) · [`longbridge-kline`](./skills/longbridge-kline) · [`longbridge-depth`](./skills/longbridge-depth) · [`longbridge-capital-flow`](./skills/longbridge-capital-flow) · [`longbridge-market-temp`](./skills/longbridge-market-temp) · [`longbridge-derivatives`](./skills/longbridge-derivatives) · [`longbridge-security-list`](./skills/longbridge-security-list) |
-| **Your account** | [`longbridge-positions`](./skills/longbridge-positions) · [`longbridge-orders`](./skills/longbridge-orders) · [`longbridge-watchlist`](./skills/longbridge-watchlist) · [`longbridge-watchlist-admin`](./skills/longbridge-watchlist-admin) · [`longbridge-subscriptions`](./skills/longbridge-subscriptions) |
-| **Smart analysis** | [`longbridge-valuation`](./skills/longbridge-valuation) · [`longbridge-fundamental`](./skills/longbridge-fundamental) · [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) · [`longbridge-portfolio`](./skills/longbridge-portfolio) · [`longbridge-news`](./skills/longbridge-news) · [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) · [`longbridge-earnings`](./skills/longbridge-earnings) |
+| **Live market data** | [`longbridge-quote`](./skills/longbridge-quote) · [`longbridge-kline`](./skills/longbridge-kline) · [`longbridge-depth`](./skills/longbridge-depth) · [`longbridge-capital-flow`](./skills/longbridge-capital-flow) · [`longbridge-market-temp`](./skills/longbridge-market-temp) · [`longbridge-derivatives`](./skills/longbridge-derivatives) · [`longbridge-security-list`](./skills/longbridge-security-list) · [`longbridge-anomaly`](./skills/longbridge-anomaly) · [`longbridge-ah-premium`](./skills/longbridge-ah-premium) · [`longbridge-constituent`](./skills/longbridge-constituent) · [`longbridge-fx`](./skills/longbridge-fx) |
+| **Your account** | [`longbridge-positions`](./skills/longbridge-positions) · [`longbridge-orders`](./skills/longbridge-orders) · [`longbridge-watchlist`](./skills/longbridge-watchlist) · [`longbridge-watchlist-admin`](./skills/longbridge-watchlist-admin) · [`longbridge-subscriptions`](./skills/longbridge-subscriptions) · [`longbridge-statement`](./skills/longbridge-statement) · [`longbridge-alert`](./skills/longbridge-alert) · [`longbridge-dca`](./skills/longbridge-dca) |
+| **Smart analysis** | [`longbridge-valuation`](./skills/longbridge-valuation) · [`longbridge-fundamental`](./skills/longbridge-fundamental) · [`longbridge-peer-comparison`](./skills/longbridge-peer-comparison) · [`longbridge-portfolio`](./skills/longbridge-portfolio) · [`longbridge-news`](./skills/longbridge-news) · [`longbridge-catalyst-radar`](./skills/longbridge-catalyst-radar) · [`longbridge-earnings`](./skills/longbridge-earnings) · [`longbridge-corporate`](./skills/longbridge-corporate) · [`longbridge-flows`](./skills/longbridge-flows) · [`longbridge-calendar`](./skills/longbridge-calendar) |
 
 Click any name above to see what it can do.
 
