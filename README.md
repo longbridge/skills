@@ -57,14 +57,6 @@ bunx skills add longbridge/skills -g
 /plugin install longbridge@longbridge-skills
 ```
 
-### Symlink (cloned repo)
-
-```bash
-cd /path/to/skills && git pull
-```
-
-Symlinks point directly into the repo, so a `git pull` takes effect immediately — no re-linking needed.
-
 ---
 
 ## What you can ask
