@@ -6,17 +6,17 @@ Make your AI assistant fluent in [Longbridge Securities](https://longbridge.com)
 
 ---
 
-## Install
+## Install & Update
 
-Pick whichever fits your workflow:
+Pick whichever fits your workflow. Re-running the same command also updates to the latest version.
 
 ### with `npx` (one line, no setup)
 
 ```bash
-# Install everything globally (~/.claude/skills/)
+# Install / update everything globally (~/.claude/skills/)
 npx skills add longbridge/skills -g
 
-# Or just one skill, globally
+# Or just one skill
 npx skills add longbridge/skills -g --skill longbridge-quote
 ```
 
@@ -37,33 +37,6 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 ```
 
 📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
-
----
-
-## Update
-
-Re-run the same command you used to install — the installer overwrites existing skills with the latest version.
-
-### npx / bun
-
-```bash
-npx skills add longbridge/skills -g
-bunx skills add longbridge/skills -g
-```
-
-### Plugin marketplace
-
-```text
-/plugin install longbridge@longbridge-skills
-```
-
-### Symlink (cloned repo)
-
-```bash
-cd /path/to/skills && git pull
-```
-
-Symlinks point directly into the repo, so a `git pull` takes effect immediately — no re-linking needed.
 
 ---
 
