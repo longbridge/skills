@@ -59,6 +59,12 @@ bunx skills update -g
 bunx skills update longbridge-quote -g
 ```
 
+### Claude Code plugin marketplace
+
+```bash
+claude plugins update longbridge@longbridge-skills
+```
+
 ---
 
 ## What you can ask
