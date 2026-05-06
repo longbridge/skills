@@ -40,6 +40,27 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 
 ---
 
+## Update
+
+### npx
+
+```bash
+# Update all skills
+npx skills update -g
+
+# Update a single skill
+npx skills update longbridge-quote -g
+```
+
+### bun
+
+```bash
+bunx skills update -g
+bunx skills update longbridge-quote -g
+```
+
+---
+
 ## What you can ask
 
 Once installed, talk to your AI assistant naturally. Examples:
