@@ -6,7 +6,7 @@ Make your AI assistant fluent in [Longbridge Securities](https://longbridge.com)
 
 ---
 
-## Install
+## Install & Update
 
 Pick whichever fits your workflow:
 
