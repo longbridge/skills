@@ -1,7 +1,7 @@
 ---
 name: longbridge-portfolio
 description: |
-  Account-level analysis via Longbridge MCP — total market value, cash share, period P&L, single-stock contribution ranking, industry distribution, currency exposure, historical P/L curve. Requires longbridge login + MCP with **trade scope**. Returns data, never recommends rebalancing. Triggers: "我账户表现", "我本月浮盈", "我哪只股票贡献最多", "我组合配置", "我货币暴露", "我账户行业分布", "账户全貌", "我賬戶表現", "我本月浮盈", "我哪隻股貢獻最多", "我貨幣暴露", "我賬戶行業分佈", "my account performance", "monthly P&L", "biggest contributor", "portfolio breakdown", "currency exposure", "industry mix", "account-level analysis".
+  Account-level analysis via Longbridge — total market value, cash share, period P&L, single-stock contribution ranking, industry distribution, currency exposure, historical P/L curve. Requires longbridge login with trade scope. Returns data, never recommends rebalancing. Triggers: "我账户表现", "我本月浮盈", "我哪只股票贡献最多", "我组合配置", "我货币暴露", "我账户行业分布", "账户全貌", "我賬戶表現", "我本月浮盈", "我哪隻股貢獻最多", "我貨幣暴露", "我賬戶行業分佈", "my account performance", "monthly P&L", "biggest contributor", "portfolio breakdown", "currency exposure", "industry mix", "account-level analysis".
 license: MIT
 metadata:
   author: longbridge
@@ -9,7 +9,7 @@ metadata:
   risk_level: account_read
   requires_login: true
   default_install: true
-  requires_mcp: true
+  requires_mcp: false
   tier: analysis
 ---
 
@@ -21,17 +21,19 @@ Prompt-only skill for **account-level** analysis. Distinguished from `longbridge
 >
 > **Privacy**: returns the user's private P&L. Only render detailed numbers in direct conversation; if you suspect screen-sharing or third-party observation, ask before showing exact figures. Never echo amounts into PR descriptions, tickets, or other places third parties can read.
 
-## Prerequisites (mandatory)
+## Login
+
+This skill requires a logged-in session with trade scope:
 
 ```bash
-claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
+longbridge auth login   # check "trade" / 「交易」 permission in the browser auth screen
 ```
 
-This skill requires the **trade scope** OAuth token. If a tool returns *unauthorized* / *not in authorized scope*:
+If using MCP fallback and a tool returns *unauthorized* / *not in authorized scope*, re-authorise:
 
 ```bash
 claude mcp logout longbridge
-# Re-trigger any MCP tool call; in the browser auth screen, check "trade" / 「交易」 permission.
+# Re-trigger any MCP tool call; check "trade" / 「交易」 permission.
 ```
 
 ## When to use
@@ -68,19 +70,23 @@ LLM uses today's date from system context.
 | Currency exposure | `account_balance` + `exchange_rate` |
 | Industry distribution | `stock_positions` + per-symbol `static_info` (industry field) |
 
+## CLI
+
+Run `longbridge <subcommand> --help` to verify exact flags. Example for *"我本月账户表现"* (run concurrently):
+
+```bash
+longbridge profit-analysis --start 2026-05-01 --end 2026-05-06 --format json
+longbridge profit-analysis detail --start 2026-05-01 --end 2026-05-06 --format json
+longbridge assets --format json
+longbridge positions --format json
+longbridge exchange-rate --format json
+```
+
 ## Workflow
 
-1. **Confirm MCP + trade scope** — otherwise prompt the user to re-authorise.
+1. Confirm trade-scope login (see Login section).
 2. Decide the time window (table above) and the toolset (table above).
-3. Run MCP tools concurrently. Example for *"我本月账户表现"*:
-
-   ```
-   mcp__longbridge__profit_analysis(start_date="2026-04-01", end_date="2026-04-28")
-   mcp__longbridge__profit_analysis_detail(start_date="2026-04-01", end_date="2026-04-28")
-   mcp__longbridge__account_balance()
-   mcp__longbridge__stock_positions()
-   mcp__longbridge__exchange_rate()
-   ```
+3. Run CLI commands concurrently (see CLI section). If `longbridge` is not installed, fall back to MCP.
 
 4. **Convert FX** to USD-equivalent yourself (use `exchange_rate` from the same call day) — `profit_analysis` may return mixed currencies.
 5. **Render the 4-section structure**. Cite Longbridge Securities. End with the not-investment-advice disclaimer.
@@ -144,23 +150,27 @@ Same for the contribution ranking — list the top 10 (mix of leaders and laggar
 
 | Situation | Reply |
 |---|---|
-| MCP unconfigured | Prompt `claude mcp add ...` |
-| Lacks trade scope | "This skill needs the trade-scope OAuth token. Run `claude mcp logout longbridge` and re-authorise with the trade permission ticked." |
-| `profit_analysis` empty | "{window}: no recorded P&L (account had no positions or no trades)." |
-| `account_balance` returns one currency | Skip the multi-currency section; show that one currency. |
-| `stock_positions` empty | Skip sections 3 + 4; show cash-only overview. |
+| `command not found: longbridge` | Fall back to MCP; if MCP also unavailable, tell user to install longbridge-terminal. |
+| stderr `not logged in` / `unauthorized` | Tell user to run `longbridge auth login` with trade permission. |
+| `profit-analysis` returns empty | "{window}: no recorded P&L (account had no positions or no trades)." |
+| `assets` returns one currency | Skip the multi-currency section; show that one currency. |
+| `positions` returns empty | Skip sections 3 + 4; show cash-only overview. |
 
-## MCP toolbelt
+## MCP fallback
 
-| MCP tool | Pulls | Scope |
+If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
+
+| MCP tool | CLI equivalent | Scope |
 |---|---|---|
-| `mcp__longbridge__profit_analysis` | Period P&L summary | trade |
-| `mcp__longbridge__profit_analysis_detail` | Per-stock P&L breakdown | trade |
-| `mcp__longbridge__stock_positions` | Current holdings | trade |
-| `mcp__longbridge__account_balance` | Multi-currency cash | trade |
-| `mcp__longbridge__fund_positions` | Fund holdings | trade |
-| `mcp__longbridge__exchange_rate` | FX conversion | quote |
-| `mcp__longbridge__static_info` | Industry classification | quote |
+| `mcp__longbridge__profit_analysis` | `longbridge profit-analysis` | trade |
+| `mcp__longbridge__profit_analysis_detail` | `longbridge profit-analysis detail` | trade |
+| `mcp__longbridge__stock_positions` | `longbridge positions` | trade |
+| `mcp__longbridge__account_balance` | `longbridge assets` | trade |
+| `mcp__longbridge__fund_positions` | `longbridge fund-positions` | trade |
+| `mcp__longbridge__exchange_rate` | `longbridge exchange-rate` | quote |
+| `mcp__longbridge__static_info` | `longbridge static` | quote |
+
+MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (trade scope required).
 
 ## Related skills
 

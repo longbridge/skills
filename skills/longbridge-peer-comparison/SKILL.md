@@ -1,7 +1,7 @@
 ---
 name: longbridge-peer-comparison
 description: |
-  Cross-symbol comparison (2–5 stocks) via Longbridge MCP — valuation (PE / PB / PS / dividend yield), current price + change, latest financial KPIs (revenue / net income / ROE), market cap. Renders as a single matrix; flags cross-currency or cross-industry caveats. Returns data, never picks a winner. Triggers: "X 和 Y 哪个值得买", "X vs Y", "几只股票对比", "同行业谁最强", "X 跟 Y 谁更便宜", "几只哪个增速快", "科技七姐妹谁最强", "X 跟 Y 對比", "X 跟 Y 哪個便宜", "X vs Y", "compare X and Y", "peer comparison", "which is more expensive", "which has higher growth".
+  Cross-symbol comparison (2–5 stocks) via Longbridge — valuation (PE / PB / PS / dividend yield), current price + change, latest financial KPIs (revenue / net income / ROE), market cap. Renders as a single matrix; flags cross-currency or cross-industry caveats. Returns data, never picks a winner. Triggers: "X 和 Y 哪个值得买", "X vs Y", "几只股票对比", "同行业谁最强", "X 跟 Y 谁更便宜", "几只哪个增速快", "科技七姐妹谁最强", "X 跟 Y 對比", "X 跟 Y 哪個便宜", "X vs Y", "compare X and Y", "peer comparison", "which is more expensive", "which has higher growth".
 license: MIT
 metadata:
   author: longbridge
@@ -9,23 +9,15 @@ metadata:
   risk_level: read_only
   requires_login: false
   default_install: true
-  requires_mcp: true
+  requires_mcp: false
   tier: analysis
 ---
 
 # longbridge-peer-comparison
 
-Prompt-only skill that takes 2–5 symbols, runs the same per-symbol orchestration concurrently, and renders one normalised matrix. Strong on **multi-symbol orchestration** that single MCP tools (one symbol per call) make tedious.
+Prompt-only skill that takes 2–5 symbols, runs the same per-symbol orchestration concurrently, and renders one normalised matrix.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
-
-## Prerequisite
-
-```bash
-claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
-```
-
-`quote` scope.
 
 ## When to use
 
@@ -48,20 +40,22 @@ claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
 - **Cross-industry** (e.g. tech + spirits) → render the matrix; add: *"cross-industry comparison has limited meaning — valuation thresholds are not comparable"*.
 - **Cross-market** (different accounting standards: IFRS / US GAAP / CN GAAP) → add: *"data uses different accounting standards; treat as a rough benchmark."*
 
+## CLI
+
+Run `longbridge <subcommand> --help` to verify exact flags. Per-symbol calls (run concurrently for all symbols):
+
+```bash
+longbridge quote NVDA.US --format json
+longbridge calc-index NVDA.US --format json
+longbridge financial-report NVDA.US --format json   # headline KPIs only — no need for full IS/BS/CF
+longbridge valuation NVDA.US --format json
+```
+
 ## Workflow
 
-1. Confirm MCP is configured.
-2. Resolve every symbol to `<CODE>.<MARKET>`. Apply the count rules above.
-3. **Concurrently per symbol**, call:
-
-   ```
-   mcp__longbridge__quote(symbol=X)
-   mcp__longbridge__calc_indexes(symbol=X, indexes="pe,pb,ps,dividend_yield,total_market_value,turnover_rate")
-   mcp__longbridge__latest_financial_report(symbol=X)
-   mcp__longbridge__valuation(symbol=X)
-   ```
-
-   **Do not** pull the full IS/BS/CF — `latest_financial_report` is enough for the headline KPIs.
+1. Resolve every symbol to `<CODE>.<MARKET>`. Apply the count rules above.
+2. **Concurrently per symbol**, call CLI commands (see CLI section). If `longbridge` is not installed, fall back to MCP.
+3. **Do not** pull the full IS/BS/CF — `financial-report` headline fields are enough for the KPIs.
 
 4. Normalise (label currency on every figure; **do not** auto-convert FX). Render as a Markdown table — rows are dimensions, columns are symbols.
 5. Add the **observations** paragraph at the bottom (data-only, no winners).
@@ -120,19 +114,24 @@ claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
 
 | Situation | Reply |
 |---|---|
-| MCP unconfigured | Prompt `claude mcp add ...` |
+| `command not found: longbridge` | Fall back to MCP; if MCP also unavailable, tell user to install longbridge-terminal. |
 | Some symbols' data missing | Render N/A in those rows; explain which symbol(s) failed |
 | 1 symbol only | Reroute to `longbridge-valuation` / `longbridge-fundamental` |
 | ≥ 6 symbols | Trim to top 5; tell user the rest are dropped |
+| stderr `not logged in` | Tell user to run `longbridge auth login`. |
 
-## MCP toolbelt (per symbol)
+## MCP fallback
 
-| MCP tool | Pulls |
+If `longbridge` CLI is not installed (`command not found`), use MCP tools instead (per symbol):
+
+| MCP tool | CLI equivalent |
 |---|---|
-| `mcp__longbridge__quote` | Last / change / volume / currency |
-| `mcp__longbridge__calc_indexes` | PE / PB / PS / dividend yield / total market cap / turnover rate |
-| `mcp__longbridge__latest_financial_report` | Revenue YoY, net income YoY, ROE |
-| `mcp__longbridge__valuation` | Cross-check vs `calc_indexes` |
+| `mcp__longbridge__quote` | `longbridge quote` |
+| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
+| `mcp__longbridge__latest_financial_report` | `longbridge financial-report` |
+| `mcp__longbridge__valuation` | `longbridge valuation` |
+
+MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 
 ## Related skills
 
