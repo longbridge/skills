@@ -15,7 +15,7 @@ metadata:
 
 Real-time quote, static info, and valuation indices for Longbridge-supported securities (HK / US / A-share / Singapore).
 
-> **Response language**: respond in the user's input language — Simplified Chinese (简体中文), Traditional Chinese (繁體中文), or English. Keep symbols (`NVDA.US`, `700.HK`) and numeric values verbatim.
+> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## When to use
 

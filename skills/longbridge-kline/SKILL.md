@@ -15,7 +15,7 @@ metadata:
 
 Historical candlesticks and today's intraday curve for Longbridge-supported securities (HK / US / A-share / Singapore). Does **not** support options, warrants, or indices — defer to `longbridge-derivatives` (derivatives) or `longbridge-quote` (indices).
 
-> **Response language**: respond in the user's input language — Simplified Chinese, Traditional Chinese, or English.
+> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## Subcommands
 
