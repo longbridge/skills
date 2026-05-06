@@ -87,7 +87,7 @@ longbridge valuation NVDA.US --format json
 - Dividend: highest yield
 - Scale: market-cap ratios
 
-⚠️ Valuation + growth do not collapse to a verdict; high multiples often pair with quality / certainty premium. Not investment advice. Combine with personal risk tolerance.
+⚠️ 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 (Translate into the user's language; keep numerics + ticker symbols verbatim.)

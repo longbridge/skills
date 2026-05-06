@@ -100,7 +100,7 @@ longbridge institution-rating NVDA.US --format json
 - Coverage: N analysts; X buy / Y hold / Z sell
 - Median target price: X
 
-⚠️ Reported financials are historical; future results are uncertain. Not investment advice.
+⚠️ 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 (Translate to the user's language; if a section's data is missing, state so explicitly — do not invent.)

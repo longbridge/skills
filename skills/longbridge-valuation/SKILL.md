@@ -84,7 +84,7 @@ longbridge calc-index TSLA.US --format json              # optional intraday PE 
 [Combined]
 From historical + industry views, valuation is {low / neutral / high} — historical N-th pct, {N% above/below} industry median.
 
-⚠️ High valuation does not imply "do not buy" — growth stocks frequently sustain high multiples. This is data, not investment advice.
+⚠️ 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 (Translate into the user's language; keep numeric values as-is.)

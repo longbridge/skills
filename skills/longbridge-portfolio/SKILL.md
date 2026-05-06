@@ -121,7 +121,7 @@ My account performance — Source: Longbridge Securities; period YYYY-MM-DD ~ YY
 - 互联网 / Internet:        20%
 - ...
 
-⚠️ Period P&L reflects short-term price moves and does not represent long-term return. Not rebalancing advice.
+⚠️ 以上数据仅供参考，不构成调仓建议。/ 以上數據僅供參考，不構成調倉建議。/ For reference only. Not rebalancing advice.
 ```
 
 (Translate into the user's language.)

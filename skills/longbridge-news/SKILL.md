@@ -95,7 +95,7 @@ longbridge topic NVDA.US --format json
 [Key facts] (≤ 100 chars, neutral)
 - ...
 
-⚠️ News interpretation is time-sensitive and viewpoint-laden. Not investment advice.
+⚠️ 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 (Translate into the user's language.)
