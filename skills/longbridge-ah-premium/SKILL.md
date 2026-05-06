@@ -82,7 +82,7 @@ longbridge ah-premium intraday 939.HK                              --format json
 
 ## Output
 
-Each row carries a timestamp and a premium ratio (typically expressed as `(H_price * fx) / A_price - 1`, in %). Negative = HK trades at a discount to A-share. Surface latest value + recent range; do not extrapolate / forecast.
+Each row carries a timestamp and a premium ratio (typically expressed as `(H_price * fx) / A_price - 1`, in %). Negative = HK trades at a discount to A-share. Surface latest value + recent range.
 
 ## Error handling
 

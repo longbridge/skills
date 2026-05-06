@@ -1,7 +1,7 @@
 ---
 name: longbridge-peer-comparison
 description: |
-  Cross-symbol comparison (2–5 stocks) via Longbridge — valuation (PE / PB / PS / dividend yield), current price + change, latest financial KPIs (revenue / net income / ROE), market cap. Renders as a single matrix; flags cross-currency or cross-industry caveats. Returns data, never picks a winner. Triggers: "X 和 Y 哪个值得买", "X vs Y", "几只股票对比", "同行业谁最强", "X 跟 Y 谁更便宜", "几只哪个增速快", "科技七姐妹谁最强", "X 跟 Y 對比", "X 跟 Y 哪個便宜", "X vs Y", "compare X and Y", "peer comparison", "which is more expensive", "which has higher growth".
+  Cross-symbol comparison (2–5 stocks) via Longbridge — valuation (PE / PB / PS / dividend yield), current price + change, latest financial KPIs (revenue / net income / ROE), market cap. Renders as a single matrix; flags cross-currency or cross-industry caveats. Triggers: "X 和 Y 哪个值得买", "X vs Y", "几只股票对比", "同行业谁最强", "X 跟 Y 谁更便宜", "几只哪个增速快", "科技七姐妹谁最强", "X 跟 Y 對比", "X 跟 Y 哪個便宜", "X vs Y", "compare X and Y", "peer comparison", "which is more expensive", "which has higher growth".
 license: MIT
 metadata:
   author: longbridge
@@ -81,8 +81,8 @@ longbridge valuation NVDA.US --format json
 | Net income YoY | ... | ... | ... |
 | ROE | ... | ... | ... |
 
-[Observations] (data-driven, not advice)
-- Valuation: who is highest on PE / PB / PS
+[Observations]
+- Valuation: who is highest / lowest on PE / PB / PS
 - Growth: who leads on revenue / net income YoY
 - Dividend: highest yield
 - Scale: market-cap ratios
@@ -92,17 +92,10 @@ longbridge valuation NVDA.US --format json
 
 (Translate into the user's language; keep numerics + ticker symbols verbatim.)
 
-## Hard prohibitions
-
-- **No** "I recommend X" or "X is the better buy".
-- **No** "you should buy X, not Y" advice.
-- **Observations** can only describe what the data shows (who is high / low / leading); not a verdict.
-- **No** auto-FX conversion — different currencies stay in their native unit with a label.
-
 ## Output constraints
 
 - **Must** be a Markdown table, dimensions × symbols.
-- **Must** label currency on every numeric figure (CNY / USD / HKD / SGD).
+- **Must** label currency on every numeric figure (CNY / USD / HKD / SGD); no auto-FX conversion.
 - **Must** end with not-investment-advice disclaimer.
 - Cross-currency / cross-industry / cross-market → **must** include the disclaimer at the top of the table.
 

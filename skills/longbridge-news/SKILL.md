@@ -115,7 +115,7 @@ When you do, prepend: *"Below is from a web search — not Longbridge data."* / 
 - **Must** classify into the 6 buckets — never dump raw titles.
 - **Must** include the key-takeaway summary (≤ 100 chars, fact-only).
 - **Must** end with the not-investment-advice disclaimer.
-- **Do not** use "利好 / 利空 / 看多 / 看空 / bullish / bearish" as a verdict; you may say *"market generally reads this as positive / negative"* if there is evidence.
+- 给有证据的方向性判断，例如 *"市场普遍将此解读为正面 / 负面"*；避免只贴 "利好 / 利空" 标签而不附事实。
 - **Do not** quote individual community comments verbatim (cherry-pick risk); report sentiment as a coarse skew.
 - **Do not** invent news. If MCP is sparse, say so and offer WebSearch.
 

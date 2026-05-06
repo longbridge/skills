@@ -1,7 +1,7 @@
 ---
 name: longbridge-valuation
 description: |
-  Valuation analysis for a single stock via Longbridge — current PE / PB / PS / EV-EBITDA snapshot, historical percentile (1–3 years), industry median + relative premium, industry rank. Returns data, never a buy/sell call. Triggers: "估值贵不贵", "是不是被低估", "PE 历史百分位", "PB 分位", "行业溢价", "行业折价", "X 现在适合买不", "估值水平", "估值貴不貴", "是否被低估", "PE 歷史分位", "行業溢價", "行業折價", "is X expensive", "is X undervalued", "PE percentile", "industry valuation premium", "valuation snapshot".
+  Valuation analysis for a single stock via Longbridge — current PE / PB / PS / EV-EBITDA snapshot, historical percentile (1–3 years), industry median + relative premium, industry rank. Triggers: "估值贵不贵", "是不是被低估", "PE 历史百分位", "PB 分位", "行业溢价", "行业折价", "X 现在适合买不", "估值水平", "估值貴不貴", "是否被低估", "PE 歷史分位", "行業溢價", "行業折價", "is X expensive", "is X undervalued", "PE percentile", "industry valuation premium", "valuation snapshot".
 license: MIT
 metadata:
   author: longbridge
@@ -25,7 +25,7 @@ Prompt-only analysis skill. Orchestrates Longbridge CLI commands to answer *"is 
 - *"茅台是不是被低估了"*, *"is Maotai undervalued?"*
 - *"700 估值在历史什么位置"*, *"700 historical PE percentile"*
 - *"宁德时代相对行业贵多少"*, *"how much does CATL trade above industry median"*
-- *"GOOG 现在适合买入吗"* (valuation lens, **no buy/sell verdict**)
+- *"GOOG 现在适合买入吗"*
 
 For multi-symbol comparison route to `longbridge-peer-comparison`. For business-fundamentals questions route to `longbridge-fundamental`.
 
@@ -98,9 +98,7 @@ Energy / chemicals / steel / shipping / banks / property are cyclical: PE invert
 - **Must** include three dimensions (snapshot + historical + industry); state "data unavailable" if a dimension fails.
 - **Must** cite "Longbridge Securities" / "数据来源:长桥证券" / "數據來源:長橋證券".
 - **Must** end with the not-investment-advice disclaimer.
-- **Do not** say "I recommend buying / selling".
-- **Do not** predict future PE.
-- **May** characterise combinations like "high-historical + high-industry" as a recognised hedge phrase, but qualify.
+- **May** characterise combinations like "high-historical + high-industry" and give a view; qualify with data.
 
 ## Error handling
 
