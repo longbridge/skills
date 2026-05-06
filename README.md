@@ -53,6 +53,7 @@ bunx skills add longbridge/skills -g
 
 # Update a single skill
 npx skills add longbridge/skills -g --skill longbridge-quote
+bunx skills add longbridge/skills -g --skill longbridge-quote
 ```
 
 ### Plugin marketplace
