@@ -1,7 +1,7 @@
 ---
 name: longbridge-security-list
 description: |
-  US overnight-eligible securities directory and HK broker participant directory via Longbridge Securities. `security-list` covers the US overnight-trading catalog only (the Longbridge OpenAPI exposes only that category). `participants` is the HK broker_id ↔ name dictionary. For non-US listed-stock lookups, route the user to `longbridge-quote` for individual symbol queries. Triggers: "美股 listed", "美股 overnight", "经纪商 ID", "broker_id", "港股经纪商", "港股經紀商", "經紀商 ID", "list of US stocks", "overnight tradable", "broker directory", "participant lookup".
+  US overnight-eligible securities directory and HK broker participant directory via Longbridge Securities. `security-list` covers the US overnight-trading catalog only (this is the only category exposed through this endpoint). `participants` is the HK broker_id ↔ name dictionary. For non-US listed-stock lookups, route the user to `longbridge-quote` for individual symbol queries. Triggers: "美股 listed", "美股 overnight", "经纪商 ID", "broker_id", "港股经纪商", "港股經紀商", "經紀商 ID", "list of US stocks", "overnight tradable", "broker directory", "participant lookup".
 license: MIT
 metadata:
   author: longbridge
@@ -26,7 +26,7 @@ Catalog lookups: US overnight-eligible securities, and the HK broker_id → name
 | `longbridge security-list --format json` | US overnight-eligible securities `[{symbol, name_en, name_cn}]`. |
 | `longbridge participants --format json` | HK broker directory `[{broker_id, name_en, name_cn}]`. |
 
-> ⚠️ **Scope**: `security-list` only exposes the US Overnight category (the Longbridge OpenAPI does not expose full HK / A-share / SG catalogs through this endpoint). The CLI returns `Error: Only US market is supported for security-list ...` if you pass `HK / CN / SG`. For non-US listed lookups, route the user to `longbridge-quote` for per-symbol queries.
+> ⚠️ **Scope**: `security-list` only exposes the US Overnight category (full HK / A-share / SG catalogs are not available through this endpoint). The CLI returns `Error: Only US market is supported for security-list ...` if you pass `HK / CN / SG`. For non-US listed lookups, route the user to `longbridge-quote` for per-symbol queries.
 
 ## When to use
 

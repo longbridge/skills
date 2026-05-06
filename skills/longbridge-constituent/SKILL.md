@@ -1,7 +1,7 @@
 ---
 name: longbridge-constituent
 description: |
-  Constituent stocks of an index or ETF via Longbridge Securities — list members of HSI / SPX / DJI / IXIC / CSI300 / a sector ETF, sortable by change, price, turnover, capital inflow, turnover-rate, or market cap. Returns a ranked roster, never a buy/sell call. Triggers: "标普500有哪些", "标普成分股", "恒生成分股", "纳斯达克成分", "道琼斯成分", "沪深300成分", "ETF 持仓", "ETF 成分股", "指数成分", "成分股涨幅榜", "標普500成分", "恒生成分股", "納斯達克成分", "道瓊成分", "滬深300成分", "ETF 持倉", "ETF 成分股", "指數成分", "成分股漲幅榜", "S&P 500 constituents", "Hang Seng constituents", "IXIC components", "Dow components", "CSI 300 members", "ETF holdings", "ETF constituents", "index members", "what's in SPX", "what's in HSI", "HSI.HK", "SPX.US", "IXIC.US", "DJI.US", "000300.SH".
+  Constituent stocks of an index or ETF via Longbridge Securities — list members of HSI / SPX / DJI / IXIC / CSI300 / a sector ETF, sortable by change, price, turnover, capital inflow, turnover-rate, or market cap. Returns a ranked roster. Triggers: "标普500有哪些", "标普成分股", "恒生成分股", "纳斯达克成分", "道琼斯成分", "沪深300成分", "ETF 持仓", "ETF 成分股", "指数成分", "成分股涨幅榜", "標普500成分", "恒生成分股", "納斯達克成分", "道瓊成分", "滬深300成分", "ETF 持倉", "ETF 成分股", "指數成分", "成分股漲幅榜", "S&P 500 constituents", "Hang Seng constituents", "IXIC components", "Dow components", "CSI 300 members", "ETF holdings", "ETF constituents", "index members", "what's in SPX", "what's in HSI", "HSI.HK", "SPX.US", "IXIC.US", "DJI.US", "000300.SH".
 license: MIT
 metadata:
   author: longbridge

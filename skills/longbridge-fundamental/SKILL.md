@@ -1,7 +1,7 @@
 ---
 name: longbridge-fundamental
 description: |
-  Company fundamentals via Longbridge — latest financial report KPIs (revenue / net income / EPS / ROE / margins / cash flow), YoY trends, dividend history, forward EPS consensus, analyst ratings, corporate actions. Three depth tiers (snapshot / standard / full). Returns data, never a buy/sell call. Triggers: "基本面", "业绩", "财报", "财务健康", "盈利能力", "营收", "净利润", "ROE", "毛利率", "分红历史", "EPS 预期", "研报评级", "業績", "財報", "財務健康", "毛利率", "分紅歷史", "fundamentals", "financials", "earnings report", "EPS forecast", "analyst rating", "ROE", "gross margin", "free cash flow", "dividend history", "company report".
+  Company fundamentals via Longbridge — latest financial report KPIs (revenue / net income / EPS / ROE / margins / cash flow), YoY trends, dividend history, forward EPS consensus, analyst ratings, corporate actions. Three depth tiers (snapshot / standard / full). Triggers: "基本面", "业绩", "财报", "财务健康", "盈利能力", "营收", "净利润", "ROE", "毛利率", "分红历史", "EPS 预期", "研报评级", "業績", "財報", "財務健康", "毛利率", "分紅歷史", "fundamentals", "financials", "earnings report", "EPS forecast", "analyst rating", "ROE", "gross margin", "free cash flow", "dividend history", "company report".
 license: MIT
 metadata:
   author: longbridge
@@ -100,7 +100,7 @@ longbridge institution-rating NVDA.US --format json
 - Coverage: N analysts; X buy / Y hold / Z sell
 - Median target price: X
 
-⚠️ Reported financials are historical; future results are uncertain. Not investment advice.
+⚠️ 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 (Translate to the user's language; if a section's data is missing, state so explicitly — do not invent.)

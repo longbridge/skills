@@ -3,7 +3,7 @@
 数据获取优先级：**CLI（首选）→ MCP（次选）→ Web Search（兜底）**
 
 - CLI 文档: https://open.longbridge.com/zh-CN/docs/cli/
-- MCP Endpoint: `https://openapi.longbridge.com/mcp`
+- MCP: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`
 - MCP 文档: https://open.longbridge.com/docs
 
 ## 通用说明

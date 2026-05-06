@@ -1,7 +1,7 @@
 ---
 name: longbridge-portfolio
 description: |
-  Account-level analysis via Longbridge — total market value, cash share, period P&L, single-stock contribution ranking, industry distribution, currency exposure, historical P/L curve. Requires longbridge login with trade scope. Returns data, never recommends rebalancing. Triggers: "我账户表现", "我本月浮盈", "我哪只股票贡献最多", "我组合配置", "我货币暴露", "我账户行业分布", "账户全貌", "我賬戶表現", "我本月浮盈", "我哪隻股貢獻最多", "我貨幣暴露", "我賬戶行業分佈", "my account performance", "monthly P&L", "biggest contributor", "portfolio breakdown", "currency exposure", "industry mix", "account-level analysis".
+  Account-level analysis via Longbridge — total market value, cash share, period P&L, single-stock contribution ranking, industry distribution, currency exposure, historical P/L curve. Requires longbridge login with trade scope. Triggers: "我账户表现", "我本月浮盈", "我哪只股票贡献最多", "我组合配置", "我货币暴露", "我账户行业分布", "账户全貌", "我賬戶表現", "我本月浮盈", "我哪隻股貢獻最多", "我貨幣暴露", "我賬戶行業分佈", "my account performance", "monthly P&L", "biggest contributor", "portfolio breakdown", "currency exposure", "industry mix", "account-level analysis".
 license: MIT
 metadata:
   author: longbridge
@@ -121,7 +121,7 @@ My account performance — Source: Longbridge Securities; period YYYY-MM-DD ~ YY
 - 互联网 / Internet:        20%
 - ...
 
-⚠️ Period P&L reflects short-term price moves and does not represent long-term return. Not rebalancing advice.
+⚠️ 以上数据仅供参考，不构成调仓建议。/ 以上數據僅供參考，不構成調倉建議。/ For reference only. Not rebalancing advice.
 ```
 
 (Translate into the user's language.)
@@ -134,11 +134,6 @@ Industry distribution requires `static_info` per symbol (N positions = N calls).
 - Simplify: take the **top 10 by market value**, group the rest as *"other"*.
 
 Same for the contribution ranking — list the top 10 (mix of leaders and laggards) by default; do not flood with the full position book.
-
-## Hard prohibitions
-
-- **No** "you should reduce / increase X" advice.
-- **No** subjective verdicts ("your portfolio is poorly diversified"); data-driven phrasing only ("technology accounts for 60% of NAV — sector concentration is high").
 
 ## Output constraints
 
@@ -177,7 +172,7 @@ MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridg
 - Position lookup ("what do I own?") → `longbridge-positions`
 - Per-symbol drill-down → `longbridge-quote`, `longbridge-valuation`, `longbridge-fundamental`
 - *"Why is X down?"* → `longbridge-news`
-- *"Should I sell X?"* — **do not advise**; instead route to `longbridge-valuation` + `longbridge-fundamental` and let the user decide.
+- *"Should I sell X?"* → combine with `longbridge-valuation` + `longbridge-fundamental` for a fuller picture.
 
 ## File layout
 
