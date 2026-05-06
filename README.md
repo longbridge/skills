@@ -40,6 +40,33 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 
 ---
 
+## Update
+
+Re-run the same command you used to install — the installer overwrites existing skills with the latest version.
+
+### npx / bun
+
+```bash
+npx skills add longbridge/skills -g
+bunx skills add longbridge/skills -g
+```
+
+### Plugin marketplace
+
+```text
+/plugin install longbridge@longbridge-skills
+```
+
+### Symlink (cloned repo)
+
+```bash
+cd /path/to/skills && git pull
+```
+
+Symlinks point directly into the repo, so a `git pull` takes effect immediately — no re-linking needed.
+
+---
+
 ## What you can ask
 
 Once installed, talk to your AI assistant naturally. Examples:
