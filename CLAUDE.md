@@ -33,7 +33,7 @@ longbridge-skills/
 
 - Directory name must match `^[a-z0-9]+(-[a-z0-9]+)*$` (lowercase ASCII + hyphens).
 - It MUST equal the `name:` value in the SKILL.md frontmatter.
-- All skills are namespaced `longbridge-*`. The base/foundation skill is `longbridge-core` (CLI / SDK / MCP reference); the specialised skills are `longbridge-quote`, `longbridge-kline`, etc.
+- Existing skills are namespaced `longbridge-*` (e.g. `longbridge-quote`). The single base skill is just `longbridge`.
 
 ### 2. Frontmatter
 
