@@ -6,7 +6,7 @@ Make your AI assistant fluent in [Longbridge Securities](https://longbridge.com)
 
 ---
 
-## Install & Update
+## Install
 
 Pick whichever fits your workflow:
 
@@ -37,6 +37,27 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 ```
 
 📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
+
+---
+
+## Update
+
+### npx
+
+```bash
+# Update all skills
+npx skills update -g
+
+# Update a single skill
+npx skills update longbridge-quote -g
+```
+
+### bun
+
+```bash
+bunx skills update -g
+bunx skills update longbridge-quote -g
+```
 
 ---
 
