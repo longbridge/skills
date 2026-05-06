@@ -49,7 +49,7 @@
 - {insight_2}
 
 ---
-> 数据来源: Longbridge Securities | {generation_time} | 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
+> 数据来源: Longbridge | {generation_time} | 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 ### 模板一填充规则
@@ -100,7 +100,7 @@
 - {time}: {event}
 
 ---
-> 数据来源: Longbridge Securities | {generation_time} | 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
+> 数据来源: Longbridge | {generation_time} | 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 **与模板一的差异**:
@@ -135,7 +135,7 @@
 | {stock3} | {pct3} | {stock3} | {pct3} |
 
 ---
-> 数据来源: Longbridge Securities | {generation_time} | 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
+> 数据来源: Longbridge | {generation_time} | 以上数据仅供参考，不构成投资建议。/ 以上數據僅供參考，不構成投資建議。/ For reference only. Not investment advice.
 ```
 
 **晚报特有内容**:
