@@ -38,29 +38,7 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 
 📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
 
----
-
-## Update
-
-Re-run the same command you used to install — the installer overwrites existing skills with the latest version.
-
-### npx / bun
-
-```bash
-# Update all skills
-npx skills add longbridge/skills -g
-bunx skills add longbridge/skills -g
-
-# Update a single skill
-npx skills add longbridge/skills -g --skill longbridge-quote
-bunx skills add longbridge/skills -g --skill longbridge-quote
-```
-
-### Plugin marketplace
-
-```text
-/plugin install longbridge@longbridge-skills
-```
+> **To update**, re-run the same command — the installer overwrites existing skills with the latest version.
 
 ---
 
