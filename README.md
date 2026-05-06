@@ -47,8 +47,12 @@ Re-run the same command you used to install — the installer overwrites existin
 ### npx / bun
 
 ```bash
+# Update all skills
 npx skills add longbridge/skills -g
 bunx skills add longbridge/skills -g
+
+# Update a single skill
+npx skills add longbridge/skills -g --skill longbridge-quote
 ```
 
 ### Plugin marketplace
