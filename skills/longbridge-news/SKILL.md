@@ -1,7 +1,7 @@
 ---
 name: longbridge-news
 description: |
-  Aggregated news, regulatory filings, and Longbridge-community discussion for a single stock — classified into catalyst / regulatory / strategic / financial / opinion / other, with a fact-only key-takeaway summary and a sentiment skew. Falls back to WebSearch only when MCP data is sparse or stale, and labels the source. Triggers: "X 最近新闻", "X 公告", "市场对 X 财报怎么看", "X 社区讨论", "X 公司动态", "市场情绪", "最近怎么了", "X 最近新聞", "X 公告", "市場對 X 財報怎麼看", "X 社區討論", "recent news", "company filings", "market reaction", "what is everyone saying about X", "community sentiment", "8-K", "港交所披露", "earnings reaction".
+  Aggregated news, regulatory filings, and Longbridge-community discussion for a single stock — classified into catalyst / regulatory / strategic / financial / opinion / other, with a fact-only key-takeaway summary and a sentiment skew. Falls back to WebSearch only when data is sparse or stale, and labels the source. Triggers: "X 最近新闻", "X 公告", "市场对 X 财报怎么看", "X 社区讨论", "X 公司动态", "市场情绪", "最近怎么了", "X 最近新聞", "X 公告", "市場對 X 財報怎麼看", "X 社區討論", "recent news", "company filings", "market reaction", "what is everyone saying about X", "community sentiment", "8-K", "港交所披露", "earnings reaction".
 license: MIT
 metadata:
   author: longbridge
@@ -9,7 +9,7 @@ metadata:
   risk_level: read_only
   requires_login: false
   default_install: true
-  requires_mcp: true
+  requires_mcp: false
   tier: analysis
 ---
 
@@ -18,14 +18,6 @@ metadata:
 Prompt-only skill that aggregates news, filings, and community topics for a single stock — classifies them, distils a fact-only takeaway, and reports sentiment at coarse granularity. May call WebSearch as a clearly-labelled fallback.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
-
-## Prerequisite
-
-```bash
-claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
-```
-
-`quote` scope is enough.
 
 ## When to use
 
@@ -45,17 +37,21 @@ claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
 | 社区 / community / discussion | `topic` (+ `topic_detail`, `topic_replies` for hot topics) |
 | 全面 / 综述 / overview (default) | `news` + `filings` + `topic` (concurrent) |
 
+## CLI
+
+Run `longbridge <subcommand> --help` to verify exact flags. Default omnibus example (run concurrently):
+
+```bash
+longbridge news NVDA.US --format json
+longbridge filing NVDA.US --format json
+longbridge topic NVDA.US --format json
+```
+
 ## Workflow
 
-1. Confirm MCP is configured.
-2. Resolve symbol; if mapping fails, ask back (this is common with small-caps).
-3. Pick depth (table above) and call MCP tools concurrently. Default omnibus example:
-
-   ```
-   mcp__longbridge__news(symbol=X, limit=10)
-   mcp__longbridge__filings(symbol=X, limit=10)
-   mcp__longbridge__topic(symbol=X)
-   ```
+1. Resolve symbol; if mapping fails, ask back (this is common with small-caps).
+2. Pick depth (table above) and call CLI commands concurrently (see CLI section). If `longbridge` is not installed, fall back to MCP.
+3.
 
 4. **Classify the news array** into 6 buckets (mandatory — never dump raw titles):
 
@@ -131,20 +127,25 @@ If `topic` / `topic_replies` content contains a high density of hype words — *
 
 | Situation | Reply |
 |---|---|
-| MCP unconfigured | Prompt `claude mcp add ...` |
-| `news` empty | "{symbol} has no recent news in Longbridge data — switching to WebSearch (note: web data, not Longbridge)." |
+| `command not found: longbridge` | Fall back to MCP; if MCP also unavailable, tell user to install longbridge-terminal. |
+| `news` returns empty | "{symbol} has no recent news in Longbridge data — switching to WebSearch (note: web data, not Longbridge)." |
 | `news` > 7 days stale | Same — note the staleness explicitly. |
 | Symbol mapping fails | Ask the user for the code or English ticker. |
+| stderr `not logged in` | Tell user to run `longbridge auth login`. |
 
-## MCP toolbelt
+## MCP fallback
 
-| MCP tool | Returns |
+If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
+
+| MCP tool | CLI equivalent |
 |---|---|
-| `mcp__longbridge__news` | News list for symbol |
-| `mcp__longbridge__filings` | Regulatory filings |
-| `mcp__longbridge__topic` | Community topics for symbol |
-| `mcp__longbridge__topic_detail` | Single topic detail |
-| `mcp__longbridge__topic_replies` | Replies under a topic |
+| `mcp__longbridge__news` | `longbridge news` |
+| `mcp__longbridge__filings` | `longbridge filing` |
+| `mcp__longbridge__topic` | `longbridge topic` |
+| `mcp__longbridge__topic_detail` | `longbridge topic` (detail subcommand) |
+| `mcp__longbridge__topic_replies` | `longbridge topic` (replies subcommand) |
+
+MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 
 ## Related skills
 

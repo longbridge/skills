@@ -1,7 +1,7 @@
 ---
 name: longbridge-fundamental
 description: |
-  Company fundamentals via Longbridge MCP — latest financial report KPIs (revenue / net income / EPS / ROE / margins / cash flow), YoY trends, dividend history, forward EPS consensus, analyst ratings, corporate actions. Three depth tiers (snapshot / standard / full). Returns data, never a buy/sell call. Triggers: "基本面", "业绩", "财报", "财务健康", "盈利能力", "营收", "净利润", "ROE", "毛利率", "分红历史", "EPS 预期", "研报评级", "業績", "財報", "財務健康", "毛利率", "分紅歷史", "fundamentals", "financials", "earnings report", "EPS forecast", "analyst rating", "ROE", "gross margin", "free cash flow", "dividend history", "company report".
+  Company fundamentals via Longbridge — latest financial report KPIs (revenue / net income / EPS / ROE / margins / cash flow), YoY trends, dividend history, forward EPS consensus, analyst ratings, corporate actions. Three depth tiers (snapshot / standard / full). Returns data, never a buy/sell call. Triggers: "基本面", "业绩", "财报", "财务健康", "盈利能力", "营收", "净利润", "ROE", "毛利率", "分红历史", "EPS 预期", "研报评级", "業績", "財報", "財務健康", "毛利率", "分紅歷史", "fundamentals", "financials", "earnings report", "EPS forecast", "analyst rating", "ROE", "gross margin", "free cash flow", "dividend history", "company report".
 license: MIT
 metadata:
   author: longbridge
@@ -9,23 +9,15 @@ metadata:
   risk_level: read_only
   requires_login: false
   default_install: true
-  requires_mcp: true
+  requires_mcp: false
   tier: analysis
 ---
 
 # longbridge-fundamental
 
-Prompt-only analysis skill. Orchestrates Longbridge MCP tools to deliver a five-dimension fundamentals snapshot: profitability, financial health, growth, shareholder return, market expectation.
+Prompt-only analysis skill. Orchestrates Longbridge CLI commands to deliver a five-dimension fundamentals snapshot: profitability, financial health, growth, shareholder return, market expectation.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
-
-## Prerequisite
-
-```bash
-claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
-```
-
-`quote` scope is enough.
 
 ## Three depth tiers
 
@@ -49,25 +41,33 @@ Tiers are additive — don't pull all 8+ tools when the user asks a casual quest
 
 For valuation lens (PE, PB) → `longbridge-valuation`. For comparison → `longbridge-peer-comparison`.
 
+## CLI
+
+Run `longbridge <subcommand> --help` to verify exact flags. Standard tier example (run concurrently):
+
+```bash
+longbridge financial-report NVDA.US --format json   # IS/BS/CF statements
+longbridge dividend NVDA.US --format json
+longbridge forecast-eps NVDA.US --format json
+longbridge consensus NVDA.US --format json
+```
+
+Full tier — add:
+
+```bash
+longbridge company NVDA.US --format json
+longbridge operating NVDA.US --format json
+longbridge corp-action NVDA.US --format json
+longbridge institution-rating NVDA.US --format json
+```
+
 ## Workflow
 
-1. Confirm MCP is configured.
-2. Resolve symbol; multi-symbol → route to `longbridge-peer-comparison`.
-3. Pick a tier based on prompt; call MCP tools concurrently.
+1. Resolve symbol; multi-symbol → route to `longbridge-peer-comparison`.
+2. Pick a tier based on prompt; call CLI commands concurrently (see CLI section above).
+3. If `longbridge` is not installed, fall back to MCP (see MCP fallback section).
 4. Translate fields using the dictionary below; output the **5-section structure** with disclosure dates.
 5. Cite **Longbridge Securities**; end with not-investment-advice disclaimer.
-
-### Standard tier example
-
-```
-mcp__longbridge__latest_financial_report(symbol=X)
-mcp__longbridge__financial_report(symbol=X, kind="IS", period="qf")
-mcp__longbridge__financial_report(symbol=X, kind="BS", period="qf")
-mcp__longbridge__financial_report(symbol=X, kind="CF", period="qf")
-mcp__longbridge__dividend(symbol=X)
-mcp__longbridge__forecast_eps(symbol=X)
-mcp__longbridge__consensus(symbol=X)
-```
 
 ## Output template (5 sections, mandatory)
 
@@ -125,24 +125,29 @@ Heuristics differ by sector. Anchor on **vs industry mean** or **vs own history*
 
 | Situation | Reply |
 |---|---|
-| MCP unconfigured | Prompt `claude mcp add ...` |
-| `latest_financial_report` empty | "{symbol} has no reported earnings (newly listed?)." |
+| `command not found: longbridge` | Fall back to MCP; if MCP also unavailable, tell user to install longbridge-terminal. |
+| `financial-report` returns empty | "{symbol} has no reported earnings (newly listed?)." |
 | `consensus` < 3 analysts | Caveat: "small coverage — consensus is indicative only" |
-| `dividend` empty | "{symbol} pays no dividends or has no dividend record." |
+| `dividend` returns empty | "{symbol} pays no dividends or has no dividend record." |
+| stderr `not logged in` | Tell user to run `longbridge auth login`. |
 
-## MCP toolbelt
+## MCP fallback
 
-| MCP tool | Tier |
-|---|:---:|
-| `mcp__longbridge__latest_financial_report` | snapshot |
-| `mcp__longbridge__forecast_eps` | snapshot |
-| `mcp__longbridge__consensus` | snapshot |
-| `mcp__longbridge__financial_report` | standard |
-| `mcp__longbridge__dividend` | standard |
-| `mcp__longbridge__company` | full |
-| `mcp__longbridge__operating` | full |
-| `mcp__longbridge__corp_action` | full |
-| `mcp__longbridge__institution_rating` | full |
+If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
+
+| MCP tool | CLI equivalent | Tier |
+|---|---|:---:|
+| `mcp__longbridge__latest_financial_report` | `longbridge financial-report` | snapshot |
+| `mcp__longbridge__forecast_eps` | `longbridge forecast-eps` | snapshot |
+| `mcp__longbridge__consensus` | `longbridge consensus` | snapshot |
+| `mcp__longbridge__financial_report` | `longbridge financial-report` | standard |
+| `mcp__longbridge__dividend` | `longbridge dividend` | standard |
+| `mcp__longbridge__company` | `longbridge company` | full |
+| `mcp__longbridge__operating` | `longbridge operating` | full |
+| `mcp__longbridge__corp_action` | `longbridge corp-action` | full |
+| `mcp__longbridge__institution_rating` | `longbridge institution-rating` | full |
+
+MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 
 ## Related skills
 
