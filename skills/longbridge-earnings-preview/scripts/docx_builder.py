@@ -77,6 +77,50 @@ def _set_doc_default_cjk(doc: Document, cjk: str = DEFAULT_CJK) -> None:
 
 
 # ── Builder class ─────────────────────────────────────────────────────────────
+# ── Language label tables ──────────────────────────────────────────────────────
+_LABELS = {
+    "zh": {
+        "subtitle":      "财报前瞻",
+        "analysis_date": "分析日期",
+        "report_date":   "财报发布日期",
+        "price":         "现价",
+        "market_cap":    "市值",
+        "rating":        "评级",
+        "toc":           "目录",
+        "qa_answer":     "  \u21b3 管理层答复：",
+        "qa_watch":      "  \u21b3 本次关注：",
+        "disclaimer_h":  "免责声明",
+        "disclaimer_b":  (
+            "本报告仅供参考和教育用途，不构成任何投资建议、买卖证券的邀约或任何形式的推荐。"
+            "数据来源包括 Longbridge CLI、SEC 公开文件及互联网公开信息。"
+            "所有估算、情景分析及预测均存在重大不确定性，过往表现不代表未来结果。"
+            "投资者在作出任何投资决策前应进行独立尽职调查。"
+        ),
+    },
+    "en": {
+        "subtitle":      "Earnings Preview",
+        "analysis_date": "Analysis Date",
+        "report_date":   "Report Date",
+        "price":         "Price",
+        "market_cap":    "Mkt Cap",
+        "rating":        "Rating",
+        "toc":           "Table of Contents",
+        "qa_answer":     "  \u21b3 Management Response: ",
+        "qa_watch":      "  \u21b3 Watch For: ",
+        "disclaimer_h":  "Disclaimer",
+        "disclaimer_b":  (
+            "This report is for informational and educational purposes only and does not "
+            "constitute investment advice, a solicitation to buy or sell securities, or any "
+            "form of recommendation. Data sources include the Longbridge CLI, SEC public "
+            "filings, and publicly available internet information. All estimates, scenario "
+            "analyses, and forecasts involve material uncertainty; past performance does not "
+            "guarantee future results. Investors should conduct independent due diligence "
+            "before making any investment decision."
+        ),
+    },
+}
+
+
 class DocxBuilder:
     def __init__(
         self,
@@ -89,6 +133,7 @@ class DocxBuilder:
         valuation: str,
         rating: str,
         output_path: str,
+        lang: str = "zh",
         latin: str = DEFAULT_LATIN,
         cjk: str = DEFAULT_CJK,
     ) -> None:
@@ -101,8 +146,10 @@ class DocxBuilder:
         self.valuation     = valuation
         self.rating        = rating
         self.output_path   = output_path
+        self.lang          = lang if lang in _LABELS else "zh"
         self.latin         = latin
         self.cjk           = cjk
+        self._lbl          = _LABELS[self.lang]
 
         self.doc = Document()
         sec = self.doc.sections[0]
@@ -151,14 +198,15 @@ class DocxBuilder:
 
         p2 = self.doc.add_paragraph()
         p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        self._run(p2, "财报前瞻", bold=True, size=16)
+        self._run(p2, self._lbl["subtitle"], bold=True, size=16)
 
         self.doc.add_paragraph()
 
         p3 = self.doc.add_paragraph()
         p3.alignment = WD_ALIGN_PARAGRAPH.CENTER
         self._run(p3,
-                  f"分析日期：{self.analysis_date}    |    财报发布日期：{self.report_date}",
+                  f"{self._lbl['analysis_date']}：{self.analysis_date}    |    "
+                  f"{self._lbl['report_date']}：{self.report_date}",
                   size=11, color=GREY)
 
         self.doc.add_paragraph()
@@ -166,8 +214,8 @@ class DocxBuilder:
         p4 = self.doc.add_paragraph()
         p4.alignment = WD_ALIGN_PARAGRAPH.CENTER
         self._run(p4,
-                  f"现价：{self.price}  |  市值：{self.market_cap}  |  "
-                  f"{self.valuation}  |  评级：{self.rating}",
+                  f"{self._lbl['price']}：{self.price}  |  {self._lbl['market_cap']}：{self.market_cap}  |  "
+                  f"{self.valuation}  |  {self._lbl['rating']}：{self.rating}",
                   size=10)
 
         self.doc.add_page_break()
@@ -178,7 +226,7 @@ class DocxBuilder:
         p = self.doc.add_paragraph()
         p.paragraph_format.space_before = Pt(16)
         p.paragraph_format.space_after  = Pt(4)
-        self._run(p, "目录", bold=True, size=15, color=BLUE)
+        self._run(p, self._lbl["toc"], bold=True, size=15, color=BLUE)
 
         for num, title in sections:
             row = self.doc.add_paragraph()
@@ -221,7 +269,7 @@ class DocxBuilder:
         p.paragraph_format.space_before = Pt(6)
         self._run(p, question, bold=True, size=10)
 
-        for label, val in [("  ↳ 管理层答复：", answer), ("  ↳ 本次关注：", watch)]:
+        for label, val in [(self._lbl["qa_answer"], answer), (self._lbl["qa_watch"], watch)]:
             p2 = self.doc.add_paragraph()
             p2.paragraph_format.left_indent  = Inches(0.3)
             p2.paragraph_format.space_before = Pt(0)
@@ -287,13 +335,8 @@ class DocxBuilder:
     # ── Disclaimer ────────────────────────────────────────────────────────────
     def disclaimer(self):
         self.hr()
-        self.subsection("免责声明")
-        self.body(
-            "本报告仅供参考和教育用途，不构成任何投资建议、买卖证券的邀约或任何形式的推荐。"
-            "数据来源包括 Longbridge CLI、SEC 公开文件及互联网公开信息。"
-            "所有估算、情景分析及预测均存在重大不确定性，过往表现不代表未来结果。"
-            "投资者在作出任何投资决策前应进行独立尽职调查。"
-        )
+        self.subsection(self._lbl["disclaimer_h"])
+        self.body(self._lbl["disclaimer_b"])
 
     # ── Save ─────────────────────────────────────────────────────────────────
     def save(self) -> str:
