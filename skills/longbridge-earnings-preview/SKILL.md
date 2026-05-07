@@ -1,16 +1,28 @@
 ---
-name: earnings-preview
+name: longbridge-earnings-preview
 description: >
-  Pre-earnings analysis skill for individual investors. Automatically extracts prior quarter
-  guidance, tracks recent events, summarizes earnings call Q&A, and generates a structured
-  preview report (inline summary + DOCX) before a company reports quarterly results.
-  Supports US, HK, and A-share markets.
-  Triggers on: "财报前瞻", "财报预览", "财报季准备", "财报要关注什么", "earnings preview",
-  "pre-earnings", stock ticker + earnings-related keywords (e.g. "NVDA 下季度财报"),
-  or requests about prior guidance, management outlook, historical call Q&A.
+  Pre-earnings analysis skill — extracts prior guidance, tracks events, summarises earnings
+  call Q&A, and generates a structured preview report (inline summary + DOCX) before a
+  company reports quarterly results. Supports US, HK, and A-share markets.
+  Triggers: "财报前瞻", "财报预览", "财报季准备", "财报要关注什么", "下季度财报", "业绩前瞻",
+  "上季度指引", "电话会要点", "財報前瞻", "財報預覽", "財報季準備", "財報要關注什麼",
+  "下季度財報", "業績前瞻", "上季度指引", "電話會要點",
+  "earnings preview", "pre-earnings", "prior guidance", "earnings call Q&A",
+  "NVDA earnings preview", "what to watch this earnings", "before earnings".
+license: MIT
+metadata:
+  author: longbridge
+  version: "1.0.0"
+  risk_level: read_only
+  requires_login: false
+  default_install: true
+  requires_mcp: false
+  tier: analysis
 ---
 
-# Earnings Preview Skill
+# longbridge-earnings-preview
+
+> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## What This Skill Does
 
@@ -274,9 +286,62 @@ The builder handles CJK font (`Microsoft YaHei` + `Calibri`) on every run automa
 Never set fonts manually — just use `b.body()`, `b.bullet()`, `b.table()`, `b.qa()`, `b.image()`.
 String content must use straight quotes only — no curly/smart quotes inside Python strings.
 
+## Error handling
+
+| Situation | LLM response |
+|---|---|
+| Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install longbridge-terminal and provide the web-search-only preview with a clear label. |
+| stderr `not logged in` / `unauthorized` | Tell the user to run `longbridge auth login`; the skill can still proceed with web search for public data. |
+| Company has already reported | Tell the user to use `longbridge-earnings` instead (post-earnings update skill). |
+| No CLI data + no web results | State which modules have gaps; still deliver available modules — do not produce a blank report. |
+| Other stderr | Surface verbatim — never silently retry. |
+
+## MCP fallback
+
+If the CLI binary is unavailable and `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` is configured:
+
+| CLI subcommand | MCP tool |
+|---|---|
+| `filing` | `mcp__longbridge__filings` |
+| `financial-report` | `mcp__longbridge__financial_report` |
+| `consensus` | `mcp__longbridge__consensus` |
+| `forecast-eps` | `mcp__longbridge__forecast_eps` |
+| `operating` | `mcp__longbridge__operating` |
+| `quote` | `mcp__longbridge__quote` |
+| `calc-index` | `mcp__longbridge__calc_indexes` |
+| `kline` | `mcp__longbridge__candlesticks` |
+| `institution-rating` | `mcp__longbridge__institution_rating` |
+| `news` | `mcp__longbridge__news` |
+
+## Related skills
+
+| If the user wants … | Use |
+|---|---|
+| Post-earnings deep-dive (company has already reported) | [`longbridge-earnings`](../longbridge-earnings) |
+| 5-dimension fundamentals snapshot | [`longbridge-fundamental`](../longbridge-fundamental) |
+| Historical PE / PB percentile | [`longbridge-valuation`](../longbridge-valuation) |
+| Classified news + filings + community sentiment | [`longbridge-news`](../longbridge-news) |
+| Daily incremental briefing across watchlist | [`longbridge-catalyst-radar`](../longbridge-catalyst-radar) |
+| Earnings date / calendar | [`longbridge-calendar`](../longbridge-calendar) |
+
 ## Reference Files
 
 | File | Contents | When to Read |
 |------|----------|--------------|
 | [scenarios.md](references/scenarios.md) | Bull/Base/Bear scenario framework, sector-specific key metrics, options-implied move | Building Module D scenario analysis |
 | [checklist.md](references/checklist.md) | Pre-report data collection checklist and output quality checks | Before finalizing output |
+
+## File layout
+
+```
+longbridge-earnings-preview/
+├── SKILL.md
+├── commands/
+│   └── earnings-preview.md     # /earnings-preview <SYMBOL> slash command
+├── references/
+│   ├── scenarios.md            # scenario analysis framework
+│   └── checklist.md            # data collection + quality checklist
+└── scripts/
+    ├── docx_builder.py         # DocxBuilder class — DOCX generation
+    └── chart_builder.py        # ChartBuilder class — matplotlib charts
+```
