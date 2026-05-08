@@ -1,0 +1,11 @@
+{
+  "id": "longbridge",
+  "name": "Longbridge Skills",
+  "description": "Agent Skills for Longbridge Securities — quotes, charts, fundamentals, valuation, portfolio, news. HK / US / A-share / SG markets. Trilingual (Simplified Chinese, Traditional Chinese, English).",
+  "version": "1.0.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false
+  },
+  "skills": "./skills/"
+}
