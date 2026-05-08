@@ -36,7 +36,11 @@ Run `longbridge <subcommand> --help` to verify exact flags. Primary calls (run c
 ```bash
 longbridge valuation TSLA.US --format json               # current snapshot + peer comparison
 longbridge valuation TSLA.US --history --range 3 --format json   # 3-year historical series
+longbridge valuation TSLA.US --history --indicator pb --range 5 --format json  # PB 5-year series
+longbridge valuation-rank TSLA.US --format json          # daily PE/PB/PS industry percentile rank (past 1 year)
+longbridge valuation-rank TSLA.US --start 20230101 --end 20251231 --format json  # custom date range
 longbridge industry-valuation TSLA.US --format json      # industry median + distribution
+longbridge industry-valuation dist TSLA.US --format json # percentile distribution
 longbridge calc-index TSLA.US --format json              # optional intraday PE correction
 ```
 
@@ -52,10 +56,10 @@ longbridge calc-index TSLA.US --format json              # optional intraday PE 
 
    | Quantity | Method |
    |---|---|
-   | Historical PE percentile | rank current PE against `valuation_history` series |
+   | Historical PE percentile | prefer `valuation-rank` daily rank series; fallback: rank current PE against `valuation --history` series |
    | Historical PB percentile | same |
    | Industry premium | `(current PE − industry median PE) / industry median PE` |
-   | Industry rank | bucket from `industry_valuation_dist` |
+   | Industry rank | bucket from `industry-valuation dist` |
 
    If history is sparse (< 1y) or the industry has fewer than 5 peers, **degrade gracefully** — show snapshot + relative-to-industry only, drop the percentile claim.
 
@@ -118,9 +122,10 @@ If `longbridge` CLI is not installed (`command not found`), use MCP tools instea
 |---|---|
 | `mcp__longbridge__valuation` | `longbridge valuation` |
 | `mcp__longbridge__valuation_history` | `longbridge valuation --history --range 3` |
+| `mcp__longbridge__valuation_rank` | `longbridge valuation-rank` |
 | `mcp__longbridge__industry_valuation` | `longbridge industry-valuation` |
-| `mcp__longbridge__industry_valuation_dist` | `longbridge industry-valuation` |
-| `mcp__longbridge__latest_financial_report` | `longbridge financial-report` |
+| `mcp__longbridge__industry_valuation_dist` | `longbridge industry-valuation dist` |
+| `mcp__longbridge__latest_financial_report` | `longbridge financial-report --latest` |
 | `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).

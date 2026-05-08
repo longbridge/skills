@@ -1,7 +1,7 @@
 ---
 name: longbridge-statement
 description: |
-  Account statements (daily / monthly) via Longbridge Securities — list available statements and export sections (equity holdings, cash transactions, fees, etc.) as CSV or markdown for accounting, tax filing, or audit. Requires longbridge login with Trade scope. Read-only — no order placement here. Triggers: "对账单", "月结单", "日结单", "账单导出", "税务报表", "报税资料", "导出持仓", "导出交易记录", "對賬單", "月結單", "日結單", "賬單導出", "稅務報表", "報稅資料", "匯出持倉", "匯出交易紀錄", "account statement", "monthly statement", "daily statement", "export statement", "tax report", "tax filing", "statement export", "broker statement", "1099", "year-end statement".
+  Account statements (daily / monthly) via Longbridge Securities — list available statements and export sections (equity holdings, cash transactions, fees, etc.) as CSV or markdown for accounting, tax filing, or audit. Also covers bank cards linked to the account, withdrawal history, and deposit history. Requires longbridge login with Trade scope. Read-only — no order placement here. Triggers: "对账单", "月结单", "日结单", "账单导出", "税务报表", "报税资料", "导出持仓", "导出交易记录", "银行卡", "出金记录", "入金记录", "充值记录", "對賬單", "月結單", "日結單", "賬單導出", "稅務報表", "報稅資料", "銀行卡", "出金記錄", "入金記錄", "account statement", "monthly statement", "daily statement", "export statement", "tax report", "bank cards", "withdrawal history", "deposit history", "1099", "year-end statement".
 license: MIT
 metadata:
   author: longbridge
@@ -26,6 +26,9 @@ Account statement listing and section export — for accounting, tax filing, and
 - *"月结单"*, *"monthly statement"* → `statement --type monthly`
 - *"导出某月对账单 CSV"*, *"export equity holdings"* → `statement export --file-key <KEY> --section <SECTION>`
 - *"报税要交易明细"*, *"tax report data"* → list first, then export the relevant section.
+- *"我绑定了哪些银行卡"*, *"bank cards"* → `bank-cards`
+- *"我的出金记录"*, *"withdrawal history"* → `withdrawals`
+- *"我的入金记录"*, *"deposit history"* → `deposits`
 
 For trades / fills detail, prefer `longbridge-orders`. For live holdings / cash, prefer `longbridge-positions`.
 
@@ -80,6 +83,17 @@ longbridge statement --type daily --start-date 2026-01-01 --limit 90 --format js
 
 # Export the equity-holdings section of one statement
 longbridge statement export --file-key <KEY> --section equity_holdings --format json
+
+# Bank cards linked to the account
+longbridge bank-cards --format json
+
+# Withdrawal history (paginated)
+longbridge withdrawals --format json
+longbridge withdrawals --page 2 --count 50 --format json
+
+# Deposit history (with filters)
+longbridge deposits --format json
+longbridge deposits --states 1 --currencies HKD,USD --format json  # credited, HKD+USD only
 ```
 
 > Available `--section` values vary by statement type and account. Run `longbridge statement export --help` for the canonical list before guessing.
@@ -107,6 +121,9 @@ When summarising, give a small table of dates + keys; never re-format the sectio
 |---|---|
 | `statement` / `statement list` | `mcp__longbridge__statement_list` (or fall back via the equivalent MCP tool) |
 | `statement export` | `mcp__longbridge__statement_export` (or fall back via the equivalent MCP tool) |
+| `bank-cards` | `mcp__longbridge__bank_cards` |
+| `withdrawals` | `mcp__longbridge__withdrawals` |
+| `deposits` | `mcp__longbridge__deposits` |
 
 If the exact MCP names differ, the CLI is the canonical path.
 

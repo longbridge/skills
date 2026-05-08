@@ -25,9 +25,9 @@ LLM picks based on prompt verbosity:
 
 | Tier | Trigger phrases | Tools called |
 |---|---|---|
-| **snapshot** | *"X 怎么样"*, *"how is X"*, brief curiosity | `latest_financial_report` + `forecast_eps` + `consensus` |
-| **standard** (default) | *"X 基本面 / 业绩 / 财报"*, *"X fundamentals"* | snapshot + `financial_report` (IS/BS/CF) + `dividend` |
-| **full** | *"X 全面分析"*, *"detailed fundamentals"* | standard + `company` + `operating` + `corp_action` + `institution_rating` |
+| **snapshot** | *"X 怎么样"*, *"how is X"*, brief curiosity | `financial-report --latest` + `analyst-estimates` + `consensus` |
+| **standard** (default) | *"X 基本面 / 业绩 / 财报"*, *"X fundamentals"* | snapshot + `financial-statement` (IS/BS/CF) + `dividend` |
+| **full** | *"X 全面分析"*, *"detailed fundamentals"* | standard + `company` + `operating` + `corp_action` + `institution-rating` (with `--history` + `detail`) |
 
 Tiers are additive — don't pull all 8+ tools when the user asks a casual question.
 
@@ -46,10 +46,15 @@ For valuation lens (PE, PB) → `longbridge-valuation`. For comparison → `long
 Run `longbridge <subcommand> --help` to verify exact flags. Standard tier example (run concurrently):
 
 ```bash
-longbridge financial-report NVDA.US --format json   # IS/BS/CF statements
+# Snapshot tier
+longbridge financial-report NVDA.US --latest --format json   # key KPI summary (revenue/EPS/ROE)
+longbridge analyst-estimates NVDA.US --format json           # EPS consensus (high/low/mean/median)
+longbridge consensus NVDA.US --format json                   # coverage and target price
+
+# Standard tier — add
+longbridge financial-statement NVDA.US --kind ALL --format json   # full line-item IS/BS/CF
 longbridge dividend NVDA.US --format json
 longbridge forecast-eps NVDA.US --format json
-longbridge consensus NVDA.US --format json
 ```
 
 Full tier — add:
@@ -58,7 +63,10 @@ Full tier — add:
 longbridge company NVDA.US --format json
 longbridge operating NVDA.US --format json
 longbridge corp-action NVDA.US --format json
-longbridge institution-rating NVDA.US --format json
+longbridge institution-rating NVDA.US --format json              # rating distribution + target price
+longbridge institution-rating NVDA.US --history --format json    # rating/target price change history
+longbridge institution-rating detail NVDA.US --format json       # per-institution rating detail
+longbridge institution-rating NVDA.US --industry-rank --format json  # industry-wide analyst coverage rank
 ```
 
 ## Workflow
@@ -137,15 +145,19 @@ If `longbridge` CLI is not installed (`command not found`), use MCP tools instea
 
 | MCP tool | CLI equivalent | Tier |
 |---|---|:---:|
-| `mcp__longbridge__latest_financial_report` | `longbridge financial-report` | snapshot |
+| `mcp__longbridge__latest_financial_report` | `longbridge financial-report --latest` | snapshot |
+| `mcp__longbridge__analyst_estimates` | `longbridge analyst-estimates` | snapshot |
 | `mcp__longbridge__forecast_eps` | `longbridge forecast-eps` | snapshot |
 | `mcp__longbridge__consensus` | `longbridge consensus` | snapshot |
+| `mcp__longbridge__financial_statement` | `longbridge financial-statement` | standard |
 | `mcp__longbridge__financial_report` | `longbridge financial-report` | standard |
 | `mcp__longbridge__dividend` | `longbridge dividend` | standard |
 | `mcp__longbridge__company` | `longbridge company` | full |
 | `mcp__longbridge__operating` | `longbridge operating` | full |
 | `mcp__longbridge__corp_action` | `longbridge corp-action` | full |
 | `mcp__longbridge__institution_rating` | `longbridge institution-rating` | full |
+| `mcp__longbridge__institution_rating_history` | `longbridge institution-rating --history` | full |
+| `mcp__longbridge__institution_rating_detail` | `longbridge institution-rating detail` | full |
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

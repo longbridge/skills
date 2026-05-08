@@ -32,9 +32,11 @@ Prompt-only skill that aggregates news, filings, and community topics for a sing
 | Prompt cue | Tools |
 |---|---|
 | 新闻 / news / "最近怎么了" | `news` only |
+| 搜索新闻 / search news / keyword news | `news search <keyword>` |
 | 公告 / 披露 / filing / 8-K / 中报 | `filings` only |
 | 市场怎么看 / market reaction / sentiment | `news` + `topic` |
-| 社区 / community / discussion | `topic` (+ `topic_detail`, `topic_replies` for hot topics) |
+| 社区 / community / discussion | `topic` (+ `topic detail`, `topic replies` for hot topics) |
+| 搜索社区 / search community topics | `topic search <keyword>` |
 | 全面 / 综述 / overview (default) | `news` + `filings` + `topic` (concurrent) |
 
 ## CLI
@@ -45,6 +47,13 @@ Run `longbridge <subcommand> --help` to verify exact flags. Default omnibus exam
 longbridge news NVDA.US --format json
 longbridge filing NVDA.US --format json
 longbridge topic NVDA.US --format json
+```
+
+Keyword search (no symbol required):
+
+```bash
+longbridge news search "AI chips" --format json        # search news by keyword
+longbridge topic search "NVDA earnings" --format json  # search community topics by keyword
 ```
 
 ## Workflow
@@ -140,10 +149,12 @@ If `longbridge` CLI is not installed (`command not found`), use MCP tools instea
 | MCP tool | CLI equivalent |
 |---|---|
 | `mcp__longbridge__news` | `longbridge news` |
+| `mcp__longbridge__news_search` | `longbridge news search <keyword>` |
 | `mcp__longbridge__filings` | `longbridge filing` |
 | `mcp__longbridge__topic` | `longbridge topic` |
-| `mcp__longbridge__topic_detail` | `longbridge topic` (detail subcommand) |
-| `mcp__longbridge__topic_replies` | `longbridge topic` (replies subcommand) |
+| `mcp__longbridge__topic_detail` | `longbridge topic detail` |
+| `mcp__longbridge__topic_replies` | `longbridge topic replies` |
+| `mcp__longbridge__topic_search` | `longbridge topic search <keyword>` |
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 
