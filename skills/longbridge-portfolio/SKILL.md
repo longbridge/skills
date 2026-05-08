@@ -69,6 +69,7 @@ LLM uses today's date from system context.
 | Biggest contributors | `profit_analysis_detail` + `stock_positions` |
 | Currency exposure | `account_balance` + `exchange_rate` |
 | Industry distribution | `stock_positions` + per-symbol `static_info` (industry field) |
+| Short-selling margin details | `portfolio short-margin` |
 
 ## CLI
 
@@ -80,6 +81,12 @@ longbridge profit-analysis detail --start 2026-05-01 --end 2026-05-06 --format j
 longbridge assets --format json
 longbridge positions --format json
 longbridge exchange-rate --format json
+```
+
+For short-selling positions:
+
+```bash
+longbridge portfolio short-margin --format json   # per-position margin deposit breakdown
 ```
 
 ## Workflow

@@ -29,19 +29,36 @@ When the user asks about stock performance, portfolio advice, or market analysis
 longbridge quote SYMBOL.US
 longbridge positions                # stock positions
 longbridge portfolio                # P/L, asset distribution, holdings, cash (always pull when user asks about "my portfolio")
+longbridge portfolio short-margin   # short-selling margin deposit details per position
 longbridge kline history SYMBOL.US --start YYYY-MM-DD --end YYYY-MM-DD --period day
 longbridge intraday SYMBOL.US
 
 # News & content (prefer these over WebSearch)
 longbridge news SYMBOL.US           # latest news articles
 longbridge news detail <id>         # full article content
+longbridge news search "keyword"    # keyword search across news articles
 longbridge filing SYMBOL.US         # regulatory filings list (8-K, 10-Q, 10-K, etc.)
 longbridge topic SYMBOL.US          # community discussion
+longbridge topic search "keyword"   # keyword search across community topics
 longbridge market-temp              # market sentiment index (0–100)
+
+# Fundamentals & analysis
+longbridge financial-statement SYMBOL.US --kind ALL   # hierarchical IS/BS/CF with YoY
+longbridge financial-report SYMBOL.US --latest        # key KPI summary (revenue/EPS/ROE)
+longbridge analyst-estimates SYMBOL.US                # EPS consensus (high/low/mean/median)
+longbridge valuation-rank SYMBOL.US                   # daily PE/PB/PS industry percentile rank
+
+# IPO
+longbridge ipo subscriptions        # HK IPOs in subscription stage
+longbridge ipo calendar             # all upcoming and recent IPOs
+longbridge ipo us-subscriptions     # US IPOs in subscription stage
 
 # Account
 longbridge assets                   # full asset overview: cash, buying power, margin, risk level
 longbridge statement --help         # check subcommands for statement export options
+longbridge bank-cards               # bank cards linked to the account
+longbridge withdrawals              # withdrawal history
+longbridge deposits                 # deposit history
 
 # Institutional investors (SEC 13F)
 longbridge investors                # top active fund managers by AUM
