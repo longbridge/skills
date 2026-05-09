@@ -79,6 +79,7 @@ longbridge valuation --help
 longbridge dividend --help
 
 # Step 1: get universe (if using an index)
+# NOTE: JSON response uses key "stocks" (not "list") — extract symbols from data["stocks"]
 longbridge constituent 000300.SH --limit 300 --format json
 
 # Step 2: per-symbol data (repeat for each candidate)
