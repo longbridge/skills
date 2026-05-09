@@ -36,6 +36,25 @@ Different tiers of skills have different runtime dependencies — install only w
 
    Verify with `claude mcp list` — `longbridge` should appear in the output.
 
+### Optional (required for 2 technical-analysis skills — Python libraries)
+
+Two skills rely on specialised Python libraries that must be installed manually:
+
+| Skill | Library | Install |
+|---|---|---|
+| [`longbridge-chanlun`](../skills/longbridge-chanlun) | [czsc](https://github.com/zengbin93/czsc) — 缠论形态识别 | `pip install czsc` |
+| [`longbridge-smc`](../skills/longbridge-smc) | [smartmoneyconcepts](https://github.com/joshyattridge/smart-money-concepts) — BOS / FVG / Order Block | `pip install smartmoneyconcepts` |
+
+Install both at once:
+
+```bash
+pip install czsc smartmoneyconcepts
+```
+
+> **Fallback behaviour**: if the library is missing, the LLM falls back to a basic manual Python implementation — results are less precise but the skill still runs. You will see a prompt asking you to install the library.
+
+All other technical-analysis skills (`longbridge-candlestick`, `longbridge-technical`, `longbridge-ichimoku`, `longbridge-elliott`, `longbridge-harmonic`) use only `pandas` which is standard — no extra install needed.
+
 ---
 
 ## Four install paths
