@@ -17,6 +17,19 @@ metadata:
 
 缠论（Chan Theory）形态识别引擎：基于 OHLCV 日线数据，自动检测顶底分型、笔、线段、中枢，并生成一买/一卖、二买/二卖、三买/三卖信号。
 
+## Requirements
+
+> ⚠️ **额外依赖 / Extra dependency required**
+>
+> 此 skill 依赖第三方 Python 库 **czsc**，使用前需手动安装：
+>
+> ```bash
+> pip install czsc
+> ```
+>
+> 若环境无法安装，LLM 将回退到手动实现基础分型逻辑（精度较低）。
+> This skill requires the **czsc** Python library. Install it before use: `pip install czsc`
+
 > **Response language**: match the user's input language —
 > Simplified Chinese / Traditional Chinese / English.
 

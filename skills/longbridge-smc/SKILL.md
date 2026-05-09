@@ -17,6 +17,19 @@ metadata:
 
 聪明钱概念（Smart Money Concepts / ICT）信号引擎：识别 BOS（Break of Structure 结构突破）、ChoCH（Change of Character 特性变化）、FVG（Fair Value Gap 公允价值缺口）、Order Block（订单块）、流动性抓取，综合判断机构资金偏向（多头/空头结构）。
 
+## Requirements
+
+> ⚠️ **额外依赖 / Extra dependency required**
+>
+> 此 skill 优先使用第三方 Python 库 **smartmoneyconcepts**，使用前建议安装：
+>
+> ```bash
+> pip install smartmoneyconcepts
+> ```
+>
+> 若未安装，LLM 自动回退到手动 Python 实现 BOS / ChoCH / FVG / Order Block 基础逻辑。
+> This skill prefers the **smartmoneyconcepts** library: `pip install smartmoneyconcepts`. Falls back to manual implementation if unavailable.
+
 > **Response language**: match the user's input language —
 > Simplified Chinese / Traditional Chinese / English.
 
