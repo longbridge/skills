@@ -1,7 +1,7 @@
 ---
 name: longbridge-consensus
 description: |
-  Analyst consensus details for listed companies via Longbridge — revenue / EPS / target-price consensus, estimate revision direction, beat/miss analysis, and PEAD momentum signals. Triggers: "分析师预期", "一致预期", "盈利预期", "业绩预测", "预期修正", "超预期", "低于预期", "目标价共识", "PEAD", "分析師預期", "一致預期", "盈利預期", "業績預測", "預期修正", "超預期", "目標價共識", "analyst consensus", "earnings estimate", "EPS forecast", "earnings revision", "beat miss", "price target consensus", "PEAD", "TSLA.US consensus", "700.HK analyst estimates".
+  Analyst consensus snapshot for listed companies via Longbridge — current revenue / EPS / target-price consensus estimates and analyst rating distribution. For revision direction, beat/miss tracking, and PEAD signals use longbridge-earnings-revision. Triggers: "一致预期", "分析师预期", "EPS预测", "目标价", "分析师评级分布", "买入评级", "卖出评级", "一致預期", "分析師預期", "EPS預測", "目標價", "分析師評級分佈", "買入評級", "賣出評級", "analyst consensus", "EPS forecast", "target price", "analyst rating distribution", "buy sell hold", "price target consensus", "TSLA.US consensus", "700.HK analyst estimates".
 license: MIT
 metadata:
   author: longbridge

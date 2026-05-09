@@ -1,7 +1,7 @@
 ---
 name: longbridge-sector-rotation
 description: |
-  Sector-rotation analysis across A-share, HK, and US markets — multi-factor scoring of momentum, capital flow, and valuation to rank sectors by cycle strength. Triggers: "行业轮动", "板块轮动", "行业切换", "行业动量", "行业景气度", "哪个行业跑赢", "强势板块", "弱势板块", "行业排名", "行業輪動", "板塊輪動", "行業切換", "行業動量", "行業景氣度", "哪個行業跑贏", "強勢板塊", "弱勢板塊", "sector rotation", "industry rotation", "sector momentum", "sector strength", "best performing sector", "industry ranking", "leading sector".
+  Sector-rotation snapshot across A-share, HK, and US markets — point-in-time multi-factor scoring of momentum, capital flow, and valuation to rank sectors by current cycle strength. For ongoing 6–12 month cycle positioning and allocation recommendations use longbridge-sector-monitor. Triggers: "行业轮动", "板块轮动", "行业动量排名", "强势板块", "弱势板块", "行业资金流", "板块涨幅榜", "行業輪動", "板塊輪動", "行業動量排名", "強勢板塊", "弱勢板塊", "行業資金流", "板塊漲幅榜", "sector rotation", "sector momentum ranking", "leading sector", "lagging sector", "sector capital flow", "sector strength ranking".
 license: MIT
 metadata:
   author: longbridge

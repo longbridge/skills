@@ -1,7 +1,7 @@
 ---
 name: longbridge-financial-report
 description: |
-  Full three-statement financials (IS / BS / CF) for listed companies via Longbridge — income statement, balance sheet, cash flow statement; annual / semi-annual / quarterly periods. Supports cross-statement reconciliation, DuPont decomposition, and earnings-quality (accrual vs cash flow) analysis. Triggers: "财务报表", "三张表", "利润表", "资产负债表", "现金流量表", "财报体检", "三表模型", "三表勾稽", "杜邦分析", "盈利质量", "应计利润", "財務報表", "三張表", "利潤表", "資產負債表", "現金流量表", "財報體檢", "三表勾稽", "杜邦分析", "盈利質量", "financial statements", "income statement", "balance sheet", "cash flow", "three financial statements", "DuPont analysis", "earnings quality", "accruals", "TSLA.US financials", "700.HK balance sheet".
+  Full three-statement financials (IS / BS / CF) for listed companies via Longbridge — income statement, balance sheet, cash flow statement; annual / semi-annual / quarterly periods. Use this skill to fetch raw financial data. For deep analysis (DuPont, accruals, fraud flags) use longbridge-financial-analysis; for health scoring use longbridge-financial-checkup. Triggers: "财务报表", "三张表", "利润表", "资产负债表", "现金流量表", "三表模型", "季报", "年报", "财报数据", "財務報表", "三張表", "利潤表", "資產負債表", "現金流量表", "三表模型", "季報", "年報", "財報數據", "financial statements", "income statement", "balance sheet", "cash flow statement", "three financial statements", "annual report data", "quarterly financials", "TSLA.US financials", "700.HK balance sheet".
 license: MIT
 metadata:
   author: longbridge
