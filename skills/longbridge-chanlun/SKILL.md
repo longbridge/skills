@@ -78,13 +78,13 @@ longbridge kline 700.HK --period week --count 100 --format json
 
 ## Error handling
 
-| 情形 | LLM 回复 |
-|---|---|
-| `command not found: longbridge` | 尝试 MCP fallback；否则告知用户安装 longbridge-terminal |
-| stderr 含 `not logged in` | 告知用户运行 `longbridge auth login` |
-| Python 环境缺少 czsc | 提示 `pip install czsc`，安装后重试 |
-| czsc API 不兼容（版本问题） | 提示运行 `pip install --upgrade czsc` 并检查 czsc 版本 |
-| 其他 stderr | 原样透传，不静默重试 |
+| 情形 | 简体回复 | 繁體回覆 / English |
+|---|---|---|
+| `command not found: longbridge` | 尝试 MCP fallback；否则请安装 longbridge-terminal | 嘗試 MCP fallback；否則請安裝 longbridge-terminal / Try MCP fallback; otherwise install longbridge-terminal |
+| stderr 含 `not logged in` | 请运行 `longbridge auth login` | 請運行 `longbridge auth login` / Run `longbridge auth login` |
+| Python 环境缺少 czsc | 请运行 `pip install czsc` 后重试 | 請運行 `pip install czsc` 後重試 / Run `pip install czsc` then retry |
+| czsc 版本不兼容 | 请运行 `pip install --upgrade czsc` | 請運行 `pip install --upgrade czsc` / Run `pip install --upgrade czsc` |
+| 其他 stderr | 原样返回错误，不静默重试 | 原樣返回錯誤，不靜默重試 / Surface verbatim, never retry silently |
 
 ## MCP fallback
 

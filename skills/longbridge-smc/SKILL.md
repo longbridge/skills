@@ -80,12 +80,13 @@ longbridge kline 700.HK --period 60m --count 400 --format json
 
 ## Error handling
 
-| 情形 | LLM 回复 |
-|---|---|
-| `command not found: longbridge` | 尝试 MCP fallback；否则告知用户安装 longbridge-terminal |
-| stderr 含 `not logged in` | 告知用户运行 `longbridge auth login` |
-| Python 缺少 smartmoneyconcepts | 提示 `pip install smartmoneyconcepts`；自动回退手动实现 |
-| smartmoneyconcepts API 不兼容 | 提示 `pip install --upgrade smartmoneyconcepts` 并检查版本 |
+| 情形 | 简体回复 | 繁體回覆 / English |
+|---|---|---|
+| `command not found: longbridge` | 尝试 MCP fallback；否则请安装 longbridge-terminal | 嘗試 MCP fallback；否則請安裝 longbridge-terminal / Try MCP fallback; otherwise install longbridge-terminal |
+| stderr 含 `not logged in` | 请运行 `longbridge auth login` | 請運行 `longbridge auth login` / Run `longbridge auth login` |
+| Python 缺少 smartmoneyconcepts | 请运行 `pip install smartmoneyconcepts`；自动回退手动实现 | 請運行 `pip install smartmoneyconcepts` / Run `pip install smartmoneyconcepts`; fallback to manual implementation |
+| smartmoneyconcepts API 不兼容 | 请运行 `pip install --upgrade smartmoneyconcepts` | 請升級套件 / Run `pip install --upgrade smartmoneyconcepts` |
+| 其他 stderr | 原样返回错误，不静默重试 | 原樣返回錯誤 / Surface verbatim, never retry silently |
 | 数据量不足（K 线少于 50 根） | 建议增大 `--count` 或切换更高周期 |
 | 其他 stderr | 原样透传，不静默重试 |
 

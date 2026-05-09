@@ -79,12 +79,13 @@ longbridge kline TSLA.US --period week --count 100 --format json
 
 ## Error handling
 
-| 情形 | LLM 回复 |
-|---|---|
-| `command not found: longbridge` | 尝试 MCP fallback；否则告知用户安装 longbridge-terminal |
-| stderr 含 `not logged in` | 告知用户运行 `longbridge auth login` |
-| Zigzag 摆动点不足（数据太少） | 建议增大 `--count` 或切换为周线 `--period week` |
-| 无法匹配任何波浪结构 | 告知"当前数据暂无清晰波浪结构，建议等待更多确认" |
+| 情形 | 简体回复 | 繁體回覆 / English |
+|---|---|---|
+| `command not found: longbridge` | 尝试 MCP fallback；否则请安装 longbridge-terminal | 嘗試 MCP fallback；否則請安裝 longbridge-terminal / Try MCP fallback; otherwise install longbridge-terminal |
+| stderr 含 `not logged in` | 请运行 `longbridge auth login` | 請運行 `longbridge auth login` / Run `longbridge auth login` |
+| Zigzag 摆动点不足 | 建议增大 `--count` 或切换周线 `--period week` | 建議增大 `--count` 或切換週線 / Increase `--count` or switch to `--period week` |
+| 无法匹配任何波浪结构 | 当前数据暂无清晰波浪结构，建议等待更多确认 | 當前數據暫無清晰波浪結構 / No clear wave structure yet, wait for more confirmation |
+| 其他 stderr | 原样返回错误，不静默重试 | 原樣返回錯誤 / Surface verbatim, never retry silently |
 | 其他 stderr | 原样透传，不静默重试 |
 
 ## MCP fallback
