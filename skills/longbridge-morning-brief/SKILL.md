@@ -44,8 +44,10 @@ Also trigger if the user provides a watchlist of symbols and asks for a pre-mark
 # Current quotes for watchlist symbols (can pass multiple)
 longbridge quote <SYMBOL1> <SYMBOL2> ... --format json
 
-# Today's economic / earnings / dividend calendar
-longbridge finance-calendar --format json
+# Today's earnings / economic / dividend calendar (requires subcommand)
+longbridge finance-calendar report --format json      # earnings reports
+longbridge finance-calendar macrodata --format json   # macro releases
+longbridge finance-calendar dividend --format json    # dividend events
 
 # Recent news per symbol
 longbridge news <SYMBOL> --format json
@@ -54,7 +56,7 @@ longbridge news <SYMBOL> --format json
 longbridge capital <SYMBOL> --format json
 ```
 
-If `finance-calendar` is not available as a subcommand, run `longbridge --help` to find the correct calendar subcommand name, then run `longbridge <calendar-subcommand> --help` for its flags.
+Run `longbridge finance-calendar --help` to see all available subcommands (report / dividend / split / ipo / macrodata / closed).
 
 ## Output
 
