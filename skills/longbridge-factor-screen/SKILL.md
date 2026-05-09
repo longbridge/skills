@@ -84,11 +84,10 @@ longbridge constituent 000300.SH --limit 300 --format json
 
 # Step 2: per-symbol data (repeat for each candidate)
 longbridge calc-index 600519.SH --format json      # PE, PB, PS, dividend yield
-longbridge operating 600519.SH --format json       # ROE, revenue/profit growth
+# NOTE: `operating` returns data for HK stocks only; for US/A-share use financial-report instead
+longbridge operating 700.HK --format json          # ROE, revenue/profit growth (HK only)
+longbridge financial-report AAPL.US --kind IS --report af --format json  # US/A-share fallback
 longbridge dividend 600519.SH --format json        # dividend history
-
-# For fundamentals package (if available):
-longbridge fundamental 600519.SH --format json
 ```
 
 ## Output
