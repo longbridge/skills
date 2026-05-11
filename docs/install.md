@@ -63,7 +63,7 @@ All other skills use only `pandas` and `numpy` (standard) — no extra install n
 
 ### Path A — `npx` / `bun` (recommended; simplest)
 
-**Install all 19 skills**:
+**Install all skills**:
 
 ```bash
 # Global install (lands in ~/.claude/skills/, reachable from any project)
@@ -132,7 +132,7 @@ ln -s "$PWD/skills/longbridge-quote" ~/.claude/skills/longbridge-quote
 ln -s "$PWD/skills/longbridge-kline"  ~/.claude/skills/longbridge-kline
 ```
 
-**Batch-symlink all 19**:
+**Batch-symlink all skills**:
 
 ```bash
 for d in "$PWD"/skills/*; do
@@ -145,7 +145,7 @@ ls -la ~/.claude/skills/ | grep longbridge
 
 #### ⚠️ Special case: the mutating skill
 
-**`longbridge-watchlist-admin`** modifies the user's watchlist state. The batch script above will install it; the SKILL.md enforces a dry-run + confirm protocol, so it's safe by default. If you'd rather audit it before enabling, install the other 18 first and skip this one:
+**`longbridge-watchlist-admin`** modifies the user's watchlist state. The batch script above will install it; the SKILL.md enforces a dry-run + confirm protocol, so it's safe by default. If you'd rather audit it before enabling, install all others first and skip this one:
 
 ```bash
 for d in "$PWD"/skills/*; do
