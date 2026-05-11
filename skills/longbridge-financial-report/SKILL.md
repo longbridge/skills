@@ -52,6 +52,11 @@ longbridge financial-report 700.HK --kind ALL --report qf  --format json   # Qua
 
 # If unsure about flags, always run first:
 longbridge financial-report --help
+
+# Note: v0.20.1 also adds `longbridge financial-statement` — different data structure
+# (returns field-level rows with display_order/level hierarchy).
+# Use financial-report for KPI extraction; use financial-statement for raw line-item access.
+longbridge financial-statement <SYMBOL> --kind IS --report af --format json
 ```
 
 ## Workflow
