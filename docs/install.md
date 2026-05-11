@@ -36,24 +36,26 @@ Different tiers of skills have different runtime dependencies — install only w
 
    Verify with `claude mcp list` — `longbridge` should appear in the output.
 
-### Optional (required for 2 technical-analysis skills — Python libraries)
+### Optional (required for 4 skills — Python libraries)
 
-Two skills rely on specialised Python libraries that must be installed manually:
+Four skills rely on Python libraries beyond the standard library. Install only what you need:
 
-| Skill | Library | Install |
-|---|---|---|
-| [`longbridge-chanlun`](../skills/longbridge-chanlun) | [czsc](https://github.com/zengbin93/czsc) — 缠论形态识别 | `pip install czsc` |
-| [`longbridge-smc`](../skills/longbridge-smc) | [smartmoneyconcepts](https://github.com/joshyattridge/smart-money-concepts) — BOS / FVG / Order Block | `pip install smartmoneyconcepts` |
+| Skill | Library | Install | Fallback if missing |
+|---|---|---|---|
+| [`longbridge-chanlun`](../skills/longbridge-chanlun) | [czsc](https://github.com/zengbin93/czsc) — 缠论形态识别 | `pip install czsc` | Manual fractal detection (lower accuracy) |
+| [`longbridge-smc`](../skills/longbridge-smc) | [smartmoneyconcepts](https://github.com/joshyattridge/smart-money-concepts) — BOS / FVG / Order Block | `pip install smartmoneyconcepts` | Manual BOS/FVG implementation |
+| [`longbridge-quant-stats`](../skills/longbridge-quant-stats) | [statsmodels](https://www.statsmodels.org/) + [scipy](https://scipy.org/) + [arch](https://arch.readthedocs.io/) — ADF / GARCH / regression diagnostics | `pip install statsmodels scipy arch` | Basic stats without GARCH/ADF |
+| [`longbridge-ml-strategy`](../skills/longbridge-ml-strategy) | [scikit-learn](https://scikit-learn.org/) — Random Forest / Gradient Boosting | `pip install scikit-learn` (usually pre-installed) | Degrades to logistic regression |
 
-Install both at once:
+**Install all four at once:**
 
 ```bash
-pip install czsc smartmoneyconcepts
+pip install czsc smartmoneyconcepts statsmodels scipy arch scikit-learn
 ```
 
-> **Fallback behaviour**: if the library is missing, the LLM falls back to a basic manual Python implementation — results are less precise but the skill still runs. You will see a prompt asking you to install the library.
+> **Fallback behaviour**: if a library is missing, the LLM falls back to a simpler implementation automatically. You will see an install prompt in the response.
 
-All other technical-analysis skills (`longbridge-candlestick`, `longbridge-technical`, `longbridge-ichimoku`, `longbridge-elliott`, `longbridge-harmonic`) use only `pandas` which is standard — no extra install needed.
+All other skills use only `pandas` and `numpy` (standard) — no extra install needed.
 
 ---
 
