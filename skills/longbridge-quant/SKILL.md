@@ -17,6 +17,8 @@ metadata:
 
 Server-side quantitative indicator runner: execute Pine Script v6 syntax subset on historical K-line data via Longbridge Securities servers.
 
+> ⚠️ **Beta feature**: `longbridge quant run` may return `internal server error` if the feature is not yet enabled for your account. Contact Longbridge support to enable quantitative script access if needed.
+
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## When to use
