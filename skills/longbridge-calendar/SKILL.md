@@ -120,13 +120,13 @@ When a result is empty for the chosen window, say so explicitly and offer to wid
 
 ## Error handling
 
-| Situation | Reply |
-|---|---|
-| Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install longbridge-terminal. |
-| stderr `not logged in` / `unauthorized` | Hint `longbridge auth login`. |
-| Empty result | State explicitly. Offer to widen the window or remove a filter. |
-| Invalid date format | Re-prompt with `YYYY-MM-DD`. |
-| Other stderr | Relay verbatim — never silently retry. |
+| 情形 | 简体回复 | 繁體回覆 / English reply |
+|---|---|---|
+| `command not found: longbridge` | 切换到 MCP；若也不可用，请安装 longbridge-terminal | 切換至 MCP；否則請安裝 longbridge-terminal / Fall back to MCP; install longbridge-terminal if unavailable |
+| stderr `not logged in` / `unauthorized` | 请运行 `longbridge auth login` | 請執行 `longbridge auth login` / Run `longbridge auth login` |
+| 结果为空 | 当前时间范围内无事件，可尝试扩大时间窗口或更换市场 | 目前時間範圍內無事件 / No events in this window — try widening the range or changing market |
+| 日期格式错误 | 请使用 YYYY-MM-DD 格式 | 請使用 YYYY-MM-DD 格式 / Use YYYY-MM-DD format |
+| 其他 stderr | 原样返回错误，不静默重试 | 原樣返回錯誤 / Relay verbatim — never silently retry |
 
 ## MCP fallback
 

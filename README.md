@@ -71,6 +71,7 @@ Once installed, talk to your AI assistant naturally. Examples:
 - *"NVDA AMD 哪个增速快"* / *"Compare AAPL vs MSFT vs GOOG"*
 - *"今天有什么要关注的"* / *"Give me my morning briefing"*
 - *"特斯拉最近怎么了"* / *"Recent news on TSLA"*
+- *"我的持仓近期有啥财报"* / *"Any earnings for my holdings this week?"*
 
 The right skill is picked automatically based on your question, in the language you used.
 

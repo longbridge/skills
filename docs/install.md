@@ -22,7 +22,7 @@ Different tiers of skills have different runtime dependencies — install only w
    longbridge auth login
    ```
 
-   A browser opens for authorisation. **Tick the "Trade" permission** if you want the account-tier skills (`positions / orders / watchlist / watchlist-admin`). Quote-only access is sufficient for market-data skills. Use `longbridge auth status` to confirm you're signed in.
+   A browser opens for authorisation. **Tick the "Trade" permission** if you want the account-tier skills (`positions / orders / watchlist / watchlist-admin / calendar` portfolio-briefing mode / `profit-analysis` / `financial-planning`). Quote-only access is sufficient for market-data skills. Use `longbridge auth status` to confirm you're signed in.
 
 ### Optional (required for the analysis tier — 6 skills)
 
