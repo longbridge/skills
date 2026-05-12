@@ -1,38 +1,57 @@
 ---
 name: longbridge-calendar
 description: |
-  Forward-looking events calendar via Longbridge Securities — earnings (financial / report), dividends, IPOs, macro data releases (with importance star filter), and market closure days. Filter by symbol (max 10), market (HK / US / CN / SG / JP / UK / DE / AU), and date range. Read-only. Triggers: "财报日历", "下周谁财报", "earnings calendar", "除权除息日", "派息日", "ex-dividend", "新股", "IPO 日历", "宏观数据", "非农", "CPI", "PCE", "美联储议息", "FOMC", "财报季", "休市日", "财經日曆", "下週誰財報", "除權除息日", "派息日", "新股", "IPO 日歷", "宏觀數據", "美聯儲", "FOMC", "財報季", "休市日", "earnings calendar", "ex-dividend dates", "IPO calendar", "macro calendar", "FOMC meeting", "CPI release", "non-farm payrolls", "market holidays", "trading closed days".
+  财经日历查询与持仓驱动的事件简报。默认生成持仓+自选股的完整财经日历报告（事件总览、影响解读、财报速递）；也支持按标的/市场/日期的轻量查询。Triggers: "财经日历", "今天有什么大事", "本周财报", "我的持仓近期有啥事件", "最近有啥事", "财报日历", "下周谁财报", "earnings calendar", "除权除息日", "派息日", "ex-dividend", "新股", "IPO 日历", "宏观数据", "非农", "CPI", "PCE", "美联储议息", "FOMC", "财报季", "休市日", "財經日曆", "下週誰財報", "除權除息日", "派息日", "新股", "IPO 日歷", "宏觀數據", "美聯儲", "FOMC", "財報季", "休市日", "earnings calendar", "ex-dividend dates", "IPO calendar", "macro calendar", "FOMC meeting", "CPI release", "non-farm payrolls", "market holidays", "trading closed days", "我的持倉近期有啥事件", "最近有啥事".
 license: MIT
 metadata:
   author: longbridge
-  version: "1.0.0"
+  version: "1.1.0"
   risk_level: read_only
-  requires_login: false
+  requires_login: true
   default_install: true
 ---
 
 # longbridge-calendar
 
-Forward-looking calendar of corporate and macro events: earnings, dividends, IPOs, macro data, and market closures.
+财经日历：持仓驱动的事件简报 + 轻量事件查询。
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
 ## When to use
 
-- *"下周哪些公司财报"*, *"NVDA 下次财报什么时候"*, *"earnings next week"* → `report` (or `financial`)
-- *"AAPL 下次除息日"*, *"港股下周派息"*, *"ex-dividend dates"* → `dividend`
-- *"下周有什么新股"*, *"美股 IPO 日历"*, *"upcoming IPOs"* → `ipo`
-- *"下周非农"*, *"CPI 什么时候"*, *"FOMC 议息"*, *"macro calendar"* → `macrodata` (use `--star 3` for top-importance only)
-- *"美股下周休市吗"*, *"market holidays"* → `closed`
-- *"下周市场全景"* → call `report` + `dividend` + `macrodata --star 3` concurrently
+**默认模式（生成报告）** — 用户问的是概览性问题时，走 `references/portfolio-briefing.md` 工作流：
+
+- *"今天/本周/最近有什么大事"*
+- *"我的持仓近期有啥事件"*
+- *"财经日历"*、*"earnings calendar"*
+- *"财报季来了，帮我看看"*
+
+**轻量查询模式** — 用户指定了具体标的、事件类型或纯信息查询时，直接调 CLI 返回结果即可：
+
+- *"NVDA 下次财报什么时候"* → `report --symbol NVDA.US`
+- *"港股下周派息"* → `dividend --market HK`
+- *"下周非农什么时候"* → `macrodata --star 3`
+- *"美股下周休市吗"* → `closed --market US`
 
 For a single stock's historical earnings → `longbridge-fundamental`. For watchlist-driven daily briefings → `longbridge-catalyst-radar`.
 
-## Subcommands
+## Default workflow: portfolio briefing
+
+这是默认执行路径。收到财经日历相关请求时，按 `references/portfolio-briefing.md` 完整执行：
+
+1. 获取用户持仓与自选股（`references/data-fetching.md`）
+2. 并行拉取所有日历数据（财报、宏观、分红、休市、拆合股）
+3. 按时间范围筛选，生成三段式报告：
+   - **事件总览** — 所有事件混合时间线（`references/output-template.md` 模板一）
+   - **重点事件影响解读** — 高重要性事件深度展开（模板二，无则省略）
+   - **财报结果速递** — 昨夜/盘前已出炉财报（模板三，无则省略）
+4. 末尾附免责文案
+
+详细字段规范、输出模板、语言规则均在 references 中定义。
+
+## CLI reference
 
 > Run `longbridge finance-calendar --help` if unsure of current flags. The CLI's built-in help is the canonical source.
-
-A single command handles all event types:
 
 ```
 longbridge finance-calendar <EVENT_TYPE> [OPTIONS]
@@ -61,16 +80,7 @@ Common options:
 | `--offset N` | Pagination offset. |
 | `--format json\|table` | Output format. |
 
-## Workflow
-
-1. Pick `<EVENT_TYPE>` from the prompt cue.
-2. Decide scope: `--symbol` (1–10 specific tickers) and/or `--market` (one or more markets).
-3. Decide window: `--start` / `--end`. For "next week" use `--start <today> --end <today+7>`.
-4. For macro: add `--star 3` (or 2,3) when the user wants high-impact only.
-5. Call the CLI; render a date-grouped table.
-6. Cite **Longbridge Securities** and the queried date range.
-
-## CLI
+### CLI examples
 
 ```bash
 # Earnings releases for the next 14 days, US + HK
@@ -96,17 +106,15 @@ If `--help` shows newer flags, follow the help output rather than hard-coding he
 
 ## Output
 
-Render in the user's language. Suggested layouts:
+**Portfolio briefing mode** — follow `references/output-template.md` templates.
 
-**`report` / `financial`** — table grouped by date: date / time (BMO/AMC if available) / symbol / company name / period / consensus EPS (if returned).
+**Light query mode** — render in the user's language:
 
-**`dividend`** — table: ex-date / record date / pay date / symbol / amount / currency.
-
-**`ipo`** — table: subscription window / listing date / symbol / company / price range / market.
-
-**`macrodata`** — table: date+time / region / event / importance stars / forecast / previous (when available). Group by date.
-
-**`closed`** — list: date / market / reason (e.g. *"Memorial Day"*, *"中秋节"*).
+- **`report` / `financial`** — table grouped by date: date / time (BMO/AMC if available) / symbol / company name / period / consensus EPS (if returned).
+- **`dividend`** — table: ex-date / record date / pay date / symbol / amount / currency.
+- **`ipo`** — table: subscription window / listing date / symbol / company / price range / market.
+- **`macrodata`** — table: date+time / region / event / importance stars / forecast / previous. Group by date.
+- **`closed`** — list: date / market / reason.
 
 When a result is empty for the chosen window, say so explicitly and offer to widen the window or check another market.
 
@@ -115,20 +123,20 @@ When a result is empty for the chosen window, say so explicitly and offer to wid
 | Situation | Reply |
 |---|---|
 | Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install longbridge-terminal. |
-| stderr `not logged in` / `unauthorized` | Hint `longbridge auth login` (the calendar is generally public, but auth may be required for some markets). |
+| stderr `not logged in` / `unauthorized` | Hint `longbridge auth login`. |
 | Empty result | State explicitly. Offer to widen the window or remove a filter. |
 | Invalid date format | Re-prompt with `YYYY-MM-DD`. |
 | Other stderr | Relay verbatim — never silently retry. |
 
 ## MCP fallback
 
-When the CLI binary is missing, fall back via the equivalent MCP tool. Tool names typically mirror CLI subcommand names (snake_case).
+When the CLI binary is missing, fall back via the equivalent MCP tool.
 
 | CLI usage | MCP tool |
 |---|---|
 | `finance-calendar <event_type> ...` | `mcp__longbridge__finance_calendar` (event type passed as a parameter) |
 
-If the name above does not resolve, fall back via the equivalent MCP tool when CLI is missing.
+If the name above does not resolve, run `longbridge --help` or check MCP tool list.
 
 ## Related skills
 
@@ -143,5 +151,9 @@ If the name above does not resolve, fall back via the equivalent MCP tool when C
 
 ```
 longbridge-calendar/
-└── SKILL.md          # prompt-only, no scripts/
+├── SKILL.md
+└── references/
+    ├── portfolio-briefing.md   # 默认工作流：持仓驱动三段式报告
+    ├── output-template.md      # 三个输出模板的字段规范
+    └── data-fetching.md        # 数据来源优先级、降级规则与 CLI 调用说明
 ```
