@@ -1,175 +1,239 @@
 # Output Template
 
-## 说明
+## Instructions
 
-本文件定义财经日历 Skill 的输出结构。每次输出由三个部分组成，每部分对应一个模板。有数据就生成该部分，无数据则省略（但第一部分必须保留）。三个部分按顺序拼接为一份完整报告，末尾统一附加一次免责文案。
+This file defines the output structure for the Financial Calendar Skill. Each output consists of four sections, each corresponding to a template. A section is generated if data exists, or omitted if not (but Section 1 must always be included). The four sections are concatenated in order to form a complete report, with disclaimer text appended once at the very end.
 
-**核心原则：**
-- **聚焦未来。** 只输出尚未发生的事件。唯一例外：昨夜/今日盘前刚出炉的财报结果可在第一部分和第三部分简要提及。更早的历史事件一律不纳入。
-- **尽量多生成。** 未来事件有多少就输出多少，不人为截断；每只有事件的持仓和自选股都要覆盖到。
-- **不重复。** 同一事件只出现一次，不在不同部分重复描述。
+**Core Principles:**
+- **Focus on the future.** Only output events that have not yet occurred. The sole exception: earnings results released last night/pre-market today may be briefly mentioned in Sections 1 and 3. Earlier historical events are never included.
+- **Generate as much as possible.** Output as many future events as there are — do not artificially truncate. Every holding and watchlist security with events must be covered. High-attention market-wide events should also be selectively included.
+- **No duplication.** The same event appears only once and is not repeated across sections.
 
-标的标识统一格式：`[公司名称] [代码] · [市场] · [持仓 / 自选]`
+Security identifier format varies by context:
 
-示例：
+- **When on its own line** (e.g., event list title line): `[Company Name] [Code] · [Market] · [Holdings / Watchlist / Market]`
+- **When embedded in a sentence** (e.g., portfolio linkage, impact description, inline references): `[Company Name] ([Code] · [Market] · [Holdings / Watchlist])`, wrapped in parentheses for readability
 
-- 中芯国际 688981 · A股 · 持仓
-- 中芯国际 0981.HK · 港股 · 自选
-- 英伟达 NVDA · 美股 · 自选
+Three source tags:
+- **Holdings** — Securities currently held by the user
+- **Watchlist** — Securities in the user's watchlist
+- **Market** — Neither holdings nor watchlist, but a high-attention market-wide event (marquee earnings, hot IPOs, industry leaders, etc.) included to help users discover opportunities
 
-时间统一格式：北京时间（CST），原始时区括号内标注
+Examples:
 
-示例：08:30 CST（美东时间 20:30 前一日）
+- SMIC 688981 · A-shares · Holdings
+- SMIC 0981.HK · HK · Watchlist
+- NVIDIA NVDA · US · Watchlist
+- Pinduoduo PDD · US · Market (not held/watchlisted by user, but a major earnings report)
+- [Company] · HK · Market · IPO (hot new listing)
+
+Time format: Beijing Time (CST), with original timezone noted in parentheses
+
+Example: 08:30 CST (20:30 ET previous day)
 
 ---
 
-## 第一部分：事件总览（模板一）
+## Section 1: Event Overview (Template 1)
 
-整份报告的核心部分，所有事件（宏观、持仓、自选）混合在一条时间线上，按时间统一排序。
+The core section of the report. All events (macro, holdings, watchlist, high-attention market-wide events) are merged onto a single timeline, sorted uniformly by time.
 
 ```text
-📅 [M月D日（至M月D日）] 财经日历简报
+📅 [Month Day (to Month Day)] Financial Calendar Brief
 
-> [一句话总结本期看点，如"本周是通胀数据密集周，叠加多家中概股财报"]
+> [One-line summary of key highlights, e.g., "This week is packed with inflation data, plus several Chinese ADR earnings"]
 
-━━ 昨夜/盘前结果 ━━
-[公司名称] [代码] · [市场] 财报出炉
-实际 EPS：[X.XX] vs 预期 [X.XX]（[+/-X%]）
-核心亮点：[一句话，最关键的业务数据]
-→ 持仓/自选关联：[股票名称] [代码] · [市场] · [持仓/自选] — [影响方向]
+━━ Last Night / Pre-Market Results ━━
+[Company Name] [Code] · [Market] Earnings Released
+Actual EPS: [X.XX] vs Expected [X.XX] ([+/-X%])
+Key Highlight: [One sentence — the most critical business metric]
+→ Portfolio Linkage: [Stock Name] [Code] · [Market] · [Holdings/Watchlist] — [Impact direction] (if the earnings security itself is not holdings/watchlist, explain why it's worth noting)
 
-[更多已出炉结果...]
+[More released results...]
 
-━━ 即将到来 ━━
+━━ Upcoming ━━
 
-[M月D日（周X）]
+[Month Day (Weekday)]
 
-[公司名称] [代码] · [市场] · [持仓/自选]
-  · [事件类型] · [HH:MM CST]（[原始时区]）— [一句话影响说明]
-  · [事件类型] · [HH:MM CST] — [一句话影响说明]
-  跨市场：[若可能带动其他标的，简要说明]
+[Company Name] [Code] · [Market] · [Holdings/Watchlist/Market]
+  · [Event Type] · [HH:MM CST] ([Original Timezone]) — [One-line impact description]
+  · [Event Type] · [HH:MM CST] — [One-line impact description]
+  Cross-Market: [If likely to move other securities, briefly explain]
+  💡 Why Watch: [Only for "Market" tagged securities — one sentence explaining why this event is worth attention]
 
-[宏观事件名称] · [HH:MM CST]（[原始时区]）· 重要性 [★数]
-  [一句话说明是什么事件]
-  持仓关联：[影响方向，涉及哪些标的]
+[Macro Event Name] · [HH:MM CST] ([Original Timezone]) · Importance [★ count]
+  [One sentence explaining what this event is]
+  Portfolio Linkage: [Impact direction, which securities are involved; inline references use parenthetical format e.g., "Microsoft (MSFT · US · Holdings)"]
 
-[公司名称] [代码] · [市场] · [持仓/自选]
-  · [事件类型] · [HH:MM CST] — [一句话影响说明]
+[Company Name] [Code] · [Market] · [Holdings/Watchlist/Market]
+  · [Event Type] · [HH:MM CST] — [One-line impact description]
 
-[M月D日（周X）]
+[Month Day (Weekday)]
 
-[继续按时间排列...]
+[Continue in chronological order...]
 ```
 
-字段规则：
+Field Rules:
 
-| 字段 | 规则 |
+| Field | Rule |
 | ---- | ---- |
-| 昨夜/盘前结果 | 仅限上一个交易日收盘后至今日开盘前发布的财报，更早的历史不纳入。无则省略整块 |
-| 日期分组 | 按自然日分组，每天一个日期标题（如「5月12日（周一）」），同一天内按时间先后排列 |
-| 标的事件 | 每个标的后用「持仓」或「自选」tag 标识来源。无事件的标的不出现 |
-| 宏观事件 | 与标的事件混排在同一时间线中，不单独分组。用重要性星级标识 |
-| 跨市场 | 只在事件可能带动其他持仓/自选标的时附加，只说方向不预测幅度。无跨市场影响则省略 |
-| 事件类型 | 财报 / 分红除权 / 宏观关联 / 休市 / 拆合股 / 股东大会 / 指数调整 等 |
-| 多事件标的 | 同一标的有多个事件时全部列出，缩进对齐 |
+| Last Night / Pre-Market Results | Limited to earnings released between the previous trading day's close and today's open. Earlier history is not included. Omit entire block if none |
+| Date Grouping | Group by calendar day, one date heading per day (e.g., "May 12 (Monday)"), sorted chronologically within each day |
+| Security Events | Tag each security with "Holdings", "Watchlist", or "Market". "Market" securities require a "Why Watch" explanation. Securities with no events do not appear. "Market" securities emerge naturally from unfiltered market-wide data; no hard quantity requirement |
+| Macro Events | Interleaved with security events on the same timeline, not grouped separately. Marked with importance star rating |
+| Cross-Market | Only included when an event may move other holdings/watchlist securities. State direction only, no magnitude prediction. Omit if no cross-market impact |
+| Event Type | Earnings / Dividend Ex-Date / Macro-Related / Market Closure / Stock Split / IPO New Listing / Shareholder Meeting / Index Rebalancing, etc. |
+| Multiple Events per Security | When a single security has multiple events, list all of them with aligned indentation |
 
 ---
 
-## 第二部分：重点事件影响解读（模板二）
+## Section 2: Key Event Impact Analysis (Template 2)
 
-对高重要性事件做深度展开，让用户理解「这件事跟我有什么关系」。
+In-depth expansion of high-importance events, helping users understand "what does this have to do with me?"
 
 ```text
-🔍 重点事件解读
+🔍 Key Event Analysis
 
-━━ [事件名称] · [HH:MM CST]（[原始时区]）━━
+━━ [Event Name] · [HH:MM CST] ([Original Timezone]) ━━
 
-[一句话说明事件内容与结果]
-核心数据：[EPS 实际值 vs 预期值 / 宏观数据实际值 vs 预期值 / 政策要点]
+[One sentence describing the event content and outcome]
+Core Data: [Actual EPS vs Expected / Macro data actual vs expected / Policy key points]
 
-持仓/自选影响：
+Portfolio Impact:
 
-● [公司名称] [代码] · [市场] · [持仓/自选] · 直接影响
-  关联逻辑：[一句话说明为什么受影响]
-  可能方向：[利好 / 利空 / 中性]
+● [Company Name] [Code] · [Market] · [Holdings/Watchlist] · Direct Impact
+  Linkage Logic: [One sentence explaining why it's affected]
+  Likely Direction: [Bullish / Bearish / Neutral]
 
-● [公司名称] [代码] · [市场] · [持仓/自选] · 间接影响
-  关联逻辑：[一句话]
-  可能方向：[利好 / 利空 / 中性]
+● [Company Name] [Code] · [Market] · [Holdings/Watchlist] · Indirect Impact
+  Linkage Logic: [One sentence]
+  Likely Direction: [Bullish / Bearish / Neutral]
 
-[仅列出有直接或间接影响的标的，无关联的标的不出现]
+[Only list securities with direct or indirect impact; unrelated securities do not appear]
 
-行动参考：[一句话，不含买卖指令]
+Action Reference: [One sentence, no buy/sell instructions]
 
-━━ [下一个重点事件] ━━
-[同上格式，继续解读]
+━━ [Next Key Event] ━━
+[Same format, continue analysis]
 ```
 
-字段规则：
+Field Rules:
 
-| 字段 | 规则 |
+| Field | Rule |
 | ---- | ---- |
-| 触发条件 | 时间范围内存在高重要性事件（重磅财报、央行决议、非农数据、行业重大政策等）时生成；无则省略整个第二部分 |
-| 核心数据 | 保留原始数字（客户类型差异化见通用规则） |
-| 影响等级 | 直接影响 / 间接影响，二选一。仅列出有实际影响的标的，暂无关联的标的不出现在输出中 |
-| 多事件 | 每个重点事件单独成块，依次排列，不设数量上限 |
-| 行动参考 | 如「建议等开盘 15 分钟后再判断」，不写买卖指令 |
+| Trigger Condition | Generated when high-importance events exist in the time range (major earnings, central bank decisions, non-farm payrolls, significant industry policies, etc.); omit entire Section 2 if none |
+| Core Data | Preserve raw numbers (differentiated by client type per general rules) |
+| Impact Level | Direct Impact / Indirect Impact — choose one. Only list securities with actual impact; unrelated securities do not appear in output |
+| Multiple Events | Each key event gets its own block, listed sequentially with no cap |
+| Action Reference | e.g., "Consider waiting 15 minutes after the open before making a judgment." No buy/sell instructions |
 
 ---
 
-## 第三部分：财报结果速递（模板三）
+## Section 3: Earnings Results Express (Template 3)
 
-已出炉的财报做专题分析，帮用户快速消化结果。
+Dedicated analysis of released earnings to help users quickly digest results.
 
 ```text
-📢 财报结果速递
+📢 Earnings Results Express
 
-━━ [公司名称] [代码] · [市场] 财报出炉 ━━
+━━ [Company Name] [Code] · [Market] Earnings Released ━━
 
-EPS：[实际值] vs 预期 [预期值]（[+/-X%]）
-核心亮点：[一句话，最关键的业务线数据]
-市场反应：盘后/盘前 [+/-X%]
+EPS: [Actual] vs Expected [Expected] ([+/-X%])
+Key Highlight: [One sentence — the most critical business line metric]
+Market Reaction: After-hours/Pre-market [+/-X%]
 
-持仓影响：
+Portfolio Impact:
 
-● [公司名称] [代码] · [市场] · [持仓/自选]
-  [一句话结论：影响方向 + 建议操作时机]
+● [Company Name] [Code] · [Market] · [Holdings/Watchlist]
+  [One-sentence conclusion: impact direction + suggested timing]
 
-● [公司名称] [代码] · [市场] · [持仓/自选]
-  [同上]
+● [Company Name] [Code] · [Market] · [Holdings/Watchlist]
+  [Same as above]
 
-[继续覆盖所有相关持仓和自选标的]
+[Continue covering all related holdings and watchlist securities]
 
-⚠️ [若次日有休市或半日市]
-[市场名称] [M月D日] [休市 / 半日市至 HH:MM CST]，注意流动性。
+⚠️ [If next-day closure or half-day trading applies]
+[Market Name] [Month Day] [Closed / Half-day trading until HH:MM CST] — watch for liquidity.
 
-━━ [下一家公司财报结果] ━━
-[同上格式]
+━━ [Next Company Earnings Results] ━━
+[Same format]
 ```
 
-字段规则：
+Field Rules:
 
-| 字段 | 规则 |
+| Field | Rule |
 | ---- | ---- |
-| 触发条件 | 仅限昨夜/今日盘前刚出炉的财报（上一个交易日收盘后至今日开盘前发布）。更早的历史财报不纳入。无则省略整个第三部分 |
-| EPS 行 | 保留原始数字（客户类型差异化见通用规则） |
-| 超预期幅度 | 保留百分比（客户类型差异化见通用规则） |
-| 市场反应 | 盘后/盘前股价变动，反映市场情绪强度 |
-| 操作时机 | 常用参考：「建议等开盘 15 分钟后再判断」「可继续持有观察」 |
-| 休市提示 | 仅在次日有关注市场休市时显示，否则省略 |
-| 多家财报 | 每家公司单独成块，依次排列 |
+| Trigger Condition | Limited to earnings released last night/pre-market today (between the previous trading day's close and today's open). Earlier historical earnings are not included. Omit entire Section 3 if none |
+| EPS Line | Preserve raw numbers (differentiated by client type per general rules) |
+| Beat/Miss Magnitude | Preserve percentage (differentiated by client type per general rules) |
+| Market Reaction | After-hours/pre-market price change, reflecting market sentiment intensity |
+| Timing Suggestion | Common references: "Consider waiting 15 minutes after the open before deciding", "May continue holding and observing" |
+| Closure Notice | Only displayed when a market of interest has closure the next day; otherwise omitted |
+| Multiple Earnings | Each company gets its own block, listed sequentially |
 
 ---
 
-## 通用规则
+## Section 4: Market Trends & Opportunity Discovery (Template 4)
 
-- **尽量多生成**：不人为限制事件条数或标的数量，有多少相关内容就输出多少
-- 三个部分按顺序拼接，中间用分隔线或空行区分
-- 第一部分为基础部分，必须保留；第二、三部分按数据可用性决定是否生成
-- 所有时间统一转换为北京时间（CST），原始时区括号内标注
-- 无关联的标的直接省略，不出现在输出中
-- 免责文案固定出现在整份报告末尾（仅一次），不可省略
-- 全局重大事件（如美联储议息、非农数据等）和与用户持仓/自选所在行业直接关联的热点标的允许出现；其余情况不推荐未持有且未自选的股票
-- 客户类型差异化输出规则：
-  - **基本面客户（fundamental）**：保留所有原始数字（EPS、超预期百分比、宏观数据值等）
-  - **常识性客户（commonsense）**：将专业指标转化为日常语言（如 EPS → 「盈利好于/低于预期」），省略具体数字和百分比，用方向性描述替代
+Goes beyond the user's holdings and watchlist to help discover market-level trends and potential opportunities.
+
+```text
+🔥 Market Trends & Opportunities
+
+━━ Sector Trends ━━
+
+[Trending Theme Name] (e.g., AI Computing, Nuclear Energy Revival, GLP-1 Weight-Loss Drugs, etc.)
+  Background: [One sentence explaining why this theme is getting market attention]
+  Representative Securities: [List of related stocks, with market indicated]
+  Your Connection: [If overlap with user's holdings/watchlist, point it out; if none, state "You currently do not hold related securities"]
+
+[More trending themes...]
+
+━━ Cross-Market Linkage Signals ━━
+
+[Signal Name] (e.g., A/H Premium Narrowing, Copper Price Transmission, Chinese ADR Spread, etc.)
+  Yesterday's Situation: [Specific description of what happened, backed by data]
+  Opportunity Logic: [Why this might be an opportunity]
+  Related Securities: [Relevant stocks/ETFs, with market indicated]
+  Risk Note: [One-sentence risk description]
+
+[More linkage signals...]
+
+━━ Event-Driven Opportunities ━━
+
+[Event Name] → [Potential Opportunity]
+  Logic: [How the event might create a trading window]
+  Time Window: [Start and end of the opportunity window]
+  Related Securities: [Relevant stocks, with market indicated]
+  Risk Note: [One sentence]
+
+[More event-driven opportunities...]
+```
+
+Field Rules:
+
+| Field | Rule |
+| ---- | ---- |
+| Trigger Condition | Generated when WebSearch finds valuable market trends or opportunities; omit entire Section 4 if search yields no substantive findings |
+| Sector Trends | The 2-3 most-watched themes/sectors in the current market; must have clear evidence of market attention (e.g., capital inflows, media coverage density, social discussion activity) |
+| Cross-Market Linkage | Focus on yesterday's and recent cross-market signals, including A/H premiums, ADR spreads, commodity-stock correlations, exchange rate impacts, policy time-zone arbitrage, etc. |
+| Event-Driven | Short-term opportunity windows potentially created by upcoming events (not limited to events related to user holdings) |
+| User Connection | Each opportunity point should attempt to establish a link to user's holdings/watchlist; if none exists, explicitly state so |
+| Risk Note | Every opportunity must include a risk description to maintain objectivity |
+| No Buy/Sell Instructions | Only describe opportunity logic and risks; no "you should buy/sell" recommendations |
+
+---
+
+## General Rules
+
+- **Generate as much as possible**: Do not artificially cap the number of events or securities — output as much relevant content as there is
+- The four sections are concatenated in order, separated by dividers or blank lines
+- Section 1 is the base section and must always be included; Sections 2, 3, and 4 are generated based on data availability
+- All times are converted to Beijing Time (CST), with original timezone noted in parentheses
+- Unrelated securities are simply omitted and do not appear in output
+- Disclaimer text appears once at the very end of the complete report (once only) and must not be omitted
+- Section 1: Full coverage of holdings/watchlist securities, plus market-wide high-attention event securities tagged as "Market" (marquee earnings, hot IPOs, industry leaders, etc.)
+- Sections 2 & 3: Primarily focused on holdings and watchlist securities; major global events and trending securities directly related to the user's holdings/watchlist industries are permitted
+- Section 4: Specifically designed for discovering opportunities beyond the portfolio; any security with investment value may appear
+- Client type differentiated output rules:
+  - **Fundamental client**: Preserve all raw numbers (EPS, beat percentage, macro data values, etc.)
+  - **General retail client (commonsense)**: Convert professional metrics to everyday language (e.g., EPS → "earnings came in better/worse than expected"), omit specific numbers and percentages, replace with directional descriptions

@@ -1,159 +1,169 @@
 ---
-name: longbridge-calendar
-description: |
-  财经日历查询与持仓驱动的事件简报。默认生成持仓+自选股的完整财经日历报告（事件总览、影响解读、财报速递）；也支持按标的/市场/日期的轻量查询。Triggers: "财经日历", "今天有什么大事", "本周财报", "我的持仓近期有啥事件", "最近有啥事", "财报日历", "下周谁财报", "earnings calendar", "除权除息日", "派息日", "ex-dividend", "新股", "IPO 日历", "宏观数据", "非农", "CPI", "PCE", "美联储议息", "FOMC", "财报季", "休市日", "財經日曆", "下週誰財報", "除權除息日", "派息日", "新股", "IPO 日歷", "宏觀數據", "美聯儲", "FOMC", "財報季", "休市日", "earnings calendar", "ex-dividend dates", "IPO calendar", "macro calendar", "FOMC meeting", "CPI release", "non-farm payrolls", "market holidays", "trading closed days", "我的持倉近期有啥事件", "最近有啥事".
-license: MIT
-metadata:
-  author: longbridge
-  version: "1.1.0"
-  risk_level: read_only
-  requires_login: true
-  default_install: true
+name: financial-calendar-skill
+description: Financial calendar queries, portfolio event scanning, event impact analysis, and earnings result tracking. Use when users ask questions like "what's happening today/this week/recently", "any upcoming events for my holdings/watchlist", "impact of Fed rate hike/macro data", "earnings results just came out", or other financial calendar and event impact related questions — trigger even if the user doesn't explicitly say "financial calendar".
 ---
 
-# longbridge-calendar
+# Financial Calendar Tracking & Insights
 
-财经日历：持仓驱动的事件简报 + 轻量事件查询。
+## Overview
 
-> **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
+This Skill targets general retail investors, proactively providing financial calendar summaries, impact analysis for holdings and watchlist, cross-market linkage conclusions — **and helping users discover market opportunities beyond their portfolio**. Users do not need professional financial knowledge; the system handles all reasoning from events to impacts. Conclusions cover all relevant securities — tagged if they belong to the user's holdings or watchlist — while also extending to noteworthy market highlights.
 
-## When to use
+Prerequisite: The user must have completed Longbridge account authorization. See `references/data-fetching.md` for the degradation strategy when unauthorized.
 
-**默认模式（生成报告）** — 用户问的是概览性问题时，走 `references/portfolio-briefing.md` 工作流：
+Dependent files:
 
-- *"今天/本周/最近有什么大事"*
-- *"我的持仓近期有啥事件"*
-- *"财经日历"*、*"earnings calendar"*
-- *"财报季来了，帮我看看"*
+- `references/output-template.md` — Field specifications and templates for the four output card types
+- `references/data-fetching.md` — Data source priorities, degradation rules, and CLI usage instructions
 
-**轻量查询模式** — 用户指定了具体标的、事件类型或纯信息查询时，直接调 CLI 返回结果即可：
+## Data-Driven, Not Pre-Configured
 
-- *"NVDA 下次财报什么时候"* → `report --symbol NVDA.US`
-- *"港股下周派息"* → `dividend --market HK`
-- *"下周非农什么时候"* → `macrodata --star 3`
-- *"美股下周休市吗"* → `closed --market US`
+This Skill does not maintain separate user preference settings. All required information is obtained from the following sources:
 
-For a single stock's historical earnings → `longbridge-fundamental`. For watchlist-driven daily briefings → `longbridge-catalyst-radar`.
+- **Holdings & Watchlist**: Fetched in real time from the Longbridge account to automatically determine the securities and markets the user cares about. **Holdings and watchlist are equally important for event coverage — both must be fully scanned; neither source may be omitted.** Holdings and watchlist are not grouped separately; they are unified and sorted by event time, differentiated only by tags.
+- **Market-Wide Events**: In addition to holdings and watchlist events, fetch high-importance market-wide events (without the `--filter` parameter). These events cover securities the user does not hold, tagged with "Market" to help users discover new opportunities. Selection criteria: high market attention (e.g., marquee earnings, hot IPOs, industry leader movements), relevance to current market themes, or potential to create trading opportunities.
+- **Time Range**: Determined from the user's request, with the following defaults. The CLI may not support time parameters — fetch data first, then filter results by time.
 
-## Default workflow: portfolio briefing
+| User Expression | Scan Range |
+| --- | --- |
+| Today | Current day (T+0) |
+| Tomorrow | T+1 |
+| This week | Monday to Sunday of the current week |
+| Next week | Monday to Sunday of the following week |
+| Recently / Upcoming | T+0 ~ T+3 (next 3 calendar days) |
+| No time specified | Default T+0 ~ T+3 |
 
-这是默认执行路径。收到财经日历相关请求时，按 `references/portfolio-briefing.md` 完整执行：
+**Weekend & Non-Trading Day Rules:**
 
-1. 获取用户持仓与自选股（`references/data-fetching.md`）
-2. 并行拉取所有日历数据（财报、宏观、分红、休市、拆合股）
-3. 按时间范围筛选，生成三段式报告：
-   - **事件总览** — 所有事件混合时间线（`references/output-template.md` 模板一）
-   - **重点事件影响解读** — 高重要性事件深度展开（模板二，无则省略）
-   - **财报结果速递** — 昨夜/盘前已出炉财报（模板三，无则省略）
-4. 末尾附免责文案
+Time ranges are calculated in calendar days but must ensure coverage through the next trading day. Specific rules:
 
-详细字段规范、输出模板、语言规则均在 references 中定义。
+1. **Auto-Extension**: When the end of the time range falls on a weekend or holiday, automatically extend to that market's next trading day. For example, saying "next 3 days" on Friday (T+0 ~ T+3 = Friday to Monday) — if Monday is a trading day, cover through Monday's after-hours; if Monday is also a holiday, extend to Tuesday.
+2. **Per-Market Judgment**: When a user's holdings span multiple markets (e.g., US + HK + A-shares), each market has a different trading calendar and must be evaluated separately. For example, US markets are closed on Christmas but HK markets are not — the effective time windows differ.
+3. **Use Market Closure Calendar Data**: The data collection phase already fetches market closure calendars — use them to determine actual trading day boundaries for each market.
+4. **Indicate in Output**: When the time window extends due to weekends/holidays, reflect the actual coverage range in the title (e.g., "May 8 to May 11" rather than "next 3 days"), and note weekend/holiday arrangements where appropriate.
+- **Output Style**: Default to plain language (everyday terms, no jargon); if the user demonstrates professional background or explicitly requests it, switch to fundamental-style output (preserving raw data).
+- **Filtering & Priority**: Prioritize high-importance events. Specific filtering strategies are determined based on the importance fields returned by data sources and the user's request. **Event scope is not limited to the user's holdings and watchlist**: major global events (e.g., Fed meetings, non-farm payrolls) and trending events related to the industries of the user's holdings/watchlist should also be included, to avoid missing important market information by focusing only on existing positions.
+- **Market Opportunity Discovery**: Beyond scanning events for holdings and watchlist, proactively discover market-level opportunities and trends. This includes:
+  - **Sector Rotation & Market Themes**: What themes/sectors the market is currently focused on (e.g., AI, tech, nuclear energy, GLP-1 weight-loss drugs), which sectors show significant capital inflows.
+  - **Cross-Market Linkages & Arbitrage Opportunities**: Recent cross-market linkage signals (e.g., A/H share premium changes, Chinese ADR and HK stock correlations, commodity and related stock correlations, ADR and underlying share price differentials), which may not be in the user's current portfolio but are worth watching.
+  - **Event-Driven Trading Opportunities**: Short-term trading windows potentially created by upcoming events (e.g., volatility trading around earnings, sector positioning before policy announcements).
+  - This information is proactively obtained via WebSearch, independent of the user's holdings scope, with the goal of helping users discover "the world beyond their portfolio".
 
-## CLI reference
+The above default behaviors require no pre-configuration by the user. If the user requests adjustments during a conversation, follow those instructions for the current session.
 
-> Run `longbridge finance-calendar --help` if unsure of current flags. The CLI's built-in help is the canonical source.
+## Execution Flow
 
-```
-longbridge finance-calendar <EVENT_TYPE> [OPTIONS]
-```
+Each request executes the full flow, producing output in four sections. Each section is generated if data exists and omitted if not (but the first section must always be included). Generate as much content as possible, covering all dimensions the user might care about. The same event should appear only once and not be repeated across sections.
 
-| `<EVENT_TYPE>` | Returns |
-|---|---|
-| `financial` | Financial-period events. |
-| `report` | Earnings releases (V2 rule: includes `financial` automatically). |
-| `dividend` | Dividend ex-dates / pay-dates. |
-| `ipo` | Upcoming initial public offerings. |
-| `macrodata` | Macro data releases (CPI / NFP / FOMC / GDP / etc.). Use `--star 1\|2\|3` (repeatable) to filter by importance. |
-| `closed` | Market closure days. |
+### Data Collection (Unified Upfront)
 
-Common options:
+1. Retrieve the user's holdings and watchlist (if unauthorized, stop and prompt login)
+2. Following the `data-fetching.md` specification, **fetch all data sources in parallel** (all without `--filter`, fetching market-wide data):
+   - Earnings/performance calendar, macroeconomic calendar, dividend/ex-date calendar, market closure/trading calendar, stock split calendar, IPO/new listing calendar
+   - **Market trends and opportunity data** (proactively searched via WebSearch, fetched in parallel with the CLI data above)
+3. After obtaining the full dataset, **tag each event** based on the holdings and watchlist (Holdings / Watchlist / Market) — tags are classification labels only and do not affect data retrieval scope
+4. Filter results by the user's requested time range (default T+0 ~ T+3)
+5. **Time direction: Focus on the future.** Only retain events that **have not yet occurred** (from today onward). The sole exception is earnings results released "last night / pre-market today" (i.e., published between the previous trading day's close and today's open), which may be briefly mentioned in sections one and three. Earlier historical events are excluded entirely.
+6. If the user specifies a particular stock, provide in-depth expansion on that stock's dimension
 
-| Flag | Meaning |
-|---|---|
-| `--symbol <SYM>` | Filter by symbol; repeatable up to 10. With `--symbol`, default start date is 3 months ago; without, today. |
-| `--market <MKT>` | Filter by market: `HK / US / CN / SG / JP / UK / DE / AU`; repeatable. |
-| `--start YYYY-MM-DD` | Start date. Default: today (or 3 months ago when `--symbol` is set). |
-| `--end YYYY-MM-DD` | End date. Default: no limit. |
-| `--count N` | Max events (default 100). |
-| `--star 1\|2\|3` | Macro importance, repeatable. Only effective for `macrodata`. |
-| `--next later\|earlier` | Pagination direction (default `later`). |
-| `--offset N` | Pagination offset. |
-| `--format json\|table` | Output format. |
+### Section 1: Event Overview (Template 1)
 
-### CLI examples
+All events (macro, holdings, watchlist, **high-attention market-wide events**) are merged into a single timeline, sorted uniformly by date and time, without duplication:
 
-```bash
-# Earnings releases for the next 14 days, US + HK
-longbridge finance-calendar report --market US --market HK --end 2026-05-12 --format json
+- If there are earnings results released **last night or pre-market today** (limited to the period from the previous trading day's close to present), mention them briefly without expanding on history
+- Group by calendar day (e.g., "May 12 (Monday)"), sorted chronologically within each day
+- Macro events (CPI, PPI, Fed meetings, non-farm payrolls, etc.) and security-specific events are interleaved on the same timeline, not grouped separately
+- Source tags for securities:
+  - "Holdings" — currently held by the user
+  - "Watchlist" — in the user's watchlist
+  - "Market" — neither holdings nor watchlist, but a high-attention market event (e.g., marquee earnings, hot IPOs, industry leaders) included to help users discover opportunities
+- **Source of "Market" securities**: These naturally emerge from the market-wide calendar data fetched without the `--filter` parameter. After fetching unfiltered data, exclude holdings and watchlist codes, then select noteworthy events from the remainder and tag them as "Market". No hard quantity requirement — event-heavy days will naturally produce more, quiet days fewer. The key is **not to lose the ability to discover opportunities by filtering on securities**
+  - May include, but is not limited to, these types:
+    - Earnings from large-cap, high-attention companies (industry leaders, recently trending companies)
+    - Hot IPOs / new listings
+    - Securities closely related to current market themes
+    - Catalyst events for companies with recent price anomalies or heavy market discussion
+- Securities with no events do not appear
+- No cap on the number of events — list as many as there are
+- Output following Template 1 format in `output-template.md`
 
-# Specific tickers' upcoming earnings
-longbridge finance-calendar financial --symbol AAPL.US --symbol TSLA.US --format json
+### Section 2: Key Event Impact Analysis (Template 2)
 
-# This month's ex-dividend dates in US
-longbridge finance-calendar dividend --market US --format json
+- Extract high-importance events (e.g., major earnings, Fed meetings, non-farm payrolls, significant industry policies)
+- Provide in-depth analysis for each key event:
+  - Event content and core data
+  - Impact classification for actually affected stocks (direct impact / indirect impact), tagged if they are watchlist/holdings, omitting unrelated securities
+  - Action reference (no buy/sell instructions)
+- If there are no high-importance events in the time range, this section may be omitted
+- Output following Template 2 format in `output-template.md`
 
-# High-importance macro (FOMC / CPI / NFP)
-longbridge finance-calendar macrodata --star 3 --format json
+### Section 3: Earnings Results Express (Template 3)
 
-# Upcoming IPOs in HK
-longbridge finance-calendar ipo --market HK --format json
+- Cover earnings results released **last night or pre-market today** across all securities (from the previous trading day's close to today's open) — earlier results are excluded. Generate an earnings result card for each:
+  - Beat/miss assessment and magnitude
+  - Core business highlights
+  - Market reaction (after-hours/pre-market price movement)
+  - Next-day market closure notice (if applicable)
+- If no earnings have been released, this section is omitted
+- Output following Template 3 format in `output-template.md`
 
-# Market closure days
-longbridge finance-calendar closed --market US --format json
-```
+### Section 4: Market Trends & Opportunity Discovery (Template 4)
 
-If `--help` shows newer flags, follow the help output rather than hard-coding here.
+This section goes beyond the user's existing holdings and watchlist to proactively discover market-level opportunities:
 
-## Output
+- **Recent Market Trends & Sector Movements**: Search via WebSearch for currently trending themes, sector rotation directions, and capital flows. Not limited to securities the user already follows — the goal is to help users discover new opportunities.
+- **Cross-Market Linkages & Arbitrage Signals**: Scan recent (especially yesterday's) cross-market linkage activity, including but not limited to:
+  - A/H share premium anomalies (price spreads for the same company listed on both A-shares and HK)
+  - Chinese ADR vs. HK underlying share price differentials
+  - Commodity price fluctuations transmitting to related listed company stock prices (e.g., copper price rise → copper mining stocks)
+  - Exchange rate movements creating cross-market impacts
+  - "Time-zone arbitrage" windows where a policy/event has already been priced into one market but another market hasn't opened yet
+- **Event-Driven Potential Opportunities**: Based on upcoming events (earnings, policies, data releases), identify potential short-term trading opportunity windows, even if the securities involved are not in the user's portfolio
+- Each opportunity point must explain the logic and risks; no specific buy/sell recommendations
+- If searches yield no valuable opportunity information, this section may be omitted
+- Output following Template 4 format in `output-template.md`
 
-**Portfolio briefing mode** — follow `references/output-template.md` templates.
+### Wrap-Up
 
-**Light query mode** — render in the user's language:
+- Append disclaimer text at the end (see output specifications)
+- Prompt the user that they can follow up: "If you'd like to dive deeper into any event, or when earnings results come out, feel free to ask me anytime."
 
-- **`report` / `financial`** — table grouped by date: date / time (BMO/AMC if available) / symbol / company name / period / consensus EPS (if returned).
-- **`dividend`** — table: ex-date / record date / pay date / symbol / amount / currency.
-- **`ipo`** — table: subscription window / listing date / symbol / company / price range / market.
-- **`macrodata`** — table: date+time / region / event / importance stars / forecast / previous. Group by date.
-- **`closed`** — list: date / market / reason.
+## Output Specifications
 
-When a result is empty for the chosen window, say so explicitly and offer to widen the window or check another market.
+### Language Rules
 
-## Error handling
+- Sentence length ≤ 30 words; avoid long compound sentences
+- Each event conclusion should not exceed 2 lines
+- Use hedging language such as "may", "likely", etc.; do not make definitive predictions
+- Action suggestions should use phrases like "consider monitoring", "wait until after the open to assess" — not "you should buy/sell"
+- Do not use jargon such as EPS, guidance, Beta, IV, etc.; convert all terms to everyday language
 
-| Situation | Reply |
-|---|---|
-| Shell `command not found: longbridge` | Fall back to MCP if configured; otherwise tell the user to install longbridge-terminal. |
-| stderr `not logged in` / `unauthorized` | Hint `longbridge auth login`. |
-| Empty result | State explicitly. Offer to widen the window or remove a filter. |
-| Invalid date format | Re-prompt with `YYYY-MM-DD`. |
-| Other stderr | Relay verbatim — never silently retry. |
+### Terminology Conversion Reference
 
-## MCP fallback
+| Professional Term | Output Phrasing |
+| --- | --- |
+| Ex-Dividend Date (Ex-Date) | Note: rules differ by market — buying after this date means you won't receive this dividend |
+| Half-Day Trading | HK stocks only trade until noon today |
+| Supply Chain Transmission | News from this company may cause related stocks to move together |
+| Liquidity Risk | Trading volume will be thin that day, so price swings may be larger |
+| Macro Data Beat | The economic data came in better than the market expected |
 
-When the CLI binary is missing, fall back via the equivalent MCP tool.
+### Prohibitions
 
-| CLI usage | MCP tool |
-|---|---|
-| `finance-calendar <event_type> ...` | `mcp__longbridge__finance_calendar` (event type passed as a parameter) |
+- Never respond with "nothing important today" or empty results
+- No specific price predictions
+- No direct buy or sell recommendations
+- Events must always display tags; securities with no events are simply omitted from the output
+- Securities not held and not in the watchlist may appear in the following cases:
+  - Major global events (e.g., Fed meetings, non-farm payrolls) should be displayed regardless of whether the user holds them
+  - Securities tagged "Market" in Section 1 — high-attention events (marquee earnings, hot IPOs, industry leaders, etc.)
+  - Trending event securities directly related to the industries of the user's holdings or watchlist
+  - Securities in Section 4 (Market Trends & Opportunity Discovery) — this section is specifically designed to help users discover opportunities beyond their portfolio
+- Overall principle: **Full coverage** for holdings and watchlist events (no omissions); **selective coverage** for Market-tagged events (only high-value ones)
 
-If the name above does not resolve, run `longbridge --help` or check MCP tool list.
+### Disclaimer Text
 
-## Related skills
+Appended once at the end of each complete report (not repeated in each section):
 
-| Skill | Why |
-|---|---|
-| `longbridge-catalyst-radar` | Watchlist-scoped morning/evening briefings layered on this calendar. |
-| `longbridge-earnings` | Single-symbol earnings deep-dive once the date arrives. |
-| `longbridge-fundamental` | Historical earnings KPIs (the *past* counterpart). |
-| `longbridge-news` | Filings and headline reaction around the event. |
-
-## File layout
-
-```
-longbridge-calendar/
-├── SKILL.md
-└── references/
-    ├── portfolio-briefing.md   # 默认工作流：持仓驱动三段式报告
-    ├── output-template.md      # 三个输出模板的字段规范
-    └── data-fetching.md        # 数据来源优先级、降级规则与 CLI 调用说明
-```
+> If you'd like to dive deeper into any event, or when earnings results come out, feel free to ask me anytime.
+> The above content is compiled from Longbridge data sources and publicly available information, provided for reference only. It does not constitute investment advice. Please make decisions based on your own judgment.
