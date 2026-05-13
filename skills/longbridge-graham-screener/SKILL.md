@@ -41,7 +41,7 @@ Two failure modes the user must be able to distinguish — and the screener must
 
 1. **Confirm market + universe**. Ask the user for: (a) market — HK / US / A-share, (b) screening pool — single index (HSI, S&P 500, CSI 300, NDX, etc.) or a watchlist. Default batch ceiling: 300 names per run.
 2. **Fetch constituent list** for the chosen index (or watchlist) — see [§CLI](#cli).
-3. **Sector pre-classification**: flag banks / insurance / REITs / pure financials → route to substitute scoring (PB + dividend yield + capital adequacy); flag IPOs <2 years (pro-rata earnings-stability score, noted); flag suspended names (last-trade snapshot, flagged).
+3. **Sector pre-classification**: **exclude** banks / insurance / REITs / pure financials / negative-equity / pure-holding shells from the universe before scoring — NCAV does not apply to balance sheets dominated by financial assets, so these are removed, not run through a substitute model. Count the exclusion in the Market Summary "Excluded — NCAV inapplicable" line. Separately, flag IPOs < 2 years (pro-rata earnings-stability sub-score, noted in row) and suspended names (last-trade snapshot, prepend ⏸).
 4. **Batch-fetch fundamentals in parallel** (≤20 symbols per wave): balance sheet (annual + last 4Q), income statement (5y annual + 4Q quarterly), cash flow (4Q quarterly), `calc-index` + `quote` snapshot, `dividend`, `ownership`.
 5. **Apply hard filters** with user-overridable thresholds — see [§Filters](#filters).
 6. **Score each candidate** — static (0–100) + dynamic adjustments + value-trap override. See `references/criteria.md`.
@@ -82,7 +82,6 @@ longbridge insresearch  <SYMBOL> --format json
 | Capacity utilisation | `"<industry> capacity utilization <year>"` |
 | Sector outlook (qualitative) | `"<sector> outlook <year> site:reuters.com OR site:bloomberg.com OR site:wsj.com"` |
 | Recent insider transactions (if `ownership` is stale) | `"<ticker> insider selling <year>"`, `"<公司> 大股东减持 <month>"` |
-| Bank capital adequacy (financial-sector substitute) | `"<bank ticker> CET1 ratio <year>"`, `"<银行> 资本充足率 <year>"` |
 
 Each WebSearch-sourced figure must be tagged with publisher + URL + access date in the **Data Source Appendix**; never silently mix it into a Longbridge column.
 
@@ -106,7 +105,7 @@ Default rank key = adjusted cigar-butt score (static composite + dynamic adjustm
 
 | Cohort | Treatment |
 |---|---|
-| Banks / insurance / REITs / pure financials | NCAV not applicable → substitute model: PB + dividend yield + capital-adequacy (CET1 for banks, RBC for insurance, distribution coverage for REITs). Annotate the substitution in the row note. |
+| Banks / insurance / REITs / pure financials / negative-equity / pure-holding shells | **Excluded** — NCAV is not a valid valuation lens for these business models. No substitute model is run; the symbols are dropped from the universe before scoring and counted in the Market Summary "Excluded — NCAV inapplicable" line. If the user wants these analysed, point them to `longbridge-valuation-methodology` or `longbridge-valuation`. |
 | IPOs listed < 2 years | Earnings-stability sub-score pro-rated on available years. Mark row "数据局限". |
 | Suspended stocks | Show last-trade snapshot, prepend "⏸ 停牌" / "⏸ Suspended" to the name, exclude from default top-N (still listable on request). |
 | Reconciliation fail >3% | Drop from leaderboard; surface in a "数据异常待复核" footer list with the failing check named. |
@@ -171,6 +170,6 @@ MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridg
 longbridge-graham-screener/
 ├── SKILL.md
 └── references/
-    ├── criteria.md   # filter thresholds, six-dimension static scoring, dynamic adjustments, value-trap override, special-sector substitutes
+    ├── criteria.md   # filter thresholds, six-dimension static scoring, dynamic adjustments, value-trap override, NCAV-inapplicable exclusions
     └── output.md     # full leaderboard template, market-summary block, data-source appendix, disclaimer
 ```

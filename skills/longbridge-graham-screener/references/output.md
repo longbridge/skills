@@ -10,7 +10,8 @@ Loaded on demand by `longbridge-graham-screener`. Use the section order verbatim
 Graham Cigar-Butt Screener — {Market} / {Universe}
 As-of: {YYYY-MM-DD HH:MM TZ}   Currency: {HKD / USD / CNY}
 Filters: NCAV<{1.0|1.5}, PE<{10}, PB<{1.5}, Div>{3%}, CA/TL>{2.0}, ≥5y no-loss
-Universe size: {N}   Hard-filter pass: {M}   Dynamic-clean: {K}
+Universe size (raw): {N_raw}   NCAV-inapplicable excluded: {N_excl}
+Scored universe: {N_scored}   Hard-filter pass: {M}   Dynamic-clean: {K}
 
 [Leaderboard — Top {10|20}]
 ┌──────┬──────────┬──────────┬─────────┬─────────────┬──────────┬──────┬──────┬────────┬─────────────┬──────────────────────────┬────────────┐
@@ -24,16 +25,14 @@ Universe size: {N}   Hard-filter pass: {M}   Dynamic-clean: {K}
 Tier legend: 🟢 80–100 cigar-butt grade  ·  🟡 60–79 undervalued  ·  🟠 40–59 fair value  ·  🔴 0–39 / value-trap override
 
 [Market Summary]
-- Universe scanned: {N} symbols ({INDEX} constituents, as-of {date})
-- Hard filters passed: {M} ({pct}% of universe)
+- Raw universe: {N_raw} symbols ({INDEX} constituents, as-of {date})
+- Excluded — NCAV inapplicable: {N_excl} (breakdown: {n_banks} banks · {n_insurance} insurance · {n_reits} REITs · {n_finhold} financial holdings · {n_negeq} negative-equity · {n_shell} holding/shell). For these, use `longbridge-valuation-methodology` or `longbridge-valuation` instead.
+- Scored universe: {N_scored}
+- Hard filters passed: {M} ({pct}% of scored)
 - Dynamic layer clean (no value-trap flag): {K}
 - Top-N average dividend yield: {X}% — "持有等待期间每年可获约 {X}% 股息回报作为补偿"
-- Cohorts noted: {n_financials} financial-sector (PB/CAR/solvency model) · {n_ipo} IPO < 2y (pro-rated stability) · {n_suspended} suspended (last-trade snapshot)
+- Other row notes: {n_ipo} IPO < 2y (pro-rated stability) · {n_suspended} suspended (last-trade snapshot)
 - Reconciliation drops: {n_dropped} symbol(s) — see Data Anomaly footer below
-
-[Substitute-Model Rows]
-(Repeat for any 🏦 / 🛡 / 🏢 rows, since the leaderboard's NCAV column is N/A for them.)
-| Code | Name | Sector | Substitute model | PB | Div Yd | CET1 / Solvency / LTV | Score |
 
 [Data Anomaly Footer — rows dropped from leaderboard]
 | Code | Failing reconciliation check | Gap | Action |
@@ -49,7 +48,7 @@ Tier legend: 🟢 80–100 cigar-butt grade  ·  🟡 60–79 undervalued  ·  �
 - Subscription: «每周推送本榜单 / Weekly leaderboard push» (opt-in)
 
 [Data Source Appendix — MANDATORY]
-Every figure in the leaderboard, summary, and substitute-model rows must be traceable to one of the rows below.
+Every figure in the leaderboard and summary must be traceable to one of the rows below.
 
 | Field group                       | Source                                                | Fetch (UTC)        | Period             | Notes |
 |-----------------------------------|-------------------------------------------------------|--------------------|--------------------|-------|
@@ -61,16 +60,16 @@ Every figure in the leaderboard, summary, and substitute-model rows must be trac
 | Income statement (5y no-loss)     | Longbridge `financial-report --kind IS --report af`   | YYYY-MM-DD HH:MM   | FY{YYYY-4}–FY{YYYY}| Pro-rated for IPO<2y |
 | Operating cash flow (4Q)          | Longbridge `financial-report --kind CF --report qf`   | YYYY-MM-DD HH:MM   | Last 4Q            | Value-trap rule 4 |
 | Major-holder / insider flow       | Longbridge `ownership` + `insresearch`                | YYYY-MM-DD HH:MM   | Last 2Q            | Value-trap rule 2 |
+| Sector / industry classifier      | Longbridge `calc-index` / `basicinfo` (whichever exposes GICS / industry) | YYYY-MM-DD HH:MM | Live | Used to drive the NCAV-inapplicable exclusion |
 | Industry PMI / inventory cycle    | WebSearch — {Publisher}, {article date}, {URL}        | YYYY-MM-DD HH:MM   | {month YYYY}       | [substituted — Longbridge gap] |
 | Capacity utilisation              | WebSearch — {Publisher}, {article date}, {URL}        | YYYY-MM-DD HH:MM   | {month YYYY}       | [substituted — Longbridge gap] |
-| Bank CET1 / Insurance solvency / REIT NAV | WebSearch — {Publisher}, {date}, {URL}        | YYYY-MM-DD HH:MM   | {YYYY}             | Substitute-model rows only |
 | (One row per WebSearch hit)       | …                                                     | …                  | …                  | … |
 
 Footnote conventions:
 - Every WebSearch row must carry publisher + URL + article date + access date.
 - Any Longbridge field substituted via WebSearch is tagged `[substituted — Longbridge gap]`.
 - Any row dropped at the reconciliation gate is named in the **Data Anomaly Footer** with the failing check and the gap; it is NOT silently removed.
-- Cohort tags ("🏦 Bank — PB+CAR model", "⏸ Suspended", "数据局限 / IPO < 2y") must appear in the row's Data Note column AND be summarised in the Market Summary cohort line.
+- Cohort tags ("⏸ Suspended", "数据局限 / IPO < 2y") must appear in the row's Data Note column AND be summarised in the Market Summary. The NCAV-inapplicable cohort is **not** rendered as leaderboard rows at all — only counted in the Market Summary "Excluded — NCAV inapplicable" line.
 ```
 
 ---

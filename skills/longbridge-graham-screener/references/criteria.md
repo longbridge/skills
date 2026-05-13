@@ -92,18 +92,22 @@ Any row with the value-trap override set is forced to 🔴 with verdict "⚠️ 
 
 ---
 
-## 6. Special-sector substitute scoring
+## 6. NCAV-inapplicable cohorts — excluded from the universe
 
-NCAV is meaningless for businesses whose balance sheet is dominated by financial assets. The screener auto-detects these and switches model.
+NCAV is meaningless for businesses whose balance sheet is dominated by financial assets. The screener **excludes** these from the universe before scoring; it does NOT run substitute models. This keeps the leaderboard a clean Graham/NCAV ranking instead of mixing different valuation lenses under one rank key.
 
-| Sector | Substitute scoring | Required inputs | Display flag |
-|---|---|---|---|
-| Banks | PB (40) + dividend yield (25) + CET1 ratio (25) + 5y no-loss (10). Full marks: PB < 0.8, yield > 5%, CET1 > 12%. | `calc-index.pb`, `dividend`, CET1 ratio (Longbridge `financial-report` capital section if available; else WebSearch) | "🏦 Bank — PB+CAR model" |
-| Insurance | PB (40) + embedded-value yield (25) + RBC / solvency ratio (25) + 5y no-loss (10) | `calc-index.pb`, `dividend`, solvency ratio (WebSearch if not in Longbridge) | "🛡 Insurance — solvency model" |
-| REITs | Distribution yield (40) + distribution coverage (30) + LTV (20) + 5y distribution history (10) | `dividend`, debt-to-asset ratio from BS, NAV if available (WebSearch fallback) | "🏢 REIT — distribution model" |
-| Pure holding / shell / negative-equity | Excluded by default | — | "⛔ Excluded — NCAV inapplicable" |
+| Sector / state | Action | Display in Market Summary |
+|---|---|---|
+| Banks (commercial / investment) | Excluded | "Excluded — NCAV inapplicable (banks)" |
+| Insurance (life / P&C / reinsurance) | Excluded | "Excluded — NCAV inapplicable (insurance)" |
+| REITs / real-estate income trusts | Excluded | "Excluded — NCAV inapplicable (REITs)" |
+| Pure financial holdings / asset managers / brokers | Excluded | "Excluded — NCAV inapplicable (financial holdings)" |
+| Negative-equity firms | Excluded | "Excluded — negative equity" |
+| Pure holding / shell companies | Excluded | "Excluded — holding/shell" |
 
-For all substitutes, the Graham buy-line column shows "N/A — see substitute model" and the Data Source Appendix must note which substitute was used.
+Detection inputs: sector / industry code from `longbridge calc-index` or `longbridge basicinfo` (whichever exposes a GICS / industry tag); equity sign from the BS fetch. If sector classification is ambiguous, default to **include** and let the hard filters / reconciliation gate take care of it — better to keep a borderline candidate than silently drop it.
+
+If the user wants any of these analysed, point them to `longbridge-valuation-methodology` (model selection) or `longbridge-valuation` (multi-method valuation). Do **not** add per-row scoring for excluded names in this skill.
 
 ---
 
