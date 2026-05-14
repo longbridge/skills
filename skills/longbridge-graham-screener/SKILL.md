@@ -127,6 +127,8 @@ After the table, every output must include:
 4. **Data Source Appendix** — mandatory; every field, every Longbridge endpoint, every WebSearch hit (publisher + URL + date).
 5. **Disclaimer** — full trilingual disclaimer from `references/output.md`, including: 「筛选结果仅反映量化指标的符合程度，不代表对上述标的的投资建议。投资决策请结合个人情况独立判断。/ Screening results only reflect quantitative criteria compliance and do not constitute investment advice.」
 
+> ⚠️ 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ 以上內容僅供參考，不構成投資建議。投資決策請結合自身風險承受能力獨立判斷。/ For reference only. Not investment advice. Please make investment decisions independently based on your own risk tolerance.
+
 ## Error handling
 
 | Situation | 简体回复 | 繁體回覆 | English reply |

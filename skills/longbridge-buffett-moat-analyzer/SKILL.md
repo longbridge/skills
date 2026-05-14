@@ -143,6 +143,8 @@ Single-stock diagnostic with 7 fixed sections (full template in `references/outp
 
 Followed by the **Data Source Appendix (mandatory)** — every figure in sections [1]–[7] traceable to a row with source, fetch time, and period; **final row is the reconciliation summary line** (pass / within-tolerance residual list / or failure description).
 
+> ⚠️ 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ 以上內容僅供參考，不構成投資建議。投資決策請結合自身風險承受能力獨立判斷。/ For reference only. Not investment advice. Please make investment decisions independently based on your own risk tolerance.
+
 ## Error handling
 
 | Situation | 简体回复 | 繁體回覆 | English reply |

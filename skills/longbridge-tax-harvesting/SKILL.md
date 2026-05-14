@@ -100,7 +100,7 @@ XOM.US   $120.00     $108.00        −$1,200       14 months    ~$240 (20% rate
 - Check recent purchase dates; do not repurchase within 30 days of sale.
 - Purchasing a call option on the sold stock may also trigger wash-sale.
 
-⚠️ 本分析仅供参考，不构成税务建议或投资建议。以上内容仅为说明税务亏损收割原理，不代表对任何具体操作的建议。请咨询持牌税务顾问。投资决策请结合自身风险承受能力独立判断。/ 本分析僅供參考，不構成稅務建議或投資建議。以上內容僅為說明稅務虧損收割原理，不代表對任何具體操作的建議。請諮詢持牌稅務顧問。/ For reference only. Not tax or investment advice. The above examples are for illustrative purposes only and do not constitute specific trading recommendations. Consult a qualified tax professional. Please make investment decisions independently based on your own risk tolerance.
+⚠️ 本分析仅供参考，不构成投资建议，亦不构成税务建议。以上内容仅为说明税务亏损收割原理，不代表对任何具体操作的建议。请咨询持牌税务顾问。投资决策请结合自身风险承受能力独立判断。/ 本分析僅供參考，不構成投資建議，亦不構成稅務建議。以上內容僅為說明稅務虧損收割原理，不代表對任何具體操作的建議。請諮詢持牌稅務顧問。/ For reference only. Not investment advice or tax advice. The above examples are for illustrative purposes only and do not constitute specific trading recommendations. Consult a qualified tax professional. Please make investment decisions independently based on your own risk tolerance.
 ```
 
 ## Error handling
