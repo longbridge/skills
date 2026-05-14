@@ -1,7 +1,7 @@
 ---
 name: longbridge-graham-stock-analysis
 description: |
-  Graham cigar-butt (NCAV / net-net) single-stock diagnostic. Combines a 100-point static cheapness score (NCAV, PE, PB, dividend yield, debt coverage, earnings stability) with a dynamic adjustment layer (industry cycle, earnings trend, insider activity, NCAV trajectory) to separate real bargains from value traps. Pulls data from Longbridge CLI/MCP first, falls back to WebSearch only for gaps, runs cross-statement reconciliation (勾稽校验) before scoring, and footnotes every figure to its source. Triggers: "格雷厄姆", "捡烟蒂", "烟蒂股", "烟蒂投资", "NCAV", "净流动资产", "清算价值", "安全边际", "价值陷阱", "深度价值", "撿煙蒂", "煙蒂股", "煙蒂投資", "淨流動資產", "清算價值", "安全邊際", "價值陷阱", "深度價值", "Graham", "cigar butt", "net-net", "liquidation value", "value trap", "margin of safety", "deep value", "Benjamin Graham".
+  Graham cigar-butt (NCAV / net-net) single-stock diagnostic. Combines a 100-point static cheapness score (NCAV, PE, PB, dividend yield, debt coverage, earnings stability) with a dynamic adjustment layer (industry cycle, earnings trend, insider activity, NCAV trajectory) to separate real bargains from value traps. Pulls data from Longbridge CLI first; MCP fallback if CLI unavailable; falls back to WebSearch only for gaps, runs cross-statement reconciliation (勾稽校验) before scoring, and footnotes every figure to its source. Triggers: "格雷厄姆", "捡烟蒂", "烟蒂股", "烟蒂投资", "NCAV", "净流动资产", "清算价值", "安全边际", "价值陷阱", "深度价值", "撿煙蒂", "煙蒂股", "煙蒂投資", "淨流動資產", "清算價值", "安全邊際", "價值陷阱", "深度價值", "Graham", "cigar butt", "net-net", "liquidation value", "value trap", "margin of safety", "deep value", "Benjamin Graham".
 license: MIT
 metadata:
   author: longbridge
