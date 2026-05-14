@@ -1,11 +1,17 @@
 name: Notify skill updated
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'skills/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'OSS environment to upload to'
+        required: true
+        default: 'canary'
+        type: choice
+        options:
+          - canary
+          - release
+          - both
 
 jobs:
   dispatch:
@@ -20,5 +26,6 @@ jobs:
           client-payload: |
             {
               "sha": "${{ github.sha }}",
-              "ref": "${{ github.ref_name }}"
+              "ref": "${{ github.ref_name }}",
+              "environment": "${{ github.event.inputs.environment }}"
             }
