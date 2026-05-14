@@ -1,7 +1,7 @@
 ---
 name: longbridge-post-investment
 description: |
-  Post-investment monitoring via Longbridge Securities — tracks portfolio holdings vs plan on a quarterly / monthly basis, extracts key KPIs (revenue growth / gross margin / cash flow), flags deviations vs expectations, and generates a monitoring report with add / reduce / stop-loss recommendations. Triggers: "投后监控", "持仓监控", "定期复盘", "跟踪持仓", "持仓检视", "KPI跟踪", "业绩追踪", "投後監控", "持倉監控", "定期複盤", "追蹤持倉", "KPI追蹤", "post-investment monitoring", "position monitoring", "portfolio review", "KPI tracking", "performance tracking", "investment monitoring", "holding review".
+  Post-investment monitoring via Longbridge Securities — tracks portfolio holdings vs plan on a quarterly / monthly basis, extracts key KPIs (revenue growth / gross margin / cash flow), flags deviations vs expectations, and generates a neutral monitoring report summarising KPI changes. For reference only — not investment advice. Triggers: "投后监控", "持仓监控", "定期复盘", "跟踪持仓", "持仓检视", "KPI跟踪", "业绩追踪", "投後監控", "持倉監控", "定期複盤", "追蹤持倉", "KPI追蹤", "post-investment monitoring", "position monitoring", "portfolio review", "KPI tracking", "performance tracking", "investment monitoring", "holding review".
 license: MIT
 metadata:
   author: longbridge

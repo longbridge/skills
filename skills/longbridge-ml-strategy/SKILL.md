@@ -1,7 +1,7 @@
 ---
 name: longbridge-ml-strategy
 description: |
-  Machine-learning prediction strategy framework via Longbridge Securities — walk-forward rolling training with feature engineering (MACD, RSI, Bollinger Band width, volume change rate) and a scikit-learn classifier (Random Forest / Gradient Boosting); retrains every 60 days, predicts 5-day direction; buy signal when probability > 0.6, sell when < 0.4; evaluates win rate, profit factor, and Sharpe ratio. Triggers: "机器学习", "ML策略", "预测模型", "随机森林", "梯度提升", "深度学习", "AI选股", "walk-forward", "機器學習", "ML策略", "預測模型", "隨機森林", "梯度提升", "machine learning", "ML strategy", "predictive model", "random forest", "gradient boosting", "AI stock selection", "walk-forward", "rolling training", "feature engineering", "scikit-learn", "XGBoost".
+  Machine-learning prediction strategy framework via Longbridge Securities — walk-forward rolling training with feature engineering (MACD, RSI, Bollinger Band width, volume change rate) and a scikit-learn classifier (Random Forest / Gradient Boosting); retrains every 60 days, predicts 5-day direction probability; evaluates win rate, profit factor, and Sharpe ratio. For reference only — not investment advice. Triggers: "机器学习", "ML策略", "预测模型", "随机森林", "梯度提升", "深度学习", "AI选股", "walk-forward", "機器學習", "ML策略", "預測模型", "隨機森林", "梯度提升", "machine learning", "ML strategy", "predictive model", "random forest", "gradient boosting", "AI stock selection", "walk-forward", "rolling training", "feature engineering", "scikit-learn", "XGBoost".
 license: MIT
 metadata:
   author: longbridge
