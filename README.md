@@ -2,7 +2,7 @@
 
 Make your AI assistant fluent in [Longbridge](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-124 skills covering market data, fundamentals, valuation, options, technical analysis, quantitative strategies, portfolio risk, research, cross-market analysis, community, IPO, and automation across HK / US / A-share / Singapore markets.
+125 skills covering market data, fundamentals, valuation, options, technical analysis, quantitative strategies, portfolio risk, research, cross-market analysis, community, IPO, and automation across HK / US / A-share / Singapore markets.
 
 ---
 
