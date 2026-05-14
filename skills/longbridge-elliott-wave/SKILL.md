@@ -276,6 +276,17 @@ The output uses **four sections** written in natural language — no bullet dump
 
 ## Script
 
+> ⚠️ **额外依赖 / Extra dependency required**
+>
+> `scripts/signal_engine.py` 依赖 `pandas` 和 `numpy`，使用前请确认已安装：
+>
+> ```bash
+> pip install pandas numpy
+> ```
+>
+> 通常已预装；若报 `ModuleNotFoundError`，运行上述命令后重试。
+> Requires `pandas` and `numpy` — usually pre-installed. Run `pip install pandas numpy` if you see `ModuleNotFoundError`.
+
 See `scripts/signal_engine.py` for the wave engine (ZigZag + 5-wave impulse + ABC correction + Fibonacci validation).
 
 Usage:
@@ -283,7 +294,17 @@ Usage:
 python3 scripts/signal_engine.py --kline /tmp/kline_day.json --symbol AAPL.US
 ```
 
-Dependencies: `pip install pandas numpy`
+## MCP fallback
+
+When `longbridge` CLI is not installed, fall back to MCP tools:
+
+| CLI command | MCP tool |
+|---|---|
+| `longbridge kline <SYMBOL> --period day --format json` | `mcp__longbridge__candlesticks` |
+| `longbridge kline <SYMBOL> --period week --format json` | `mcp__longbridge__candlesticks` (period=Week) |
+| `longbridge news <SYMBOL> --format json` | `mcp__longbridge__news` |
+
+MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (Quote scope).
 
 ## Reference Files
 
