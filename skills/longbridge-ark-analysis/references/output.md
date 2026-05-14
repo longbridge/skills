@@ -115,11 +115,13 @@ Source: Longbridge Securities + WebSearch (see appendix)
      ┌───────────┬──────────────┬──────────────────────────────────────────────────────┐
      │ Tier      │ Size         │ Assumption (one sentence)                            │
      ├───────────┼──────────────┼──────────────────────────────────────────────────────┤
-     │ Low       │ {amount}     │ {slow adoption, narrow user base, low ARPU}          │
-     │ Base      │ {amount}     │ {mid path}                                           │
-     │ High      │ {amount}     │ {fast adoption, full penetration, premium pricing}   │
+     │ High      │ {amount}     │ ARK incumbent-displacement lens — total existing economy block being replaced │
+     │ Base      │ {amount}     │ Consensus research-house figure (Gartner / IDC / BloombergNEF / etc.) │
+     │ Low       │ {amount}     │ Serviceable sub-segment — conservative addressable subset │
      └───────────┴──────────────┴──────────────────────────────────────────────────────┘
-     Plain-language analogy: {one-sentence analogy a retail reader will grasp}
+     Plain-language analogy: {one-sentence analogy a retail reader will grasp, including
+                              why the High tier can be 10–30× the Low tier — the three rows
+                              use different lenses, not just different growth rates}
 
 [4] Cost curve (Wright's Law)
      Technology domain:           {domain, e.g. lithium-ion battery cells}
@@ -131,18 +133,18 @@ Source: Longbridge Securities + WebSearch (see appendix)
                                    economically viable}
 
 [5] 5-year target — three scenarios
-     | Scenario   | Weight | Market share | Net margin | Terminal multiple | Discounted target |
-     |------------|--------|--------------|------------|-------------------|--------------------|
-     | 🐂 Bull    | 25%    | {a}%         | {b}%       | {c}× P/E or P/S   | {price}            |
-     | 📊 Base    | 50%    | {a}%         | {b}%       | {c}×              | {price}            |
-     | 🐻 Bear    | 25%    | {a}%         | {b}%       | {c}×              | {price}            |
-
-     Discount rate: 15% (5-year horizon)         {note any user override}
-     Weighted target: {weighted_target}
-     Current price:   {p}
-     Upside / Downside: {▲/▼ XX.X%}
-     Note: scenarios are model inputs, not predictions. The Bull case is one of three —
-     not a forecast.
+       | Scenario   | Weight | Market share | Net margin | Terminal multiple | 5-yr implied price | Discounted target |
+       |------------|--------|--------------|------------|-------------------|--------------------|-------------------|
+       | 🐂 Bull    | 25%    | {a}%         | {b}%       | {c}× P/E or P/S   | {price_undiscounted}| {price}          |
+       | 📊 Base    | 50%    | {a}%         | {b}%       | {c}×              | {price_undiscounted}| {price}          |
+       | 🐻 Bear    | 25%    | {a}%         | {b}%       | {c}×              | {price_undiscounted}| {price}          |
+       Weighted 5-yr implied price: {weighted_implied}   (before discounting)
+       Discount rate: 15% (5-year horizon)         {note any user override}
+       Weighted target: {weighted_target}
+       Current price:   {p}
+       Upside / Downside: {▲/▼ XX.X%}
+       Note: scenarios are model inputs, not predictions. The Bull case is one of three —
+       not a forecast.
 
 [6] Main risks   (3 named — tied to this company's data)
      1. {Risk one — one-sentence description tied to a specific figure/event}
