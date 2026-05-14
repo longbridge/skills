@@ -133,7 +133,7 @@ Output rules for reconciliation:
 
 Single-stock diagnostic with 7 fixed sections (full template in `references/output.md`):
 
-1. **Diagnostic summary card** — star ratings on 5 dimensions, one-line verdict ("Buffett would likely buy / hold / watch / pass"), badge color (🟢🟡🟠🔴), suggested minimum holding period.
+1. **Diagnostic summary card** — star ratings on 5 dimensions, 综合评级 / Overall Rating: ★★★★★ — [强护城河/宽护城河/待观察/不符合标准 / Strong moat / Wide moat / Watch / Does not meet criteria], badge color (🟢🟡🟠🔴), suggested minimum holding period.
 2. **Dimension 1 — Business model & moat** — moat type (brand / network / cost / switching / resource), width (wide / narrow / none), pricing-power evidence, 3–5 supporting points.
 3. **Dimension 2 — Financial health** — ROE 10y track, FCF persistence, leverage, gross-margin trajectory, capex intensity. Each metric vs Buffett threshold with current value.
 4. **Dimension 3 — Management & capital allocation** — insider holding & changes, buyback/dividend history, M&A track record, alignment signals.
@@ -142,6 +142,8 @@ Single-stock diagnostic with 7 fixed sections (full template in `references/outp
 7. **Buffett-voice narrative + user education block** — first-person narrative in Buffett's register (concrete, plain-spoken, dryly humorous), then the **mandatory user education block** covering holding-period expectation, position-building rhythm, and the disclaimer variant matching the user's input language (one language only).
 
 Followed by the **Data Source Appendix (mandatory)** — every figure in sections [1]–[7] traceable to a row with source, fetch time, and period; **final row is the reconciliation summary line** (pass / within-tolerance residual list / or failure description).
+
+> ⚠️ 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ 以上內容僅供參考，不構成投資建議。投資決策請結合自身風險承受能力獨立判斷。/ For reference only. Not investment advice. Please make investment decisions independently based on your own risk tolerance.
 
 ## Error handling
 

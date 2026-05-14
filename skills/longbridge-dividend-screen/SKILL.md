@@ -82,15 +82,15 @@ Rank  Symbol    Name      Yield   Payout  FCF/DPS  3yr Div CAGR  Consistency  Sc
 (top 10 candidates)
 
 [Dividend Sustainability Highlights]
-- Most stable: <symbol> — paid uninterrupted for N years, FCF cover Nx
-- Highest growth: <symbol> — 3yr DPS CAGR +N%
+- Most stable (dividend consistency): <symbol> — paid uninterrupted for N years, FCF cover Nx
+- Highest dividend growth: <symbol> — 3yr DPS CAGR +N%
 - Risk flag: <symbol> — high yield but payout ratio >80%, monitor FCF
 
-[Total Return Estimate (illustrative)]
+[Total Return Estimate (illustrative, based on historical data)]
 Assuming dividend reinvestment + 5% annual price appreciation:
-- <symbol>: estimated 5yr total return ~N% (div. yield N% + price N%)
+- <symbol>: illustrative 5yr total return ~N% (div. yield N% + price N%)
 
-⚠️ 筛选结果仅供参考，不构成投资建议。股息不保证。/ 篩選結果僅供參考，不構成投資建議。股息不保證。/ For reference only. Not investment advice. Dividends are not guaranteed.
+⚠️ 筛选结果仅反映股息相关量化指标的符合程度，不代表对上述标的的投资建议。高股息不等于低风险，请结合个人情况独立判断。以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ 篩選結果僅反映股息相關量化指標的符合程度，不代表對上述標的的投資建議。高股息不等於低風險，請結合個人情況獨立判斷。/ Screening results only reflect dividend-related quantitative criteria and do not represent investment recommendations for the listed securities. High dividend yield does not equal low risk. The above is for reference only and does not constitute investment advice. Please make investment decisions independently based on your own risk tolerance. Dividends are not guaranteed.
 ```
 
 ## Error handling

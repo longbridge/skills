@@ -41,9 +41,9 @@ Statistical-arbitrage strategy for a pair of correlated securities. Tests for co
    - Z-score = (spread_current − μ) / σ
    - Half-life λ = −ln(2) / OLS_slope of Δspread ~ spread_{t-1} (AR(1))
 5. **Signal**:
-   - Z > 2.0: long spread (buy A, short B scaled by β)
-   - Z < −2.0: short spread (short A, buy B scaled by β)
-   - |Z| < 0.5: exit / neutral
+   - Z > 2.0: 价差处于历史高位区间（统计上偏离均值偏大）/ Spread at historical high (statistically elevated)
+   - Z < −2.0: 价差处于历史低位区间（统计上偏离均值偏小）/ Spread at historical low (statistically depressed)
+   - |Z| < 0.5: 价差回归均值区间 / Spread near historical mean
 6. Position sizing: suggest equal-dollar or volatility-scaled sizing; note that execution must be simultaneous.
 
 Run `longbridge kline --help` to confirm current flag names before calling.
@@ -68,6 +68,9 @@ longbridge kline <SYMBOL_B> --period day --count 252 --format json
 | Signal | 交易信号 | 交易訊號 | Trade signal |
 
 Output: cointegration verdict → spread statistics table → current signal → position guidance. Add a risk note if p-value > 0.05 (not cointegrated). Cite **Longbridge Securities** / **数据来源：长桥证券** / **數據來源：長橋證券**.
+
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+> The above is for reference only and does not constitute investment advice. Investment decisions should be made based on your own risk tolerance.
 
 ## Error handling
 

@@ -74,10 +74,11 @@ Present: number of contracts, hedge cost, and residual Beta after hedge.
 
 ### Step 4 — Options-based protection
 
-**Protective Put**:
-- Buy ATM or slightly OTM put on the underlying or index.
+**Protective Put** (保护性看跌期权介绍):
+- 原理：持有正股的同时持有看跌期权；当标的价格下跌时，期权价值上升，可对冲下行风险。常见做法是选择平值（ATM）或略虚值（OTM）的看跌期权。
 - Cost = put premium; protection kicks in below strike.
 - Effective floor = Strike − Premium paid.
+- 具体期权合约是否适用，请根据自身持仓情况和风险偏好独立判断。
 - Fetch available strikes: `longbridge option chain <SYMBOL> --format json`.
 
 **Collar Strategy** (zero-cost or near-zero):
@@ -142,7 +143,9 @@ Present:
 5. Scenarios: portfolio value if market falls 10% / 20% with and without hedge.
 6. Caveats (basis risk, early exercise for American options, liquidity).
 
-Always note: hedging reduces risk but also limits upside. This is not financial advice.
+Always note: hedging reduces risk but also limits upside.
+
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ The above is for reference only and does not constitute investment advice. Please make investment decisions independently based on your own risk tolerance.
 
 ## Error handling
 

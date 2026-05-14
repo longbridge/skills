@@ -1,7 +1,7 @@
 ---
 name: longbridge-post-investment
 description: |
-  Post-investment monitoring via Longbridge Securities — tracks portfolio holdings vs plan on a quarterly / monthly basis, extracts key KPIs (revenue growth / gross margin / cash flow), flags deviations vs expectations, and generates a monitoring report with add / reduce / stop-loss recommendations. Triggers: "投后监控", "持仓监控", "定期复盘", "跟踪持仓", "持仓检视", "KPI跟踪", "业绩追踪", "投後監控", "持倉監控", "定期複盤", "追蹤持倉", "KPI追蹤", "post-investment monitoring", "position monitoring", "portfolio review", "KPI tracking", "performance tracking", "investment monitoring", "holding review".
+  Post-investment monitoring via Longbridge Securities — tracks portfolio holdings vs plan on a quarterly / monthly basis, extracts key KPIs (revenue growth / gross margin / cash flow), flags deviations vs expectations, and generates a neutral monitoring report summarising KPI changes. For reference only — not investment advice. Triggers: "投后监控", "持仓监控", "定期复盘", "跟踪持仓", "持仓检视", "KPI跟踪", "业绩追踪", "投後監控", "持倉監控", "定期複盤", "追蹤持倉", "KPI追蹤", "post-investment monitoring", "position monitoring", "portfolio review", "KPI tracking", "performance tracking", "investment monitoring", "holding review".
 license: MIT
 metadata:
   author: longbridge
@@ -80,11 +80,14 @@ vs market: ±x.x%  vs sector: ±x.x%
 ## Qualitative Check
 Management tone, guidance revision, key risks materialised / resolved.
 
-## Action Recommendation
-☐ Hold — thesis intact, no change needed
-☐ Add — beat on key metrics, valuation still attractive
-☐ Trim — partial miss, reduce exposure
-☐ Exit — thesis broken, stop-loss triggered
+## 指标变化摘要 / Key Metrics Update
+
+| 维度 | 预期 | 实际 | 偏差 |
+|---|---|---|---|
+| (根据实际分析填写) | | | |
+
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+> The above is for reference only and does not constitute investment advice. Investment decisions should be made based on your own risk tolerance.
 
 Rationale: ...
 Next review trigger: ...

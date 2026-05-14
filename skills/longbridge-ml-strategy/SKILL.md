@@ -1,7 +1,7 @@
 ---
 name: longbridge-ml-strategy
 description: |
-  Machine-learning prediction strategy framework via Longbridge Securities — walk-forward rolling training with feature engineering (MACD, RSI, Bollinger Band width, volume change rate) and a scikit-learn classifier (Random Forest / Gradient Boosting); retrains every 60 days, predicts 5-day direction; buy signal when probability > 0.6, sell when < 0.4; evaluates win rate, profit factor, and Sharpe ratio. Triggers: "机器学习", "ML策略", "预测模型", "随机森林", "梯度提升", "深度学习", "AI选股", "walk-forward", "機器學習", "ML策略", "預測模型", "隨機森林", "梯度提升", "machine learning", "ML strategy", "predictive model", "random forest", "gradient boosting", "AI stock selection", "walk-forward", "rolling training", "feature engineering", "scikit-learn", "XGBoost".
+  Machine-learning prediction strategy framework via Longbridge Securities — walk-forward rolling training with feature engineering (MACD, RSI, Bollinger Band width, volume change rate) and a scikit-learn classifier (Random Forest / Gradient Boosting); retrains every 60 days, predicts 5-day direction probability; evaluates win rate, profit factor, and Sharpe ratio. For reference only — not investment advice. Triggers: "机器学习", "ML策略", "预测模型", "随机森林", "梯度提升", "深度学习", "AI选股", "walk-forward", "機器學習", "ML策略", "預測模型", "隨機森林", "梯度提升", "machine learning", "ML strategy", "predictive model", "random forest", "gradient boosting", "AI stock selection", "walk-forward", "rolling training", "feature engineering", "scikit-learn", "XGBoost".
 license: MIT
 metadata:
   author: longbridge
@@ -49,9 +49,9 @@ If unavailable, fall back to a simpler logistic-regression model.
    - Predict probability for the current bar
 
 4. **Signal generation**:
-   - prob > 0.60 → Buy signal
-   - prob < 0.40 → Sell/Short signal
-   - Otherwise → Hold / neutral
+   - prob > 0.60 → 模型上涨概率偏高 / Model upside probability elevated
+   - prob < 0.40 → 模型下跌概率偏高 / Model downside probability elevated
+   - Otherwise → 模型无方向性预测 / No directional signal from model
 
 5. **Backtest metrics** (on out-of-sample predictions):
    - Win rate (% correct directional calls)
@@ -84,6 +84,9 @@ longbridge kline <SYMBOL> --period day --count 504 --format json
 | Top features | 重要特征 | 重要特徵 | Top features |
 
 Output: current signal box → backtest summary table → feature importance list → caveats (past performance, data snooping). Cite **Longbridge Securities** / **数据来源：长桥证券** / **數據來源：長橋證券**.
+
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+> The above is for reference only and does not constitute investment advice. Investment decisions should be made based on your own risk tolerance.
 
 ## Error handling
 

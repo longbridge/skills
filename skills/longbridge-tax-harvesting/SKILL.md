@@ -88,19 +88,19 @@ Symbol   Cost Basis  Current Price  Unreal. Loss  Hold Period  Tax Saving Est.
 TSLA.US  $280.00     $210.00        −$7,000       8 months     ~$2,590 (37% rate)
 XOM.US   $120.00     $108.00        −$1,200       14 months    ~$240 (20% rate)
 
-[Harvest Recommendations (ranked by tax saving)]
-1. TSLA.US  Sell → realise −$7,000 loss → estimated tax saving ~$2,590
-   Substitute: RIVN.US / LCID.US / DRIV ETF (avoid repurchasing TSLA for 30 days)
+[Tax Harvesting Opportunity Analysis (ranked by potential tax saving)]
+1. TSLA.US  若实现亏损 $7,000（示例）→ 预计可节省税款约 $2,590（仅为说明税务亏损收割原理，不构成具体操作建议）
+   Substitute reference (for wash-sale avoidance illustration): RIVN.US / LCID.US / DRIV ETF (do not repurchase TSLA within 30 days of any sale)
    ⚠️ Wash-sale risk if TSLA was purchased in last 30 days
 
-2. XOM.US   Sell → realise −$1,200 loss → estimated tax saving ~$240
-   Substitute: CVX.US or XLE ETF
+2. XOM.US   若实现亏损 $1,200（示例）→ 预计可节省税款约 $240（仅供参考）
+   Substitute reference: CVX.US or XLE ETF
 
 [Wash-Sale Warnings]
 - Check recent purchase dates; do not repurchase within 30 days of sale.
 - Purchasing a call option on the sold stock may also trigger wash-sale.
 
-⚠️ 本分析仅供参考，不构成税务建议。请咨询持牌税务顾问。/ 本分析僅供參考，不構成稅務建議。請諮詢持牌稅務顧問。/ For reference only. Not tax advice. Consult a qualified tax professional.
+⚠️ 本分析仅供参考，不构成投资建议，亦不构成税务建议。以上内容仅为说明税务亏损收割原理，不代表对任何具体操作的建议。请咨询持牌税务顾问。投资决策请结合自身风险承受能力独立判断。/ 本分析僅供參考，不構成投資建議，亦不構成稅務建議。以上內容僅為說明稅務虧損收割原理，不代表對任何具體操作的建議。請諮詢持牌稅務顧問。/ For reference only. Not investment advice or tax advice. The above examples are for illustrative purposes only and do not constitute specific trading recommendations. Consult a qualified tax professional. Please make investment decisions independently based on your own risk tolerance.
 ```
 
 ## Error handling
