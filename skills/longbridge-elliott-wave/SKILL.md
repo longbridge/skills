@@ -283,7 +283,16 @@ Usage:
 python3 scripts/signal_engine.py --kline /tmp/kline_day.json --symbol AAPL.US
 ```
 
-Dependencies: `pip install pandas numpy`
+> ⚠️ **额外依赖 / Extra dependency required**
+>
+> `scripts/signal_engine.py` 依赖 `pandas` 和 `numpy`，使用前请确认已安装：
+>
+> ```bash
+> pip install pandas numpy
+> ```
+>
+> 通常已预装；若报 `ModuleNotFoundError`，运行上述命令后重试。
+> Requires `pandas` and `numpy` — usually pre-installed. Run `pip install pandas numpy` if you see `ModuleNotFoundError`.
 
 ## Reference Files
 
