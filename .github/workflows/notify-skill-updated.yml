@@ -1,0 +1,31 @@
+name: Notify skill updated
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'OSS environment to upload to'
+        required: true
+        default: 'canary'
+        type: choice
+        options:
+          - canary
+          - release
+          - both
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger developers skill pack
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DEVELOPERS_DISPATCH_TOKEN }}
+          repository: longbridge/developers
+          event-type: skill-updated
+          client-payload: |
+            {
+              "sha": "${{ github.sha }}",
+              "ref": "${{ github.ref_name }}",
+              "environment": "${{ github.event.inputs.environment }}"
+            }
