@@ -152,6 +152,39 @@ If no method in the live library is a clean match, say so plainly: *"No matching
 
 TAM numbers are central to the model and easy to fabricate. The skill enforces source priority and explicit labelling.
 
+### ARK TAM definition (use this lens, not consensus new-market TAM)
+
+ARK's TAM is **not** "the size of the new service market" — it is **the total incumbent spend that the technology is going to displace**, computed bottom-up:
+
+```
+TAM = incumbent-market unit count × $/unit (the old-economy spend being replaced)
+```
+
+This lens is typically **10–100× larger** than consensus research-house TAM, because it measures the entire economy block being substituted, not the new service's standalone market.
+
+| Disruption area | ❌ Consensus new-market TAM (do not use as primary) | ✅ ARK-lens TAM (use this) | WebSearch suggestion |
+|---|---|---|---|
+| Autonomous driving / Robotaxi | Mobility-as-a-service market $100–400B | Global passenger miles × $/mile ≈ $10T+ total transport spend | `"global transportation spending" 2030` |
+| Energy storage / EV | EV sales market $1–2T | Global ICE car + fuel + maintenance total spend ≈ $5–8T | `"global automotive market" "fuel spend" 2030` |
+| AI & data | Cloud-AI services market $500B | Global enterprise IT / software spend being displaced by AI ≈ $3–5T | `"global enterprise IT spending" 2030` |
+| Genomic revolution | Gene therapy / diagnostics market $500B | Global pharma R&D + treatment spend being displaced ≈ $1–2T | `"global pharmaceutical market" 2030` |
+| Blockchain / fintech | Crypto market / DeFi TVL | Global financial-services revenue being disintermediated ≈ $20T+ | `"global financial services revenue" 2030` |
+
+**Bottom-up computation (when no single authority covers the full incumbent market):**
+
+1. Find the incumbent unit count (vehicles on the road, annual approved drugs, enterprise data bytes, etc.).
+2. Find the average spend per unit ($/mile, $/prescription, $/GB).
+3. Multiply: incumbent units × $/unit = displacement TAM.
+4. Tag it `估算 — bottom-up incumbent displacement` — the method itself is ARK's published approach and the components have sources, so this does not count as fabrication.
+
+**Tier mapping under the ARK lens:**
+
+- **High / optimistic** → use the **ARK incumbent-displacement TAM** above.
+- **Base** → use a **consensus research-house figure** (Grand View, Mordor, MarketsandMarkets, Gartner, IDC, etc.).
+- **Low / conservative** → use a **serviceable sub-segment** (e.g. for RKLB only small-launch; for TSLA only robotaxi share-gain).
+
+The plain-language analogy in the report must explain to the reader why these three tiers can differ by 10–30×, and which lens each tier reflects.
+
 ### Source priority
 
 | Priority | Source type | Examples | Where to find it |
@@ -160,7 +193,7 @@ TAM numbers are central to the model and easy to fabricate. The skill enforces s
 | 2 | Company self-disclosure | IR deck, annual report, prospectus TAM statement | `longbridge sec-filings` + WebSearch |
 | 3 | Academic / think-tank | Stanford AI Index, Epoch AI, RethinkX, NHGRI | WebSearch |
 | 4 | ARK Invest public reports | ARK Big Ideas annual (free) | `site:ark-invest.com big ideas` |
-| 5 | Internal estimate | Logic-based bottom-up | Must be tagged `估算` (estimated) — never given a fake publisher |
+| 5 | Internal estimate | Logic-based bottom-up (incl. ARK incumbent-displacement) | Must be tagged `估算` (estimated) — never given a fake publisher |
 
 ### Three tiers
 
@@ -208,10 +241,20 @@ Each tier line in the report must carry: numeric value, **assumption-in-one-sent
 
 | Variable | Bull (optimistic) | Base | Bear (pessimistic) |
 |---|---|---|---|
-| TAM | Use TAM-high | Use TAM-base | Use TAM-low |
-| Company market share at year 5 | Aggressive but defensible | Mid-path | Slower share gain |
-| Net margin at year 5 | Scale-economy + Wright's-Law tail | Industry-adjusted | Margin compression |
-| Terminal multiple (P/E or P/S) | Sector mature-stage upper band | Sector mature-stage median | Sector mature-stage lower band |
+| TAM | ARK incumbent-displacement TAM (存量市场口径) | Consensus research-house TAM | Serviceable sub-segment (conservative subset) |
+| Company market share at year 5 | Platform winner-take-most: **40–70%** (strong network effects) / **20–40%** (defensible moat, competitive market) | Competitive equilibrium midpoint: **15–30%** | Penetration stalls: **5–15%** |
+| Net margin at year 5 | Pure software / platform (zero marginal cost): **60–90%**; hardware + software hybrid: **25–45%** | Industry-adjusted midpoint: **15–30%** | Competitive compression: **5–15%** |
+| Terminal multiple (P/E or P/S) | Still in high-growth at year 5 (>30%/yr revenue growth): **P/E 60–100×** or **P/S 15–25×**; growth slowing (15–30%): **P/E 35–60×** | Growth normalising (10–20%): **P/E 25–40×** | Growth into single digits: **P/E 15–25×** |
+
+**Terminal-multiple selection logic (key ARK-method departure):**
+
+ARK does **not** mechanically compress the multiple to a "mature-stage P/E". Instead, the multiple is chosen based on **which point on the growth curve the company is still on at year 5**.
+
+- Decision rule: if year-5 revenue growth is projected to still be >30%/yr, disruption is **not yet complete** — use a growth-stage multiple, not a mature-stage one.
+- Calibration anchor: **PEG ≈ 1**.
+  - Growth ~40% → reasonable P/E ≈ 40×.
+  - Growth ~70% → reasonable P/E ≈ 70×.
+- The chosen multiple per scenario must be reported alongside the implied year-5 growth rate so the reader can spot-check the PEG.
 
 ### Formula (per scenario)
 
@@ -284,3 +327,5 @@ ARK methodology is a **5-year** lens.
 - Never give TAM a fabricated publisher. Estimates are labelled `估算`.
 - Never use the words "buy", "sell", "strongly recommend", or "must hold" in the action frame.
 - Never present ARK's historical performance (ARKK ETF) as a credibility anchor for this skill — the skill is independent from ARK Invest.
+- Never default to "mature-stage P/E" for a company still growing revenue at >30% at year 5 — use PEG ≈ 1 as the calibration anchor.
+- Never use consensus new-market TAM as the High tier. The High tier must be ARK-style incumbent-displacement TAM; consensus goes to Base; conservative sub-market goes to Low. Explain the difference in the plain-language block.
