@@ -22,11 +22,14 @@ When the user's input language is Chinese, render every English label in the tem
 | Source | 来源 | 來源 |
 | Current price | 当前价 | 當前價 |
 | Innovation platform | 创新平台 | 創新平台 |
-| AI & data | AI 与大数据 | AI 與大數據 |
-| Robotics & automation | 自动化与机器人 | 自動化與機器人 |
-| Energy storage | 能源存储 | 能源存儲 |
-| Genomic revolution | 基因革命 | 基因革命 |
-| Blockchain & fintech | 区块链与金融科技 | 區塊鏈與金融科技 |
+| Artificial Intelligence | 人工智能 | 人工智能 |
+| Robotics & Autonomous Mobility | 机器人与自动化出行 | 機器人與自動化出行 |
+| Energy Storage & EV Adoption | 能源存储与电动车渗透 | 能源存儲與電動車滲透 |
+| Multiomic Sequencing & AI Drug Discovery | 多组学测序与 AI 制药 | 多組學測序與 AI 製藥 |
+| Public Blockchains & Digital Assets | 公链与数字资产 | 公鏈與數字資產 |
+| Value-chain tier | 价值链层级 | 價值鏈層級 |
+| Upstream / Core / Downstream / Adjacent | 上游 / 核心 / 下游 / 邻接 | 上游 / 核心 / 下游 / 鄰接 |
+| Convergence theme | 平台交叉主题 | 平台交叉主題 |
 | One-line conclusion | 一句话结论 | 一句話結論 |
 | Core bet | 核心赌注 | 核心賭注 |
 | Suitability check | 适用性检查 | 適用性檢查 |
@@ -90,15 +93,21 @@ As-of: {date}   Currency: {ccy}   Current price: {p}
 Source: Longbridge Securities + WebSearch (see appendix)
 
 [1] One-line conclusion
-     {Company} sits on the {platform name(s)} platform. Under the ARK-style model the
-     weighted 5-year target price is {weighted_target}, implying {▲/▼ XX.X%} vs current price.
+     {Company} sits on the {platform name(s)} platform, value-chain tier: {upstream / core / downstream / adjacent}
+     {— convergence: {AI × Robotics | AI × Multiomic | etc.} if applicable}.
+     Under the ARK-style model the weighted 5-year target price is {weighted_target},
+     implying {▲/▼ XX.X%} vs current price.
      Core bet: "{single-sentence statement of the long-run thesis, e.g. 'autonomous-ride-hail scales globally'}".
 
 [2] Suitability check
-     Platform fit:                    {Strong / Medium / Weak} — {one-line evidence}
+     Platform fit:                    {Strong / Medium / Weak} — {platform + tier + 1-line evidence;
+                                                                  e.g. "AI platform, upstream — designs
+                                                                  AI accelerators, > 80% revenue from
+                                                                  data-center GPUs"}
      Innovation revenue share:        {Strong / Medium / Weak} — {one-line evidence + figure}
      R&D intensity:                   {Strong / Medium / Weak} — {one-line evidence + figure}
      Management innovation vision:    {Strong / Medium / Weak} — {one-line evidence + citation}
+     Convergence (if any):            {AI × Robotics | AI × Multiomic | none}
      → Pass {— note: "framework applies; some assumptions lower-confidence" if applicable}
 
 [3] TAM (Total Addressable Market)

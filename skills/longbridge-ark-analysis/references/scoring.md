@@ -10,15 +10,79 @@ ARK methodology is a gate, not a soft preference. A name is either inside the di
 
 ### Five innovation platforms (one or more must apply)
 
-| Platform | Representative directions | Example tickers (for orientation only) |
-|---|---|---|
-| AI & data | Foundation models, cloud, data infrastructure, AI chips | NVDA, GOOG, MSFT |
-| Robotics & automation | Autonomous driving, industrial robotics, drones, automation software | TSLA, PATH |
-| Energy storage | Battery technology, EV powertrain, grid storage, solar | TSLA, ENPH |
-| Genomic revolution | Gene editing, multi-omics, precision medicine, biotech tools | CRSP, PACB |
-| Blockchain & fintech | Crypto, on-chain finance, digital payments, brokerage rails | COIN, SQ |
+Aligned with ARK Invest's most recent Big Ideas framing. Each platform is evaluated as a value chain — a company can sit on **any tier** (upstream / core / downstream) and still be in-platform, provided its revenue depends materially on that tier's economics.
 
-A company can sit on more than one platform; for dual-platform names, name both in the report.
+> Example tickers below are for **orientation only**, not recommendations. If a name appears here, it does **not** auto-pass the suitability gate — the four-dimension scoring still applies.
+
+#### Platform 1 — Artificial Intelligence
+
+Foundation models, agentic AI, AI compute, AI-native applications. ARK's emphasis in recent reports has shifted from "AI as a feature" to "AI as a general-purpose platform" — compute infrastructure, software agents, and enterprise productivity.
+
+| Tier | Examples of in-tier business | Example tickers |
+|---|---|---|
+| Upstream | AI accelerators, advanced-packaging, HBM memory, foundry capacity, networking silicon | NVDA, AVGO, AMD, TSM, ASML, MU |
+| Core | Foundation-model platforms, hyperscale cloud, AI training/inference platforms | MSFT, GOOGL, META, ORCL |
+| Downstream | AI-native enterprise software, agentic workflow, data-analytics platforms | PLTR, NOW, CRM, SNOW |
+| Adjacent infra | Data-center power, cooling, electrical equipment for AI build-out | VRT, ETN, CEG, VST |
+
+#### Platform 2 — Robotics & Autonomous Mobility
+
+Autonomous taxis, humanoid robots, drones, industrial automation, machine vision. Humanoid robotics has been **newly elevated** in ARK's recent Big Ideas and should be treated as a first-class direction.
+
+| Tier | Examples of in-tier business | Example tickers |
+|---|---|---|
+| Upstream | LIDAR, sensors, precision actuators, robotics motors, vision chips | MBLY, OUST, KEYS |
+| Core | Autonomous platforms, humanoid robotics, robotaxi operators, drone platforms | TSLA, GOOGL (Waymo), PATH, ABB |
+| Downstream | Autonomous ride-hailing demand, robotic logistics, automated warehouse | UBER, AMZN, SHOP (logistics arm) |
+| Adjacent infra | Industrial-automation OEMs, machine-vision systems | ROK, FANUY, EMR |
+
+#### Platform 3 — Energy Storage & EV Adoption
+
+EVs, battery technology, grid storage, charging infrastructure. ARK frames this as the **EV S-curve adoption story** plus the Wright's-Law battery-cost curve.
+
+| Tier | Examples of in-tier business | Example tickers |
+|---|---|---|
+| Upstream | Lithium / cobalt / nickel miners, battery materials, cell makers, separator film | ALB, SQM, CATL, LG Energy Solution, Panasonic |
+| Core | EV OEMs, vertically integrated battery + vehicle platforms | TSLA, BYD, RIVN, LI, NIO |
+| Downstream | Charging networks, fleet electrification, EV insurance / financing | CHPT, EVgo, BLNK |
+| Adjacent infra | Stationary grid storage, home energy storage, microinverters, solar inverters | ENPH, SEDG, FLNC |
+
+#### Platform 4 — Multiomic Sequencing & AI Drug Discovery
+
+Gene editing, multiomic sequencing, AI-driven drug discovery, precision medicine, synthetic biology. ARK's recent emphasis is the **AI × Genomics convergence** — AI compressing both discovery cost and trial timelines.
+
+| Tier | Examples of in-tier business | Example tickers |
+|---|---|---|
+| Upstream | Sequencers, long-read platforms, reagents, lab equipment | ILMN, PACB, ONT, TMO, DHR |
+| Core | Gene-editing therapeutics, AI-drug-discovery platforms, mRNA platforms | CRSP, NTLA, BEAM, RXRX, SDGR, ABCL |
+| Downstream | Liquid biopsy, cancer diagnostics, precision-medicine assays | EXAS, NTRA, GH, NVTA |
+| Adjacent | Synthetic biology platforms, cell & gene therapy CDMOs | DNA, ZY, CRL |
+
+#### Platform 5 — Public Blockchains & Digital Assets
+
+Bitcoin, public layer-1 blockchains, stablecoins, on-chain finance, tokenization of real-world assets, on-chain payments. ARK's recent framing emphasizes **bitcoin as a monetary network**, **stablecoins as payment rails**, and **tokenization as the bridge to traditional finance**.
+
+| Tier | Examples of in-tier business | Example tickers |
+|---|---|---|
+| Upstream | Mining ASICs, mining-fleet operators, low-cost power for mining | MARA, RIOT, CLSK, HUT |
+| Core | Crypto exchanges, custody, on-chain protocols, bitcoin treasury vehicles | COIN, HOOD (crypto), MSTR |
+| Downstream | Stablecoin issuers/distributors, on-chain payments, tokenization platforms | SQ / Block, PYPL (stablecoin rail) |
+| Adjacent | Wallet infrastructure, smart-contract dev tools, RWA tokenization | (largely private; tag via WebSearch) |
+
+### Convergence themes (cross-platform — ARK's recent emphasis)
+
+ARK's recent Big Ideas reports lean heavily on **platform convergence**. Where a name straddles two platforms via convergence, name both in the suitability section and treat the convergence as a strengthening signal — not a weakening one.
+
+| Convergence | Description | Example exposure |
+|---|---|---|
+| AI × Robotics | Foundation-model intelligence inside physical robots (humanoid, autonomous vehicles, factory bots) | TSLA (Optimus + FSD), Figure AI (private), GOOGL (Waymo) |
+| AI × Multiomic | AI compresses drug-discovery cost & trial timelines; lab-in-the-loop biology | RXRX, SDGR, ABCL, NVDA (BioNeMo) |
+| AI × Blockchain | Autonomous on-chain agents, AI-native crypto protocols | (mostly private; track via ARK Big Ideas + WebSearch) |
+| Robotics × Energy Storage | EVs as data + battery platforms; vehicle-to-grid energy economics | TSLA, BYD |
+| Blockchain × Energy | Bitcoin mining as flexible grid load; renewable-powered mining | CLSK, MARA |
+| Multiomic × Robotics | Lab automation, automated cell engineering | (largely private; e.g. Ginkgo via DNA) |
+
+A company can sit on more than one platform; for dual-platform / convergence names, name both in the report and treat the convergence as a positive signal in the management-vision dimension.
 
 ### Four-dimension suitability scoring
 
@@ -26,10 +90,10 @@ Each dimension is tagged **强 (strong) / 中 (medium) / 弱 (weak)** with one-l
 
 | Dimension | Source | 强 (strong) | 中 (medium) | 弱 (weak) |
 |---|---|---|---|---|
-| Platform fit | `basicinfo` + `company-profile` + recent `news` | Core business clearly inside ≥ 1 platform | Some platform-adjacent business but not the main P&L | No meaningful overlap with the five platforms |
-| Innovation revenue share | `financial-report --kind IS` (segment mix) + recent earnings deck | Innovation-related revenue > 50% | 20% – 50% | < 20% |
+| Platform fit | `basicinfo` + `company-profile` + recent `news` | Core business clearly inside ≥ 1 platform's **core or upstream** tier, OR on a convergence (e.g. AI × Robotics) | Business sits in **downstream / adjacent infrastructure** tier of a platform, OR partial exposure not the main P&L | No meaningful overlap with the five platforms at any tier |
+| Innovation revenue share | `financial-report --kind IS` (segment mix) + recent earnings deck | Innovation-related revenue (across all in-platform tiers) > 50% | 20% – 50% | < 20% |
 | R&D intensity | `financial-report --kind IS` (R&D ÷ revenue) | Materially above industry median | Near industry median | Below industry median |
-| Management innovation vision | `news` + `sec-filings` + IR materials | Quantified innovation roadmap in deck / call / letter | Innovation mentioned but no quantification | No clear innovation narrative |
+| Management innovation vision | `news` + `sec-filings` + IR materials | Quantified innovation roadmap in deck / call / letter; named platform or convergence direction | Innovation mentioned but no quantification | No clear innovation narrative |
 
 ### Pass / reject matrix
 
