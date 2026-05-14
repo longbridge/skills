@@ -75,12 +75,12 @@ longbridge news <SYMBOL> --format json
 |---|---|---|---|---|---|---|
 | 1 | NVDA.US | NVIDIA | $2.5T | Momentum + Thematic | +40% in 60d; AI capex cycle | ... |
 
-For each top idea, add a one-paragraph investment rationale covering:
-- Why now (catalyst or setup)
-- What to watch (key metric or event)
+For each top idea, add a one-paragraph 分析摘要 / Analysis summary covering:
+- 近期催化剂或关注事项 / Recent catalysts or watchpoints（供参考）
+- 关键指标与事件 / Key metrics and events
 - Key risk (one-liner bear case)
 
-**Disclaimer**: These are idea-generation outputs, not buy recommendations. Always conduct your own due diligence.
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ The above is for reference only and does not constitute investment advice.
 
 ## Error handling
 

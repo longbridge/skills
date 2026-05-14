@@ -49,9 +49,8 @@ Trigger on prompts asking for:
 4. For each detected event:
    - Summarise the event details (size, timing, counterparties)
    - State the typical historical price reaction pattern
-   - Recommend a trading window (entry / exit timing)
    - Assess current price positioning relative to the event
-5. Output a ranked opportunity list.
+5. Output a ranked event list for user reference.
 
 > If unsure of exact flag names, run `longbridge <subcommand> --help` before proceeding.
 
@@ -77,7 +76,7 @@ longbridge kline <SYMBOL> --period day --count 60 --format json
 ## Output structure
 
 ```
-EVENT OPPORTUNITY REPORT — <SYMBOL>  <Date>
+EVENT ANALYSIS REPORT — <SYMBOL>  <Date>
 
 EVENTS DETECTED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -85,9 +84,8 @@ Event 1: MAJOR SHAREHOLDER INCREASE
   Announced: <date>
   Details:   <shareholder> increased stake by x.x% to xx.x%
   Amount:    $xxx million
-  Historical pattern: +x–x% in 10 trading days post-announcement
-  Trading window: Buy within 2 days of announcement; take profit at day 8–10
-  Current price vs. announcement: +x.x% (still within historical window)
+  Historical market reaction reference: +x–x% in 10 trading days post-announcement (historical average)
+  Current price vs. announcement: +x.x%
   Signal strength: ★★★★☆
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -96,12 +94,15 @@ Event 2: LOCKUP EXPIRY
   Shares:       xxx million shares (~xx% of free float)
   Avg cost:     $xx.xx (current price: $xx.xx — holders at +xx% gain)
   Selling risk: [High | Moderate | Low]
-  Historical pattern: -x–x% in 5 days around expiry
-  Trading window: Avoid / reduce before expiry; re-enter 5 days after
+  Historical market reaction reference: -x–x% in 5 days around expiry (historical average)
 
-RANKED OPPORTUNITIES
-#1  <Event type>  Signal: ★★★★☆  Risk: Medium  Window: x–x days
-#2  <Event type>  Signal: ★★★☆☆  Risk: High    Window: x–x days
+RANKED EVENT LIST
+#1  <Event type>  Signal: ★★★★☆  Risk: Medium
+#2  <Event type>  Signal: ★★★☆☆  Risk: High
+
+---
+以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+The above is for informational purposes only and does not constitute investment advice. Investment decisions should be made independently based on your own risk tolerance.
 ```
 
 ## Error handling

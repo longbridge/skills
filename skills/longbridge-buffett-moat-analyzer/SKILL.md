@@ -133,7 +133,7 @@ Output rules for reconciliation:
 
 Single-stock diagnostic with 7 fixed sections (full template in `references/output.md`):
 
-1. **Diagnostic summary card** — star ratings on 5 dimensions, one-line verdict ("Buffett would likely buy / hold / watch / pass"), badge color (🟢🟡🟠🔴), suggested minimum holding period.
+1. **Diagnostic summary card** — star ratings on 5 dimensions, 综合评级 / Overall Rating: ★★★★★ — [强护城河/宽护城河/待观察/不符合标准 / Strong moat / Wide moat / Watch / Does not meet criteria], badge color (🟢🟡🟠🔴), suggested minimum holding period.
 2. **Dimension 1 — Business model & moat** — moat type (brand / network / cost / switching / resource), width (wide / narrow / none), pricing-power evidence, 3–5 supporting points.
 3. **Dimension 2 — Financial health** — ROE 10y track, FCF persistence, leverage, gross-margin trajectory, capex intensity. Each metric vs Buffett threshold with current value.
 4. **Dimension 3 — Management & capital allocation** — insider holding & changes, buyback/dividend history, M&A track record, alignment signals.

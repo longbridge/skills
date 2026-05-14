@@ -1,7 +1,7 @@
 ---
 name: longbridge-buffett-moat-stock-screener
 description: |
-  Buffett-style stock screener — "What would Buffett buy now?" Generates 3–5 candidate stocks from a market / sector / preference query via a two-layer model: hard quant filter (ROE 5y ≥15%, debt/asset ≤50%, FCF positive 3y, listed ≥5y, gross margin ≥30%) → qualitative moat scoring (moat 35% / capital allocation 20% / earnings predictability 20% / valuation 15% / runway 10%). Longbridge CLI first, MCP fallback, WebSearch for gaps only. Output: candidate cards with moat-type tag, quantitative highlights, verdict (🟢 likely buy / 🟡 wait for price / 🔴 not at this price), deep-dive CTA to `longbridge-buffett-moat-analyzer`. Mandatory holding-period education + data-source appendix. Disqualifies airlines, pre-revenue biotech, ST, listing<5y. Triggers: "巴菲特会买什么", "巴菲特选股", "巴菲特风格的股票", "护城河选股", "宽护城河股票", "价值投资选股", "10年不动的股票", "定价权强的公司", "巴菲特會買什麼", "巴菲特選股", "護城河選股", "寬護城河股票", "Buffett screener", "what would Buffett buy", "wide-moat screener", "quality compounder screen", "Berkshire-style screen", "pricing-power screen".
+  Buffett-style stock screener — "What would Buffett buy now?" Generates 3–5 candidate stocks from a market / sector / preference query via a two-layer model: hard quant filter (ROE 5y ≥15%, debt/asset ≤50%, FCF positive 3y, listed ≥5y, gross margin ≥30%) → qualitative moat scoring (moat 35% / capital allocation 20% / earnings predictability 20% / valuation 15% / runway 10%). Longbridge CLI first, MCP fallback, WebSearch for gaps only. Output: candidate cards with moat-type tag, quantitative highlights, verdict (🟢 meets Buffett criteria / 🟡 partially meets criteria / 🔴 does not meet criteria), deep-dive CTA to `longbridge-buffett-moat-analyzer`. Mandatory holding-period education + data-source appendix. Disqualifies airlines, pre-revenue biotech, ST, listing<5y. Triggers: "巴菲特会买什么", "巴菲特选股", "巴菲特风格的股票", "护城河选股", "宽护城河股票", "价值投资选股", "10年不动的股票", "定价权强的公司", "巴菲特會買什麼", "巴菲特選股", "護城河選股", "寬護城河股票", "Buffett screener", "what would Buffett buy", "wide-moat screener", "quality compounder screen", "Berkshire-style screen", "pricing-power screen".
 license: MIT
 metadata:
   author: longbridge
@@ -67,9 +67,9 @@ Failure modes the screener must flag honestly:
    - Moat type & width (35%) · Capital allocation (20%) · Earnings predictability (20%) · Valuation reasonableness (15%) · Long-term industry runway (10%).
    Full rubric in `references/criteria.md`. Each dimension also gets a 1–5 star rating shown on the candidate card.
 8. **Verdict matrix** — combine Layer 2 quality stars (moat + financials) with valuation tier. See `references/criteria.md` §Verdict matrix. Maps to one of three card verdicts:
-   - 🟢 **大概率会买 / Likely buy** — wide moat + clean financials + price 充足/一般.
-   - 🟡 **可能会考虑 / Maybe — wait for price** — wide moat + clean financials + price 偏贵.
-   - 🔴 **目前估值不合适 / Not at this price** — wide moat but price 高估, OR moat narrow at any price (redirect to Graham).
+   - 🟢 **符合巴菲特选股标准 / Meets Buffett criteria** — wide moat + clean financials + price 充足/一般.
+   - 🟡 **部分符合，关注估值变化 / Partially meets criteria** — wide moat + clean financials + price 偏贵.
+   - 🔴 **当前不符合标准 / Does not meet criteria** — wide moat but price 高估, OR moat narrow at any price (redirect to Graham).
 9. **Holding-period mapping** — derive expected min hold from moat width (★★★★★ → 5y+, ★★★★ → 3–5y, ★★★ → 1–3y, ★★ or below → not a Buffett candidate). See `references/criteria.md`.
 10. **Rank and emit 3–5 candidate cards** (not a giant leaderboard — the design doc's deliberate cap). Follow the candidate-card template in `references/output.md`.
 11. **Mandatory closing blocks** (every output, no exceptions):
@@ -185,7 +185,7 @@ Default rank key = Layer-2 composite (high to low). User can override to: moat-s
 Name (Code) · Market · Sector              Quality stars: ★★★★★
 Moat type: {brand / network / cost / switching / regulatory / resource}
 Top-3 highlights (quantitative first): {ROE x%}, {Gross margin x%}, {FCF / capex intensity}
-Buffett verdict: 🟢 大概率会买 / 🟡 可能会考虑 / 🔴 目前估值不合适
+评级参考: 🟢 符合巴菲特选股标准 / 🟡 部分符合，关注估值变化 / 🔴 当前不符合标准
 Valuation read: {充足 / 一般 / 偏贵 / 高估} — current price vs 10y band
 Min. holding period: {5y+ / 3–5y / 1–3y}
 [深度诊断这只股票 → longbridge-buffett-moat-analyzer <CODE>]
@@ -195,7 +195,10 @@ After the cards, every output must include:
 1. **Selection rationale** — 2–3 sentences on (a) why these names together, (b) market caveats right now, (c) which one to deep-dive first.
 2. **Holding-period & user-education block** — single-language table (in the user's input language) comparing Buffett-style expectations vs short-term/speculative expectations (holding time / entry pattern / drawdown tolerance / position logic / action frequency).
 3. **Data Source Appendix (MANDATORY)** — every field on every card, every Longbridge endpoint hit, every WebSearch hit (publisher + URL + access date). The final line is a per-row reconciliation summary (clean pass / within-tolerance residuals / per-row drops).
-4. **Disclaimer** — disclaimer variant matching the user's input language only, picked from `references/output.md` §Disclaimer variants. Never print multiple language variants.
+4. **Disclaimer** — disclaimer variant matching the user's input language only, picked from `references/output.md` §Disclaimer variants. Never print multiple language variants. Every output must end with the following statement (in the user's input language):
+   - 简体：以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+   - 繁體：以上內容僅供參考，不構成投資建議。投資決策請結合自身風險承受能力獨立判斷。
+   - English: The above is for informational purposes only and does not constitute investment advice. Please make investment decisions independently based on your own risk tolerance.
 
 ## Error handling
 

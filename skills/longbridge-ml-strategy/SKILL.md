@@ -49,9 +49,9 @@ If unavailable, fall back to a simpler logistic-regression model.
    - Predict probability for the current bar
 
 4. **Signal generation**:
-   - prob > 0.60 → Buy signal
-   - prob < 0.40 → Sell/Short signal
-   - Otherwise → Hold / neutral
+   - prob > 0.60 → 模型上涨概率偏高 / Model upside probability elevated
+   - prob < 0.40 → 模型下跌概率偏高 / Model downside probability elevated
+   - Otherwise → 模型无方向性预测 / No directional signal from model
 
 5. **Backtest metrics** (on out-of-sample predictions):
    - Win rate (% correct directional calls)
@@ -84,6 +84,9 @@ longbridge kline <SYMBOL> --period day --count 504 --format json
 | Top features | 重要特征 | 重要特徵 | Top features |
 
 Output: current signal box → backtest summary table → feature importance list → caveats (past performance, data snooping). Cite **Longbridge Securities** / **数据来源：长桥证券** / **數據來源：長橋證券**.
+
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+> The above is for reference only and does not constitute investment advice. Investment decisions should be made based on your own risk tolerance.
 
 ## Error handling
 

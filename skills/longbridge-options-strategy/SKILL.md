@@ -48,7 +48,9 @@ longbridge option volume <SYMBOL> --format json
 
 ## Strategy matrix
 
-| Market view | IV level | Recommended strategy | Risk profile |
+> 以下为不同市场环境下常见的期权策略介绍，仅供教育性参考，不构成操作建议。
+
+| Market view | IV level | 常见策略参考 / Common strategy reference | Risk profile |
 |---|---|---|---|
 | Bullish | Any | Long call / bull call spread | Limited loss, capped or unlimited gain |
 | Bullish | Rich | Bull put spread (sell put spread) | Collect premium, limited risk |
@@ -93,7 +95,7 @@ Why this fits: {2-sentence rationale linking market view + IV}
 [Alternative: {Name}]
 {Brief description and trade-offs}
 
-⚠️ 以上分析仅供参考，不构成投资建议。/ 以上分析僅供參考，不構成投資建議。/ For reference only. Not investment advice.
+⚠️ 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ The above is for reference only and does not constitute investment advice.
 ```
 
 ## Error handling

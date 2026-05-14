@@ -80,11 +80,14 @@ vs market: ±x.x%  vs sector: ±x.x%
 ## Qualitative Check
 Management tone, guidance revision, key risks materialised / resolved.
 
-## Action Recommendation
-☐ Hold — thesis intact, no change needed
-☐ Add — beat on key metrics, valuation still attractive
-☐ Trim — partial miss, reduce exposure
-☐ Exit — thesis broken, stop-loss triggered
+## 指标变化摘要 / Key Metrics Update
+
+| 维度 | 预期 | 实际 | 偏差 |
+|---|---|---|---|
+| (根据实际分析填写) | | | |
+
+> 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+> The above is for reference only and does not constitute investment advice. Investment decisions should be made based on your own risk tolerance.
 
 Rationale: ...
 Next review trigger: ...

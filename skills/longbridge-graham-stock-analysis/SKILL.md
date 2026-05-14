@@ -117,10 +117,15 @@ Single-stock diagnostic with **8 fixed sections** (full template in `references/
 4. Holding-period view (catalyst presence, waiting cost via dividend yield, expected horizon range)
 5. Liquidation-value table (default vs industry-adjusted haircuts, adjusted NCAV per share)
 6. Safety-margin price band (current price / default NCAV line / adjusted NCAV line / Graham buy line = adjusted NCAV × 0.67)
-7. Three-line verdict (valuation level / adjusted safety margin / holding recommendation)
+7. Three-line summary (valuation level / adjusted safety margin / Graham quantitative assessment — neutral, factual, no buy/sell recommendation)
 8. **Data source appendix** — mandatory; every figure tagged with source, fetch time, and period (and any within-tolerance reconciliation note for that field)
 
 Always close with the boilerplate disclaimer (see `references/output.md` §Disclaimer).
+
+> **Compliance note**: The three-line summary in section 7 must be stated as objective metric readings, not directional recommendations. For example:
+> - "当前价格低于格雷厄姆计算的内在价值估算，符合格雷厄姆 NCAV 量化标准（仅供参考）" — not "建议买入 / 低估值建议关注".
+> - "Current price is below the Graham-derived intrinsic value estimate and meets Graham NCAV quantitative criteria (for reference only)" — not "consider buying" or "recommended".
+> - The output must conclude with: 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ The above is for reference only and does not constitute investment advice. Please make investment decisions independently based on your own risk tolerance.
 
 ## Error handling
 

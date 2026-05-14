@@ -15,7 +15,7 @@ metadata:
 
 # longbridge-graham-screener
 
-Prompt-only batch screener. Given a market or index universe, applies Graham's six hard filters (NCAV, PE, PB, dividend yield, debt coverage, earnings stability), scores each name on a 100-point static + dynamic composite, and returns a ranked cigar-butt candidate list with Graham buy lines, holding-period expectation, and value-trap warnings.
+Prompt-only batch screener. Given a market or index universe, applies Graham's six hard filters (NCAV, PE, PB, dividend yield, debt coverage, earnings stability), scores each name on a 100-point static + dynamic composite, and returns a ranked list of stocks meeting Graham's quantitative criteria, with Graham buy lines, holding-period expectation, and value-trap warnings.
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
@@ -48,7 +48,7 @@ Two failure modes the user must be able to distinguish — and the screener must
 7. **Reconciliation gate per row**: if balance-sheet sum / current-assets sum / shares×price mismatches the reported total by >3%, drop the row from the leaderboard with a "data anomaly" note (do not silently average).
 8. **Rank by adjusted score** (descending); default top 10–20 returned. Emit the table + market summary + waiting-cost note + suggested next step.
 9. **Append a Data Source Appendix** (mandatory) listing every Longbridge endpoint hit, every WebSearch hit (publisher + URL + access date), fetch timestamps, and any field substitutions.
-10. **End every output** with the recommendation: «本筛选器仅静态硬指标 + 通用动态因子，未考虑公司层面主观估值陷阱。命中候选请用 `longbridge-graham-stock-analysis` 做单股深度诊断。»
+10. **End every output** with: «筛选结果仅反映量化指标的符合程度，不代表对上述标的的投资建议。投资决策请结合个人情况独立判断。/ Screening results only reflect quantitative criteria compliance and do not constitute investment advice. 本筛选器仅静态硬指标 + 通用动态因子，未考虑公司层面主观估值陷阱。命中标的请用 `longbridge-graham-stock-analysis` 做单股深度诊断。»
 
 ## CLI
 
@@ -123,9 +123,9 @@ Minimum columns:
 After the table, every output must include:
 1. **Market summary** — universe size, hard-filter pass count, dynamic-clean count.
 2. **Waiting-cost line** — average dividend yield of the top-N; the «持有等待期间每年可获约 X% 股息回报作为补偿» line.
-3. **Next-step recommendation** — point users to `longbridge-graham-stock-analysis` for any name they want to act on (筛选器未考虑主观估值陷阱因素).
+3. **Next-step recommendation** — point users to `longbridge-graham-stock-analysis` for any name they want to research further (筛选器未考虑主观估值陷阱因素).
 4. **Data Source Appendix** — mandatory; every field, every Longbridge endpoint, every WebSearch hit (publisher + URL + date).
-5. **Disclaimer** — full trilingual disclaimer from `references/output.md`.
+5. **Disclaimer** — full trilingual disclaimer from `references/output.md`, including: 「筛选结果仅反映量化指标的符合程度，不代表对上述标的的投资建议。投资决策请结合个人情况独立判断。/ Screening results only reflect quantitative criteria compliance and do not constitute investment advice.」
 
 ## Error handling
 

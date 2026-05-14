@@ -54,9 +54,9 @@ Analyse the news/filing content for event type and directional sentiment:
 
 Run `longbridge kline` (daily, 60 days around prior similar events) to measure the historical price reaction window (T-5 to T+20).
 
-### Step 4 — Position sizing guidance
+### Step 4 — Historical reaction summary
 
-Based on event type, historical reaction magnitude, and current implied volatility (from options data if available via `longbridge-derivatives`), provide qualitative position sizing guidance (entry timing, stop-loss, target, holding period).
+Based on event type and historical reaction magnitude, summarise the observed price reaction range and volatility characteristics for this class of event. Present the data as historical reference only; do not provide entry timing, stop-loss levels, target prices, or holding-period recommendations.
 
 ## CLI
 
@@ -80,10 +80,11 @@ For a given symbol and event, produce a structured event brief:
 
 1. **Event summary** — type, date, source.
 2. **Sentiment score** — bullish / neutral / bearish with rationale.
-3. **Historical reaction** — average T+5/T+10/T+20 return for this event type (if data available).
-4. **Trade setup** — entry window, stop-loss level, target, holding period, risk notes.
+3. **Historical reaction reference** — average T+5/T+10/T+20 return range and volatility for this event type (if data available), presented as historical statistics only.
 
-Include a disclaimer: *"此框架仅供参考，不构成投资建议。"* / *"This framework is for informational purposes only and does not constitute investment advice."*
+---
+以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。
+The above is for informational purposes only and does not constitute investment advice. Investment decisions should be made independently based on your own risk tolerance.
 
 ## Error handling
 
