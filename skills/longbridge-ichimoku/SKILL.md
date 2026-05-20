@@ -165,7 +165,7 @@ Cite **Longbridge Securities** / **数据来源:长桥证券** / **數據來源:
 
 ## MCP fallback
 
-If `longbridge` binary is unavailable, call `mcp__longbridge__kline` with equivalent parameters and run the same Python analysis.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

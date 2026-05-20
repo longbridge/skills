@@ -94,13 +94,7 @@ Cite **Longbridge Securities** as the data source and note the data timestamp.
 
 When the CLI binary is missing, fall back via the equivalent MCP tool:
 
-| CLI | MCP tool |
-|-----|----------|
-| `longbridge ipo calendar` | `mcp__longbridge__ipo_calendar` |
-| `longbridge ipo subscriptions` | `mcp__longbridge__ipo_subscriptions` |
-| `longbridge ipo detail <SYM>` | `mcp__longbridge__ipo_detail` |
-| `longbridge ipo orders` | `mcp__longbridge__ipo_orders` |
-| `longbridge ipo profit-loss` | `mcp__longbridge__ipo_profit_loss` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If a tool name does not resolve, ask the user to install the CLI.
 

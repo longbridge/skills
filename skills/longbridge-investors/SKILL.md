@@ -116,11 +116,7 @@ EXITED:  HPQ.US (−7.2M, −$195M)
 
 If `longbridge` CLI is unavailable (`command not found`), use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__investors` | `longbridge investors` |
-| `mcp__longbridge__investors_portfolio` | `longbridge investors <CIK>` |
-| `mcp__longbridge__investors_changes` | `longbridge investors changes <CIK>` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

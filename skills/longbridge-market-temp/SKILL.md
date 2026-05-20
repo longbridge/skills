@@ -78,19 +78,14 @@ If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed 
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `market-temp` (snapshot) | `mcp__longbridge__market_temperature` |
-| `market-temp --history` | `mcp__longbridge__history_market_temperature` |
-| `trading session` | `mcp__longbridge__trading_session` |
-| `trading days` | `mcp__longbridge__trading_days` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
-MCP-only extensions: `mcp__longbridge__market_status` (finer state), `mcp__longbridge__finance_calendar` (earnings / dividends / IPO / macro).
+MCP-only extensions are available; discover them from the MCP server's tool list at runtime.
 
 ## Related skills
 
 - Single-stock quote / status → `longbridge-quote`
-- Earnings calendar / IPO / macro events → use `mcp__longbridge__finance_calendar` directly
+- Earnings calendar / IPO / macro events → use the equivalent MCP tool directly
 
 ## File layout
 

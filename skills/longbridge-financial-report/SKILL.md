@@ -119,11 +119,7 @@ ROE {X%} = Net margin {Y%} × Asset turnover {Z×} × Equity multiplier {W×}
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__financial_report` | financial-report subcommand (all statements) |
-| `mcp__longbridge__financial_statement` | financial-statement subcommand (line-item access) |
-| `mcp__longbridge__latest_financial_report` | financial-report subcommand (latest period) |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

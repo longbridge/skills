@@ -86,7 +86,7 @@ JSON array, one row per constituent — fields typically include `symbol`, `name
 
 ## MCP fallback
 
-If `longbridge` CLI is not installed (`command not found`), use the MCP tool for index/ETF constituents (e.g. `mcp__longbridge__index_constituents` — confirm the exact tool name at runtime).
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 If unsure of the exact MCP tool name, run the CLI; the binary is the canonical path.
 

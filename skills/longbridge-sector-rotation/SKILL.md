@@ -106,11 +106,7 @@ tilt toward growth sectors.
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `kline <SYMBOL>` | `mcp__longbridge__security_candlesticks` |
-| `capital <SYMBOL>` | `mcp__longbridge__capital_flow` |
-| `industry-valuation <SYMBOL>` | `mcp__longbridge__industry_valuation` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

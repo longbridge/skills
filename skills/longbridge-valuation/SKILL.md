@@ -118,15 +118,7 @@ Energy / chemicals / steel / shipping / banks / property are cyclical: PE invert
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
 
-| MCP tool | Data |
-|---|---|
-| `mcp__longbridge__valuation` | Current valuation snapshot + peer comparison |
-| `mcp__longbridge__valuation_history` | Historical valuation series |
-| `mcp__longbridge__valuation_rank` | Daily industry percentile rank |
-| `mcp__longbridge__industry_valuation` | Industry median + distribution |
-| `mcp__longbridge__industry_valuation_dist` | Industry percentile distribution |
-| `mcp__longbridge__latest_financial_report` | Latest financial report KPIs |
-| `mcp__longbridge__calc_indexes` | Intraday valuation correction |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

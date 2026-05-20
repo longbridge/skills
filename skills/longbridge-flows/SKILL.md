@@ -102,16 +102,7 @@ When a result is empty, state so. Do not invent.
 
 When the CLI binary is missing, fall back via the equivalent MCP tool. Tool names typically mirror CLI subcommand names (snake_case).
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `investors` (rankings / 13F) | `mcp__longbridge__investors` |
-| `investors changes` | `mcp__longbridge__investors_changes` |
-| `fund-holder` | `mcp__longbridge__fund_holder` |
-| `insider-trades` | `mcp__longbridge__insider_trades` |
-| `short-positions` | `mcp__longbridge__short_positions` |
-| `broker-holding` | `mcp__longbridge__broker_holding` |
-| `broker-holding detail` | `mcp__longbridge__broker_holding_detail` |
-| `broker-holding daily` | `mcp__longbridge__broker_holding_daily` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If a name above does not resolve, fall back via the equivalent MCP tool when CLI is missing.
 

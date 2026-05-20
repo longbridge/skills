@@ -109,12 +109,7 @@ Why this fits: {2-sentence rationale linking market view + IV}
 
 ## MCP fallback
 
-| CLI command | MCP tool |
-|---|---|
-| `longbridge quote` | `mcp__longbridge__quote` |
-| `longbridge option chain` | `mcp__longbridge__option_chain_expiry_date_list` |
-| `longbridge option chain --date` | `mcp__longbridge__option_chain_info_by_date` |
-| `longbridge option volume` | `mcp__longbridge__option_volume` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

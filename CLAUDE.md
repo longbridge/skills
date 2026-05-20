@@ -113,7 +113,9 @@ A `<skill>/commands/<name>.md` file declares a `/<name>` slash command that trig
 
 ### 6. Path selection: CLI vs MCP
 
-Default rule: `longbridge <subcmd> --format json` first; fall back to `mcp__longbridge__*` when the shell returns `command not found: longbridge` (binary not installed). Per-skill exceptions (e.g. an MCP-only analysis skill, or a mutating skill's confirmation protocol) live in the relevant SKILL.md, not here.
+Default rule: CLI first; fall back to MCP when the shell returns `command not found: longbridge` (binary not installed).
+
+**Do not enumerate specific MCP tool names in SKILL.md.** MCP tool names (e.g. `mcp__longbridge__financial_report`) change as the server evolves. Instead, skill files must instruct the LLM to discover available tools at runtime — the MCP server exposes a tool list that the LLM can inspect. Describe *what capability is needed* ("get financial statements", "fetch analyst consensus"), not *which exact tool name* to call.
 
 ### 7. Error handling
 
@@ -149,6 +151,7 @@ Keep SKILL.md under ~200 lines. Push detail (long field dictionaries, multi-page
 
 - **`scripts/cli.py` wrapping the longbridge CLI itself with hard-coded flags** (`-s NVDA.US --include-static`). The CLI evolves; wrappers desync. Either call `longbridge ... --format json` directly from the prompt, or — if you really need a helper — keep it narrow and pass arguments through (don't bake business templates into Python).
 - **Hard-coding subcommand names or flags in SKILL.md**. Don't write tables like "for financial statements use `longbridge financial-report --kind IS`". Write "check `longbridge --help` for available subcommands, then `longbridge <subcommand> --help` for options." The moment you write a specific name, it's a future diff waiting to happen.
+- **Hard-coding MCP tool names in SKILL.md**. Don't write `mcp__longbridge__financial_report` or similar. The MCP server's tool list is discoverable at runtime; describe what capability is needed and let the LLM pick the right tool.
 - **Bilingual tables**: never write "Chinese / English" — must be 3-column (Simplified / Traditional / English).
 - **Skipping the Response language directive**: every SKILL.md needs it, otherwise output language is unstable.
 - **Combining preview + execute** for mutating skills: must be two distinct turns, separated by an explicit user confirmation.

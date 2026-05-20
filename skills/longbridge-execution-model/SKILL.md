@@ -97,7 +97,7 @@ Estimated λ:  x.xxe-6  ($/share per share traded)
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to `mcp__longbridge__kline` and `mcp__longbridge__trades`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

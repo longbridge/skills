@@ -100,9 +100,7 @@ Cite **Longbridge Securities** as the data source.
 
 When the CLI binary is missing, fall back via the equivalent MCP tool:
 
-| CLI | MCP tool |
-|-----|----------|
-| `longbridge sharelist ...` | `mcp__longbridge__sharelist` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If the tool name does not resolve, ask the user to install the CLI.
 

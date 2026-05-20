@@ -97,11 +97,7 @@ longbridge kline --help
 
 ## MCP fallback
 
-| CLI command | MCP tool |
-|---|---|
-| `longbridge option chain --date` | `mcp__longbridge__option_chain_info_by_date` |
-| `longbridge option volume` | `mcp__longbridge__option_volume` |
-| `longbridge kline` | `mcp__longbridge__candlesticks` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

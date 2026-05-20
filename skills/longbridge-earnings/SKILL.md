@@ -86,23 +86,13 @@ See [references/summary-card-spec.md](references/summary-card-spec.md)
 
 If the local `longbridge` CLI is unavailable (`command not found: longbridge`) and the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, the same data is reachable through MCP. Subcommand → MCP tool mapping:
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `longbridge filing` | `mcp__longbridge__filings` (and related filing tools) |
-| `longbridge financial-report` | `mcp__longbridge__financial_report` |
-| `longbridge consensus` | `mcp__longbridge__consensus` |
-| `longbridge forecast-eps` | `mcp__longbridge__forecast_eps` |
-| `longbridge quote` | `mcp__longbridge__quote` |
-| `longbridge calc-index` | `mcp__longbridge__calc_indexes` |
-| `longbridge kline` | `mcp__longbridge__candlesticks` / `history_candlesticks_by_offset` / `history_candlesticks_by_date` |
-| `longbridge institution-rating` | `mcp__longbridge__institution_rating` |
-| `longbridge news` | `mcp__longbridge__news` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP-only extras worth pulling in for Step 3 valuation:
 
-- `mcp__longbridge__valuation_history` — historical PE/PB time series for percentile context
-- `mcp__longbridge__industry_valuation_dist` — industry-relative position
-- `mcp__longbridge__profit_analysis` / `profit_analysis_detail` — only if the user wants a portfolio-level P&L view alongside the single-name update
+- the equivalent MCP tool — historical PE/PB time series for percentile context
+- the equivalent MCP tool — industry-relative position
+- the equivalent MCP tool / `profit_analysis_detail` — only if the user wants a portfolio-level P&L view alongside the single-name update
 
 ## Related skills
 

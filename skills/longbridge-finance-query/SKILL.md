@@ -86,7 +86,7 @@ Always include the fiscal period and currency in the output.
 
 ## MCP fallback
 
-If CLI is unavailable: `mcp__longbridge__financial_report` (with `kind` parameter) and `mcp__longbridge__calc_indexes`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

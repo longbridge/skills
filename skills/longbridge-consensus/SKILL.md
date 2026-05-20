@@ -123,13 +123,7 @@ As of: {date}
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| MCP tool | Data |
-|---|---|
-| `mcp__longbridge__consensus` | Coverage count, buy/hold/sell, target price |
-| `mcp__longbridge__analyst_estimates` | Revenue / EPS estimates (high / low / mean / median) |
-| `mcp__longbridge__forecast_eps` | Forward EPS by period |
-| `mcp__longbridge__institution_rating` | Rating distribution + median target price |
-| `mcp__longbridge__institution_rating_history` | Rating and target price change history |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

@@ -149,7 +149,7 @@ Present a table of indicator values, individual votes (+1 / 0 / -1), and a compo
 
 ## MCP fallback
 
-If `longbridge` binary is unavailable, call `mcp__longbridge__kline` with equivalent parameters and run the same analysis.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

@@ -107,11 +107,7 @@ Each subcommand returns a JSON array, one object per requested symbol. Missing p
 
 If the CLI binary is unavailable and the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, fall back to:
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `quote` | `mcp__longbridge__quote` |
-| `static` | `mcp__longbridge__static_info` |
-| `calc-index` | `mcp__longbridge__calc_indexes` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP is slower (HTTP + OAuth) but does not depend on a local binary.
 

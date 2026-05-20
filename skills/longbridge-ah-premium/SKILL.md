@@ -95,10 +95,7 @@ Each row carries a timestamp and a premium ratio (typically expressed as `(H_pri
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `ah-premium <SYMBOL>` (kline) | `mcp__longbridge__ah_premium_kline` (or fall back via the equivalent MCP tool) |
-| `ah-premium intraday <SYMBOL>` | `mcp__longbridge__ah_premium_intraday` (or fall back via the equivalent MCP tool) |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -114,13 +114,7 @@ When no significant events are found, state so explicitly — do not invent sign
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `news` | `mcp__longbridge__news` |
-| `filing` | `mcp__longbridge__filing` |
-| `corp-action` | `mcp__longbridge__corp_action` |
-| `shareholder` | `mcp__longbridge__shareholder` |
-| `finance-calendar` | `mcp__longbridge__finance_calendar` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -123,7 +123,7 @@ Suggested entry range, position size, stop-loss level, review trigger.
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to the equivalent `mcp__longbridge__*` tools for each data type.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

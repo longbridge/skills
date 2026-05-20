@@ -86,13 +86,7 @@ Field translations:
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| CLI usage | MCP tool |
-|---|---|
-| `topic <SYMBOL>` | `mcp__longbridge__topic_list` |
-| `topic search <KEYWORD>` | `mcp__longbridge__topic_search` |
-| `topic detail <ID>` | `mcp__longbridge__topic_detail` |
-| `topic replies <ID>` | `mcp__longbridge__topic_replies` |
-| `topic mine` | `mcp__longbridge__topic_mine` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

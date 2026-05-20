@@ -123,12 +123,7 @@ Re-hedge trigger (if delta-hedged): Delta drift ±{threshold}
 
 ## MCP fallback
 
-| CLI command | MCP tool |
-|---|---|
-| `longbridge option chain` | `mcp__longbridge__option_chain_expiry_date_list` |
-| `longbridge option chain --date` | `mcp__longbridge__option_chain_info_by_date` |
-| `longbridge kline` | `mcp__longbridge__candlesticks` |
-| `longbridge quote` | `mcp__longbridge__quote` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -142,14 +142,7 @@ Always close with the boilerplate disclaimer (see `references/output.md` §Discl
 
 If `longbridge` CLI is not installed, use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__financial_report` | `longbridge financial-report` |
-| `mcp__longbridge__financial_statement` | `longbridge financial-statement` |
-| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
-| `mcp__longbridge__quote` | `longbridge quote` |
-| `mcp__longbridge__dividend` | `longbridge dividend` |
-| `mcp__longbridge__ownership` | `longbridge ownership` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

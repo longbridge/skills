@@ -117,10 +117,7 @@ XOM.US   $120.00     $108.00        −$1,200       14 months    ~$240 (20% rate
 
 If `longbridge` CLI is not installed, use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__positions` | `longbridge positions` |
-| `mcp__longbridge__quote` | `longbridge quote` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` + `trade_read` scopes).
 

@@ -142,21 +142,7 @@ Heuristics differ by sector. Anchor on **vs industry mean** or **vs own history*
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
 
-| MCP tool | Data | Tier |
-|---|---|:---:|
-| `mcp__longbridge__latest_financial_report` | Latest financial report KPIs | snapshot |
-| `mcp__longbridge__analyst_estimates` | Analyst EPS estimates | snapshot |
-| `mcp__longbridge__forecast_eps` | Forward EPS by period | snapshot |
-| `mcp__longbridge__consensus` | Coverage count, ratings, target price | snapshot |
-| `mcp__longbridge__financial_statement` | Full IS / BS / CF statements | standard |
-| `mcp__longbridge__financial_report` | Financial report | standard |
-| `mcp__longbridge__dividend` | Dividend history | standard |
-| `mcp__longbridge__company` | Company profile | full |
-| `mcp__longbridge__operating` | Operating metrics | full |
-| `mcp__longbridge__corp_action` | Corporate actions | full |
-| `mcp__longbridge__institution_rating` | Rating distribution + target price | full |
-| `mcp__longbridge__institution_rating_history` | Rating / target price change history | full |
-| `mcp__longbridge__institution_rating_detail` | Per-institution rating detail | full |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

@@ -129,13 +129,7 @@ Notes:
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `calc-index <SYMBOL>` | `mcp__longbridge__calc_indexes` |
-| `operating <SYMBOL>` | `mcp__longbridge__financial_report` (operating indicators) |
-| `valuation <SYMBOL>` | `mcp__longbridge__valuation` |
-| `dividend <SYMBOL>` | `mcp__longbridge__dividend` |
-| `constituent <INDEX>` | `mcp__longbridge__index_constituents` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

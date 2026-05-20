@@ -104,12 +104,7 @@ Key field translations (LLM maps JSON keys → user language):
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `depth` | `mcp__longbridge__depth` |
-| `trades` | `mcp__longbridge__trades` |
-| `brokers` | `mcp__longbridge__brokers` |
-| `capital` | `mcp__longbridge__capital_distribution` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

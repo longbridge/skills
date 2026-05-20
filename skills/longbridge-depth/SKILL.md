@@ -63,13 +63,9 @@ If `longbridge` is missing, fall back to MCP. If stderr surfaces *"broker queue 
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `depth` | `mcp__longbridge__depth` |
-| `brokers` | `mcp__longbridge__brokers` |
-| `trades` | `mcp__longbridge__trades` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
-MCP-only extensions: `mcp__longbridge__short_positions`, `mcp__longbridge__option_volume`, `mcp__longbridge__option_volume_daily`.
+MCP-only extensions are available; discover them from the MCP server's tool list at runtime.
 
 ## Related skills
 

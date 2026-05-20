@@ -86,7 +86,7 @@ Note: Sector coverage depends on available representative ETFs/indices in Longbr
 
 ## MCP fallback
 
-If CLI is unavailable: `mcp__longbridge__quote`, `mcp__longbridge__capital_flow`, and `mcp__longbridge__calc_indexes`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

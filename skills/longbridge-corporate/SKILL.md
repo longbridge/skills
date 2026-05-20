@@ -93,13 +93,7 @@ When data is empty, state so explicitly (e.g. *"No corporate actions on record."
 
 When the CLI binary is missing, fall back via the equivalent MCP tool. Tool names typically mirror CLI subcommand names (snake_case).
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `shareholder` | `mcp__longbridge__shareholder` |
-| `executive` | `mcp__longbridge__executive` |
-| `company` | `mcp__longbridge__company` |
-| `corp-action` | `mcp__longbridge__corp_action` |
-| `invest-relation` | `mcp__longbridge__invest_relation` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If a name above does not resolve, fall back via the equivalent MCP tool when CLI is missing.
 

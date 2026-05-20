@@ -84,7 +84,7 @@ If segment-level detail is absent, note: *"Longbridge 暂无分部数据，建�
 
 ## MCP fallback
 
-If CLI is unavailable: use `mcp__longbridge__financial_report` (IS kind) and `mcp__longbridge__calc_indexes`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

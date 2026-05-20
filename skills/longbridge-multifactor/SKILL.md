@@ -91,7 +91,7 @@ Output: top-10 / bottom-10 ranked table → factor dispersion summary → compos
 
 ## MCP fallback
 
-Use `mcp__longbridge__candlesticks` and `mcp__longbridge__calc_indexes` when CLI is unavailable.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 
