@@ -45,23 +45,22 @@ If the market is ambiguous, **ask the user** rather than guessing.
 
 ## Subcommands
 
-This skill orchestrates up to three Longbridge CLI subcommands and merges their JSON output:
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed:
 
-| CLI command | Returns |
-|---|---|
-| `longbridge quote <SYMBOL>... --format json` | last / open / high / low / prev_close / volume / turnover / trade_status |
-| `longbridge static <SYMBOL>... --format json` | name / industry / lot_size / total_shares / circulating_shares / EPS / BPS / dividend yield / currency |
-| `longbridge calc-index <SYMBOL>... --index pe,pb,... --format json` | per-symbol valuation indices (PE, PB, turnover_rate, total_market_value, change_rate, …) |
+- Real-time quote data (last price, open, high, low, prev close, volume, turnover, trade status)
+- Static reference data (name, industry, lot size, total/circulating shares, EPS, BPS, dividend yield, currency)
+- Valuation indices (PE, PB, turnover rate, total market cap, change rates, etc.)
 
-> **If you're ever unsure of the exact flag names or defaults**, run `longbridge <subcommand> --help` first — every Longbridge CLI subcommand self-documents its arguments, defaults, and examples. Do not hard-code flag names from this SKILL.md if the CLI version may have evolved.
+> **Always run `longbridge <subcommand> --help` first** — every Longbridge CLI subcommand self-documents its arguments, defaults, and examples. Do not hard-code flag names from this SKILL.md if the CLI version may have evolved.
 
 ## Workflow
 
 1. Extract symbol(s) from the prompt; normalise each to `<CODE>.<MARKET>`.
-2. Decide which subset of subcommands is needed:
-   - **Quote only** (price / change / volume) → just `longbridge quote …`
-   - **Static** (industry, market cap, EPS, BPS, dividend yield) → also `longbridge static …`
-   - **Indices** (PE, PB, turnover rate, etc.) → also `longbridge calc-index … --index pe,pb,…`
+2. Run `longbridge --help` to identify available subcommands, then `longbridge <subcommand> --help` to confirm flags.
+3. Decide which subset of data is needed:
+   - **Quote only** (price / change / volume) → real-time quote subcommand
+   - **Static** (industry, market cap, EPS, BPS, dividend yield) → static reference subcommand
+   - **Indices** (PE, PB, turnover rate, etc.) → valuation index subcommand (check `--help` for supported field names)
    - **Combined** ("full snapshot") → all three
 3. Run them (parallel is fine when supported by the agent runtime). Each command returns a JSON array keyed by symbol.
 4. Merge the per-symbol rows by `symbol` into a single object per security.
@@ -70,25 +69,17 @@ This skill orchestrates up to three Longbridge CLI subcommands and merges their 
 ## CLI examples
 
 ```bash
-# Single-symbol quote
-longbridge quote NVDA.US --format json
+# Always check available flags first:
+longbridge <subcommand> --help
 
-# Multi-symbol quote
-longbridge quote NVDA.US 700.HK 600519.SH --format json
-
-# Static reference
-longbridge static 600519.SH --format json
-
-# Valuation indices
-longbridge calc-index NVDA.US --index pe,pb,turnover_rate --format json
-
-# Full snapshot (run all three and merge)
-longbridge quote      NVDA.US                                        --format json
-longbridge static     NVDA.US                                        --format json
-longbridge calc-index NVDA.US --index pe,pb,total_market_value       --format json
+# Then call with --format json — example structure (verify subcommand names and flags with --help):
+longbridge <quote-subcommand>      NVDA.US --format json
+longbridge <quote-subcommand>      NVDA.US 700.HK 600519.SH --format json   # multi-symbol
+longbridge <static-subcommand>     600519.SH --format json
+longbridge <calc-index-subcommand> NVDA.US --format json   # valuation indices; use --help for index field names
 ```
 
-The `calc-index --index` parameter accepts a comma-separated list. Run `longbridge calc-index --help` to see the full set of supported field names; the cheat-sheet (with multilingual labels) lives in [references/calc-index-fields.md](references/calc-index-fields.md).
+Run `longbridge <calc-index-subcommand> --help` to see all supported index field names. A reference cheat-sheet (with multilingual labels) lives in [references/calc-index-fields.md](references/calc-index-fields.md).
 
 ## Output
 

@@ -50,7 +50,7 @@ For index/ETF constituent lists route to `longbridge-constituent`. For single-st
    - User provides a list of symbols.
    - Use an index as universe (route to `longbridge-constituent` first):
      ```bash
-     longbridge constituent 000300.SH --limit 300 --format json
+     longbridge constituent 000300.SH --format json   # run --help for available flags
      ```
 3. **Discover exact CLI flags** before calling:
    ```bash
@@ -80,13 +80,13 @@ longbridge dividend --help
 
 # Step 1: get universe (if using an index)
 # NOTE: JSON response uses key "stocks" (not "list") — extract symbols from data["stocks"]
-longbridge constituent 000300.SH --limit 300 --format json
+longbridge constituent 000300.SH --format json   # run --help for available flags
 
 # Step 2: per-symbol data (repeat for each candidate)
 longbridge calc-index 600519.SH --format json      # PE, PB, PS, dividend yield
 # NOTE: `operating` returns data for HK stocks only; for US/A-share use financial-report instead
 longbridge operating 700.HK --format json          # ROE, revenue/profit growth (HK only)
-longbridge financial-report AAPL.US --kind IS --report af --format json  # US/A-share fallback
+longbridge financial-report AAPL.US --format json  # US/A-share fallback; run --help for flags
 longbridge dividend 600519.SH --format json        # dividend history
 ```
 

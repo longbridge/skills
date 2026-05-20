@@ -46,42 +46,30 @@ For the index *quote* (level, change, volume), use `longbridge-quote` instead. F
 
 ETFs use their own ticker (e.g. `SPY.US`, `QQQ.US`, `2800.HK`).
 
-## Subcommand
+## CLI
 
-> Single CLI command. Run `longbridge constituent --help` if unsure of current flags.
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling.
 
 ```bash
-longbridge constituent <SYMBOL> [--limit N] [--sort INDICATOR] [--order desc|asc] --format json
+longbridge <subcommand> HSI.HK --format json   # run --help for available flags and subcommand names
 ```
 
-| Flag | Default | Notes |
-|---|---|---|
-| `--limit` | `50` | Number of members to return |
-| `--sort` | `change` | `change` / `price` / `turnover` / `inflow` / `turnover-rate` / `market-cap` |
-| `--order` | `desc` | `desc` / `asc` |
+Types of data needed:
+- Constituent list for an index or ETF symbol
+- Sort/filter options: by change, price, turnover, capital inflow, turnover rate, or market cap (run `--help` for available sort flags)
+- Limit on number of members to return (run `--help` for the flag name)
 
 ## Workflow
 
 1. Resolve the user's index/ETF name to `<CODE>.<MARKET>` (use the table above; if ambiguous between markets, ask).
-2. Pick `--sort` from intent:
-   - "涨幅榜 / gainers" → `--sort change --order desc`
-   - "跌幅榜 / losers" → `--sort change --order asc`
-   - "成交活跃 / most traded" → `--sort turnover`
-   - "主力净流入 / net inflow" → `--sort inflow`
-   - "权重股 / largest weight" → `--sort market-cap`
-3. Pick `--limit`: default 50 unless user specifies (e.g. "前 10" → `--limit 10`).
-4. Run `longbridge constituent ... --format json`, render the rows in a table.
-
-## CLI examples
-
-```bash
-longbridge constituent HSI.HK                                     --format json
-longbridge constituent HSI.HK --limit 20 --sort change            --format json
-longbridge constituent SPX.US --sort market-cap --limit 10        --format json
-longbridge constituent IXIC.US --sort inflow --order desc         --format json
-longbridge constituent 000300.SH --sort turnover --limit 30       --format json
-longbridge constituent QQQ.US                                     --format json
-```
+2. Pick sort order from intent (run `--help` to confirm flag names):
+   - "涨幅榜 / gainers" → sort by change, descending
+   - "跌幅榜 / losers" → sort by change, ascending
+   - "成交活跃 / most traded" → sort by turnover
+   - "主力净流入 / net inflow" → sort by inflow
+   - "权重股 / largest weight" → sort by market cap
+3. Pick result count: default 50 unless user specifies (e.g. "前 10" → limit 10).
+4. Run the CLI command with `--format json`, render the rows in a table.
 
 ## Output
 
@@ -98,9 +86,7 @@ JSON array, one row per constituent — fields typically include `symbol`, `name
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `constituent <SYMBOL>` | `mcp__longbridge__index_constituents` (or fall back via the equivalent MCP tool) |
+If `longbridge` CLI is not installed (`command not found`), use the MCP tool for index/ETF constituents (e.g. `mcp__longbridge__index_constituents` — confirm the exact tool name at runtime).
 
 If unsure of the exact MCP tool name, run the CLI; the binary is the canonical path.
 

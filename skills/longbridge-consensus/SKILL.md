@@ -32,23 +32,16 @@ For full fundamentals (revenue/margins/ROE) use `longbridge-fundamental`. For va
 
 ## CLI
 
-Run `longbridge <subcommand> --help` to verify exact flags. Call concurrently:
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed (call concurrently):
+
+- Coverage count, buy/hold/sell distribution, consensus target price
+- Revenue / EPS estimates (high / low / mean / median)
+- Forward EPS by period
+- Institution rating distribution + median target price
+- Rating and target price change history (for revision trend — run `--help` for available history flags)
 
 ```bash
-# Core consensus — always run these
-longbridge consensus TSLA.US --format json           # coverage count, buy/hold/sell, target price
-longbridge analyst-estimates TSLA.US --format json   # revenue / EPS high / low / mean / median
-longbridge forecast-eps TSLA.US --format json        # forward EPS by period
-longbridge institution-rating TSLA.US --format json  # rating distribution + median target
-
-# Revision & beat/miss history — add when user asks for revisions or beat/miss
-longbridge institution-rating TSLA.US --history --format json   # rating + target price change history
-
-# If unsure about any flag:
-longbridge consensus --help
-longbridge analyst-estimates --help
-longbridge forecast-eps --help
-longbridge institution-rating --help
+longbridge <subcommand> TSLA.US --format json   # run --help for available flags and subcommand names
 ```
 
 ## Workflow
@@ -56,20 +49,20 @@ longbridge institution-rating --help
 1. **Resolve symbol** to `<CODE>.<MARKET>` format.
 2. **Determine scope** from the user prompt:
 
-   | Prompt intent | Commands to run |
+   | Prompt intent | Data to fetch |
    |---|---|
-   | Consensus snapshot | `consensus` + `analyst-estimates` + `forecast-eps` |
-   | Rating distribution / target price | `institution-rating` |
-   | Revision trend | `institution-rating --history` |
-   | Beat / miss analysis | `analyst-estimates` (compare actuals vs mean) |
-   | PEAD signal | `analyst-estimates` + `consensus` + price context |
+   | Consensus snapshot | Coverage count + buy/hold/sell + EPS estimates + forward EPS |
+   | Rating distribution / target price | Institution rating distribution + median target |
+   | Revision trend | Rating and target price change history |
+   | Beat / miss analysis | EPS actuals vs consensus mean |
+   | PEAD signal | EPS actuals + consensus + price context |
 
 3. **In-LLM analysis**:
 
    | Quantity | Method |
    |---|---|
-   | **Estimate revision direction** | Compare current mean EPS vs prior period from `institution-rating --history`; rising / flat / falling |
-   | **Beat / miss** | Actual EPS (from `analyst-estimates` actuals field) vs consensus mean; beat threshold > +2% |
+   | **Estimate revision direction** | Compare current mean EPS vs prior period from rating history; rising / flat / falling |
+   | **Beat / miss** | Actual EPS vs consensus mean; beat threshold > +2% |
    | **PEAD signal** | Consecutive beats + upward revisions → positive momentum; consecutive misses + downward revisions → negative momentum. **Note**: PEAD is a statistical tendency, not a guarantee. |
    | **Surprise %** | `(Actual − Estimate) / |Estimate| × 100%` |
 
@@ -96,7 +89,7 @@ As of: {date}
 
 [Estimate revision trend]
 - Direction (past 30/90 days): {rising / flat / falling}
-- Key revisions: {summary from institution-rating --history}
+- Key revisions: {summary from rating/target price change history}
 
 [Beat / miss history (last 4 quarters)]
 | Quarter | Actual EPS | Estimate | Surprise % |
@@ -121,8 +114,8 @@ As of: {date}
 |---|---|---|
 | `command not found: longbridge` | 回退到 MCP；如 MCP 也不可用，请用户安装 longbridge-terminal。 | 回退到 MCP；如也不可用，請安裝 longbridge-terminal。/ Fall back to MCP; if also unavailable, tell user to install longbridge-terminal. |
 | stderr `not logged in` | 请运行 `longbridge auth login` 登录。 | 請執行 `longbridge auth login`。/ Run `longbridge auth login`. |
-| `consensus` returns < 3 analysts | 覆盖分析师不足 3 位，一致预期仅供参考。 | 覆蓋分析師不足 3 位，僅供參考。/ Fewer than 3 analysts — consensus is indicative only. |
-| `analyst-estimates` returns empty | "{symbol} 暂无分析师预期数据。" | "{symbol} 暫無分析師預期。" / "{symbol} has no analyst estimates." |
+| Consensus data has < 3 analysts | 覆盖分析师不足 3 位，一致预期仅供参考。 | 覆蓋分析師不足 3 位，僅供參考。/ Fewer than 3 analysts — consensus is indicative only. |
+| Analyst estimates data returns empty | "{symbol} 暂无分析师预期数据。" | "{symbol} 暫無分析師預期。" / "{symbol} has no analyst estimates." |
 | No actuals for beat/miss | 跳过超预期/低于预期分析，注明无历史实际值。 | 跳過超預期分析，注明無歷史數據。/ Skip beat/miss analysis; note no historical actuals available. |
 | Other stderr | 直接显示原始错误，不静默重试。 | 顯示原始錯誤。/ Surface verbatim — do not retry silently. |
 
@@ -130,13 +123,13 @@ As of: {date}
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| MCP tool | CLI equivalent |
+| MCP tool | Data |
 |---|---|
-| `mcp__longbridge__consensus` | `longbridge consensus` |
-| `mcp__longbridge__analyst_estimates` | `longbridge analyst-estimates` |
-| `mcp__longbridge__forecast_eps` | `longbridge forecast-eps` |
-| `mcp__longbridge__institution_rating` | `longbridge institution-rating` |
-| `mcp__longbridge__institution_rating_history` | `longbridge institution-rating --history` |
+| `mcp__longbridge__consensus` | Coverage count, buy/hold/sell, target price |
+| `mcp__longbridge__analyst_estimates` | Revenue / EPS estimates (high / low / mean / median) |
+| `mcp__longbridge__forecast_eps` | Forward EPS by period |
+| `mcp__longbridge__institution_rating` | Rating distribution + median target price |
+| `mcp__longbridge__institution_rating_history` | Rating and target price change history |
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

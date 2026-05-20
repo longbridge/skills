@@ -39,29 +39,16 @@ Browse and participate in Longbridge community discussions — list topics for a
 
 ## CLI
 
-Run `longbridge topic --help` to verify exact flags before use.
+Run `longbridge topic --help` to discover available subcommands and flags before use.
 
 ```bash
-# List topics for a stock
-longbridge topic TSLA.US --format json
+# Discover available subcommands and flags
+longbridge topic --help
 
-# Search topics by keyword
-longbridge topic search "AI chips" --format json
+# Example: list topics for a stock (verify subcommand name via --help)
+longbridge topic <SYMBOL> --format json
 
-# View topic detail
-longbridge topic detail 12345 --format json
-
-# View replies for a topic
-longbridge topic replies 12345 --format json
-
-# My topics (requires login)
-longbridge topic mine --format json
-
-# Publish a new topic (requires login)
-longbridge topic create --body "My view on NVDA earnings..." --format json
-
-# Reply to a topic (requires login)
-longbridge topic create-reply 12345 --body "I agree, the guidance was strong." --format json
+# Example: search, detail, replies, my topics, post, reply — run --help to find exact subcommand names and flags
 ```
 
 ## Output

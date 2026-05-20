@@ -44,17 +44,17 @@ If you do prefer pipes, use a heredoc-fed Python script (`python3 <<'PY' ... PY`
 **CLI docs**: https://open.longbridge.com/zh-CN/docs/cli/
 **MCP endpoint**: `https://openapi.longbridge.com/mcp`
 
-Key CLI entry points for earnings analysis:
+**CLI discovery**: Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Do not assume subcommand names — the CLI is updated frequently. Broad categories needed for earnings analysis:
 
-| Data Needed | CLI Entry Point |
-|-------------|----------------|
-| Filings & reports | `longbridge filing --help` |
-| Financial statements | `longbridge financial-report --help` |
-| Analyst consensus & estimates | `longbridge consensus --help` |
-| Quote & valuation metrics | `longbridge quote --help` / `longbridge calc-index --help` |
-| Price history | `longbridge kline --help` |
-| Analyst ratings | `longbridge institution-rating --help` |
-| News | `longbridge news --help` |
+- Earnings calendar / upcoming earnings dates
+- Financial statements (income, balance sheet, cash flow)
+- Earnings snapshot / AI beat-miss summary
+- Analyst consensus & EPS estimates
+- Quote & valuation metrics
+- Price history (candlestick)
+- Analyst ratings & target prices
+- Regulatory filings (10-Q, 10-K, 8-K)
+- News
 
 Web Search supplements for content not in CLI: consensus estimates vintage, earnings call transcripts, M&A precedent data.
 

@@ -30,7 +30,7 @@ Computes seven classic technical indicators from 200 days of OHLCV data and prod
 1. Resolve the symbol to `<CODE>.<MARKET>` format.
 2. Fetch 200 daily candles:
    ```bash
-   longbridge kline <SYMBOL> --period day --count 200 --format json
+   longbridge kline <SYMBOL> --period day --format json   # run --help for available flags
    ```
 3. Run the Python analysis below to compute all indicators and their individual votes.
 4. Report each indicator's current value and signal, then summarise with the composite vote tally.
@@ -38,9 +38,9 @@ Computes seven classic technical indicators from 200 days of OHLCV data and prod
 ## CLI
 
 ```bash
-longbridge kline NVDA.US   --period day --count 200 --format json
-longbridge kline 700.HK    --period day --count 200 --format json
-longbridge kline 600519.SH --period day --count 200 --format json
+longbridge kline NVDA.US   --period day --format json   # run --help for available flags
+longbridge kline 700.HK    --period day --format json
+longbridge kline 600519.SH --period day --format json
 ```
 
 Run `longbridge kline --help` to verify current flag names and defaults.

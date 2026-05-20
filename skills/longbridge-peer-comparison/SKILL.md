@@ -42,13 +42,16 @@ Prompt-only skill that takes 2–5 symbols, runs the same per-symbol orchestrati
 
 ## CLI
 
-Run `longbridge <subcommand> --help` to verify exact flags. Per-symbol calls (run concurrently for all symbols):
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed per symbol (run concurrently for all symbols):
+
+- Real-time quote (last price, change)
+- Valuation indices (PE, PB, PS, dividend yield, market cap)
+- Financial KPIs from the most recent report (revenue, net income, ROE) — headline figures only, not full statements
+- Historical valuation data
 
 ```bash
-longbridge quote NVDA.US --format json
-longbridge calc-index NVDA.US --format json
-longbridge financial-report NVDA.US --format json   # headline KPIs only — no need for full IS/BS/CF
-longbridge valuation NVDA.US --format json
+# Always check flags first, then call — example structure:
+longbridge <subcommand> NVDA.US --format json
 ```
 
 ## Workflow

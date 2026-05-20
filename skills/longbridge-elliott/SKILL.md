@@ -32,7 +32,7 @@ metadata:
 1. 提取标的代码，标准化为 `<CODE>.<MARKET>` 格式。
 2. 获取日线 OHLCV 数据（200 根 K 线）：
    ```bash
-   longbridge kline <SYMBOL> --period day --count 200 --format json
+   longbridge kline <SYMBOL> --period day --format json   # run --help for available flags
    ```
 3. **Zigzag 识别摆动点**（Python 实现，threshold 默认 5%）：
    ```python
@@ -61,10 +61,10 @@ metadata:
 
 ```bash
 # 日线数据（主要数据源）
-longbridge kline AAPL.US --period day --count 200 --format json
+longbridge kline AAPL.US --period day --format json   # run --help for available flags
 
 # 周线数据（辅助验证大级别波浪）
-longbridge kline TSLA.US --period week --count 100 --format json
+longbridge kline TSLA.US --period week --format json
 ```
 
 ## Output
@@ -83,7 +83,7 @@ longbridge kline TSLA.US --period week --count 100 --format json
 |---|---|---|
 | `command not found: longbridge` | 尝试 MCP fallback；否则请安装 longbridge-terminal | 嘗試 MCP fallback；否則請安裝 longbridge-terminal / Try MCP fallback; otherwise install longbridge-terminal |
 | stderr 含 `not logged in` | 请运行 `longbridge auth login` | 請運行 `longbridge auth login` / Run `longbridge auth login` |
-| Zigzag 摆动点不足 | 建议增大 `--count` 或切换周线 `--period week` | 建議增大 `--count` 或切換週線 / Increase `--count` or switch to `--period week` |
+| Zigzag 摆动点不足 | 建议切换更长周期（如周线），运行 `longbridge kline --help` 查看可用参数 | 建議切換更長週期，執行 `longbridge kline --help` / Switch to a longer period; run `longbridge kline --help` for options |
 | 无法匹配任何波浪结构 | 当前数据暂无清晰波浪结构，建议等待更多确认 | 當前數據暫無清晰波浪結構 / No clear wave structure yet, wait for more confirmation |
 | 其他 stderr | 原样返回错误，不静默重试 | 原樣返回錯誤 / Surface verbatim, never retry silently |
 | 其他 stderr | 原样透传，不静默重试 |
