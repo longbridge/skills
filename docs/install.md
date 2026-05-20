@@ -46,11 +46,12 @@ Four skills rely on Python libraries beyond the standard library. Install only w
 | [`longbridge-smc`](../skills/longbridge-smc) | [smartmoneyconcepts](https://github.com/joshyattridge/smart-money-concepts) — BOS / FVG / Order Block | `pip install smartmoneyconcepts` | Manual BOS/FVG implementation |
 | [`longbridge-quant-stats`](../skills/longbridge-quant-stats) | [statsmodels](https://www.statsmodels.org/) + [scipy](https://scipy.org/) + [arch](https://arch.readthedocs.io/) — ADF / GARCH / regression diagnostics | `pip install statsmodels scipy arch` | Basic stats without GARCH/ADF |
 | [`longbridge-ml-strategy`](../skills/longbridge-ml-strategy) | [scikit-learn](https://scikit-learn.org/) — Random Forest / Gradient Boosting | `pip install scikit-learn` (usually pre-installed) | Degrades to logistic regression |
+| [`longbridge-elliott-wave`](../skills/longbridge-elliott-wave) | [pandas](https://pandas.pydata.org/) + [numpy](https://numpy.org/) — wave engine `scripts/signal_engine.py` | `pip install pandas numpy` (usually pre-installed) | Skill still runs; script may fail |
 
-**Install all four at once:**
+**Install all at once:**
 
 ```bash
-pip install czsc smartmoneyconcepts statsmodels scipy arch scikit-learn
+pip install czsc smartmoneyconcepts statsmodels scipy arch scikit-learn pandas numpy
 ```
 
 > **Fallback behaviour**: if a library is missing, the LLM falls back to a simpler implementation automatically. You will see an install prompt in the response.

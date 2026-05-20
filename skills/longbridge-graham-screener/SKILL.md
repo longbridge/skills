@@ -1,7 +1,7 @@
 ---
 name: longbridge-graham-screener
 description: |
-  Graham cigar-butt batch screener — runs Benjamin Graham's NCAV / net-net / defensive-investor hard filters across an index or market universe and returns a ranked candidate list with NCAV ratio, PE, PB, dividend yield, debt coverage, 5y earnings stability, Graham buy price, and a dynamic value-trap warning. Longbridge CLI/MCP first; WebSearch fills genuine gaps (PMI, sector outlook). Every figure footnoted to its source. Auto-switches model for banks / insurance / REITs and flags <2y IPOs and suspended names. Triggers: "格雷厄姆筛选", "格雷厄姆选股", "捡烟蒂榜单", "烟蒂股榜", "NCAV筛选", "NCAV排行榜", "净流动资产筛选", "防御型投资者选股", "撿煙蒂榜單", "煙蒂股榜", "NCAV篩選", "淨流動資產篩選", "防禦型投資者選股", "Graham screen", "Graham screener", "NCAV screen", "net-net screen", "net-net list", "cigar-butt screen", "defensive investor screen", "liquidation value screen", "Benjamin Graham screen".
+  Graham cigar-butt batch screener — runs Benjamin Graham's NCAV / net-net / defensive-investor hard filters across an index or market universe and returns a ranked candidate list with NCAV ratio, PE, PB, dividend yield, debt coverage, 5y earnings stability, Graham buy price, and a dynamic value-trap warning. Longbridge CLI first; MCP fallback if CLI unavailable; WebSearch fills genuine gaps (PMI, sector outlook). Every figure footnoted to its source. Auto-switches model for banks / insurance / REITs and flags <2y IPOs and suspended names. Triggers: "格雷厄姆筛选", "格雷厄姆选股", "捡烟蒂榜单", "烟蒂股榜", "NCAV筛选", "NCAV排行榜", "净流动资产筛选", "防御型投资者选股", "撿煙蒂榜單", "煙蒂股榜", "NCAV篩選", "淨流動資產篩選", "防禦型投資者選股", "Graham screen", "Graham screener", "NCAV screen", "net-net screen", "net-net list", "cigar-butt screen", "defensive investor screen", "liquidation value screen", "Benjamin Graham screen".
 license: MIT
 metadata:
   author: longbridge
@@ -126,6 +126,8 @@ After the table, every output must include:
 3. **Next-step recommendation** — point users to `longbridge-graham-stock-analysis` for any name they want to research further (筛选器未考虑主观估值陷阱因素).
 4. **Data Source Appendix** — mandatory; every field, every Longbridge endpoint, every WebSearch hit (publisher + URL + date).
 5. **Disclaimer** — full trilingual disclaimer from `references/output.md`, including: 「筛选结果仅反映量化指标的符合程度，不代表对上述标的的投资建议。投资决策请结合个人情况独立判断。/ Screening results only reflect quantitative criteria compliance and do not constitute investment advice.」
+
+> ⚠️ 以上内容仅供参考，不构成投资建议。投资决策请结合自身风险承受能力独立判断。/ 以上內容僅供參考，不構成投資建議。投資決策請結合自身風險承受能力獨立判斷。/ For reference only. Not investment advice. Please make investment decisions independently based on your own risk tolerance.
 
 ## Error handling
 
