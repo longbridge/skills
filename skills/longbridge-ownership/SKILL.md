@@ -81,7 +81,7 @@ If pledge data or shareholder headcount is requested but unavailable, note: *"è¯
 
 ## MCP fallback
 
-If CLI is unavailable: `mcp__longbridge__major_shareholders` and `mcp__longbridge__static_info`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

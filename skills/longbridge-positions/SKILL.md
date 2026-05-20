@@ -77,16 +77,9 @@ If `longbridge` is missing, fall back to MCP. If stderr contains `unauthorized` 
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `portfolio` | merge `stock_positions` + `fund_positions` + `account_balance` (no combined MCP tool) |
-| `positions` | `mcp__longbridge__stock_positions` |
-| `fund-positions` | `mcp__longbridge__fund_positions` |
-| `assets` | `mcp__longbridge__account_balance` |
-| `margin-ratio` | `mcp__longbridge__margin_ratio` |
-| `max-qty` | `mcp__longbridge__estimate_max_purchase_quantity` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
-MCP-only extensions: `mcp__longbridge__profit_analysis` / `profit_analysis_detail` (P/L analysis), `mcp__longbridge__exchange_rate` (currency conversion). For *"how is my P&L this month?"* route to `longbridge-portfolio`.
+MCP-only extensions are available; discover them from the MCP server's tool list at runtime.
 
 ## Related skills
 

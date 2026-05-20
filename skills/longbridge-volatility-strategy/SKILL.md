@@ -75,7 +75,7 @@ Present results as a compact table followed by a description of the current vol 
 
 ## MCP fallback
 
-When `longbridge` CLI is unavailable, use `mcp__longbridge__candlesticks` with `period=Day` and `count=252`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

@@ -103,10 +103,7 @@ When a result is empty (no anomalies, or no volume data yet), state so explicitl
 
 When the CLI binary is missing, fall back via the equivalent MCP tool. Tool names typically mirror CLI subcommand names (snake_case).
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `anomaly` | `mcp__longbridge__anomaly` |
-| `trade-stats` | `mcp__longbridge__trade_stats` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If a name above does not resolve, fall back via the equivalent MCP tool when CLI is missing.
 

@@ -95,9 +95,7 @@ Present results as a date-sorted table with indicator columns. Example layout:
 
 When the CLI binary is missing, fall back via the equivalent MCP tool:
 
-| CLI | MCP tool |
-|-----|----------|
-| `longbridge quant run ...` | `mcp__longbridge__quant_run` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If the tool name does not resolve, ask the user to install the CLI.
 

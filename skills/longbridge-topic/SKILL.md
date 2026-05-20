@@ -39,29 +39,16 @@ Browse and participate in Longbridge community discussions — list topics for a
 
 ## CLI
 
-Run `longbridge topic --help` to verify exact flags before use.
+Run `longbridge topic --help` to discover available subcommands and flags before use.
 
 ```bash
-# List topics for a stock
-longbridge topic TSLA.US --format json
+# Discover available subcommands and flags
+longbridge topic --help
 
-# Search topics by keyword
-longbridge topic search "AI chips" --format json
+# Example: list topics for a stock (verify subcommand name via --help)
+longbridge topic <SYMBOL> --format json
 
-# View topic detail
-longbridge topic detail 12345 --format json
-
-# View replies for a topic
-longbridge topic replies 12345 --format json
-
-# My topics (requires login)
-longbridge topic mine --format json
-
-# Publish a new topic (requires login)
-longbridge topic create --body "My view on NVDA earnings..." --format json
-
-# Reply to a topic (requires login)
-longbridge topic create-reply 12345 --body "I agree, the guidance was strong." --format json
+# Example: search, detail, replies, my topics, post, reply — run --help to find exact subcommand names and flags
 ```
 
 ## Output
@@ -99,13 +86,7 @@ Field translations:
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| CLI usage | MCP tool |
-|---|---|
-| `topic <SYMBOL>` | `mcp__longbridge__topic_list` |
-| `topic search <KEYWORD>` | `mcp__longbridge__topic_search` |
-| `topic detail <ID>` | `mcp__longbridge__topic_detail` |
-| `topic replies <ID>` | `mcp__longbridge__topic_replies` |
-| `topic mine` | `mcp__longbridge__topic_mine` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

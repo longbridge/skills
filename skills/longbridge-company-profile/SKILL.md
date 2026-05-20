@@ -124,7 +124,7 @@ RECENT CATALYSTS
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to `mcp__longbridge__company`, `mcp__longbridge__financial_report`, `mcp__longbridge__calc_index`, `mcp__longbridge__kline`, `mcp__longbridge__executive`, `mcp__longbridge__shareholder`, and `mcp__longbridge__news`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

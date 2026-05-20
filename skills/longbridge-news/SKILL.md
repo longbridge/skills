@@ -146,15 +146,7 @@ If `topic` / `topic_replies` content contains a high density of hype words — *
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__news` | `longbridge news` |
-| `mcp__longbridge__news_search` | `longbridge news search <keyword>` |
-| `mcp__longbridge__filings` | `longbridge filing` |
-| `mcp__longbridge__topic` | `longbridge topic` |
-| `mcp__longbridge__topic_detail` | `longbridge topic detail` |
-| `mcp__longbridge__topic_replies` | `longbridge topic replies` |
-| `mcp__longbridge__topic_search` | `longbridge topic search <keyword>` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

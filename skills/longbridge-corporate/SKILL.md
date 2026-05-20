@@ -32,13 +32,13 @@ For financial KPIs (revenue / margin / EPS), use `longbridge-fundamental`. For v
 
 > Run `longbridge <subcommand> --help` if unsure of current flags. The CLI's built-in help is the canonical source.
 
-| CLI command | Returns |
+| Capability | Returns |
 |---|---|
-| `longbridge shareholder <SYMBOL> --format json` | Institutional shareholders: name, related ticker, % held, share change, report date. Filters: `--range all\|inc\|dec`, `--sort chg\|owned\|time`, `--order desc\|asc`. |
-| `longbridge executive <SYMBOL> --format json` | Executives and key personnel (officers, directors, key roles). |
-| `longbridge company <SYMBOL> --format json` | Company overview: founding date, employees, IPO price, listing date, address, business description. |
-| `longbridge corp-action <SYMBOL> --format json` | Corporate actions: stock splits, dividends, rights issues, bonus issues. |
-| `longbridge invest-relation <SYMBOL> --format json` | Investment relations: parent company / subsidiaries / sister listings. |
+| Institutional shareholders | Name, related ticker, % held, share change, report date. Run `--help` for available filter/sort flags. |
+| Executives and key personnel | Officers, directors, key roles. |
+| Company overview | Founding date, employees, IPO price, listing date, address, business description. |
+| Corporate actions | Stock splits, dividends, rights issues, bonus issues. |
+| Investment relations | Parent company / subsidiaries / sister listings. |
 
 Single symbol per call. The CLI accepts `--lang zh-CN` or `--lang en` for content fetched from longbridge.com (defaults to system `LANG`).
 
@@ -52,15 +52,16 @@ Single symbol per call. The CLI accepts `--lang zh-CN` or `--lang en` for conten
 ## CLI
 
 ```bash
-longbridge shareholder AAPL.US                       --format json
-longbridge shareholder AAPL.US --range inc --sort owned --format json
-longbridge executive 700.HK                          --format json
-longbridge company NVDA.US                           --format json
-longbridge corp-action 700.HK                        --format json
-longbridge invest-relation 700.HK                    --format json
-```
+# Discover available subcommands and their flags first
+longbridge --help
+longbridge <subcommand> --help   # run for each subcommand before use
 
-If `--help` shows newer flags, follow the help output rather than hard-coding here.
+longbridge <shareholder-subcommand> AAPL.US --format json           # run --help for filter/sort flags
+longbridge <executive-subcommand> 700.HK --format json
+longbridge <company-subcommand> NVDA.US --format json
+longbridge <corp-action-subcommand> 700.HK --format json
+longbridge <invest-relation-subcommand> 700.HK --format json
+```
 
 ## Output
 
@@ -92,13 +93,7 @@ When data is empty, state so explicitly (e.g. *"No corporate actions on record."
 
 When the CLI binary is missing, fall back via the equivalent MCP tool. Tool names typically mirror CLI subcommand names (snake_case).
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `shareholder` | `mcp__longbridge__shareholder` |
-| `executive` | `mcp__longbridge__executive` |
-| `company` | `mcp__longbridge__company` |
-| `corp-action` | `mcp__longbridge__corp_action` |
-| `invest-relation` | `mcp__longbridge__invest_relation` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If a name above does not resolve, fall back via the equivalent MCP tool when CLI is missing.
 

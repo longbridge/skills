@@ -129,7 +129,7 @@ DCA mutations require the **trade scope**. Without it, both CLI and MCP fail wit
 
 ## MCP fallback (only after confirmation)
 
-If the CLI binary is unavailable, MCP equivalents may exist under names such as `mcp__longbridge__create_dca_plan` / `mcp__longbridge__pause_dca_plan` / `mcp__longbridge__stop_dca_plan` / `mcp__longbridge__list_dca_plans`. Tool names are environment-specific — discover them via `ListMcpResourcesTool` rather than hard-coding.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 > **Important**: the preview / confirm cycle still applies when going through MCP. MCP write tools have no built-in confirmation prompt; this SKILL is responsible for the gate. The extra read-back-of-parameters rule applies in full to MCP calls.
 

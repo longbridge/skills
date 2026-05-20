@@ -116,11 +116,7 @@ Industry: {industry_name}  |  Peers in sample: N  |  Currency: {currency}
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__industry_valuation` | `longbridge industry-valuation` |
-| `mcp__longbridge__industry_valuation_dist` | `longbridge industry-valuation dist` |
-| `mcp__longbridge__valuation` | `longbridge valuation` (single-stock snapshot) |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

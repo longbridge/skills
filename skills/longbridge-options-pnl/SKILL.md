@@ -101,12 +101,7 @@ S      Net P&L
 
 ## MCP fallback
 
-| CLI command | MCP tool |
-|---|---|
-| `longbridge option quote` | `mcp__longbridge__option_quote` |
-| `longbridge option chain` | `mcp__longbridge__option_chain_expiry_date_list` |
-| `longbridge option chain --date` | `mcp__longbridge__option_chain_info_by_date` |
-| `longbridge quote` | `mcp__longbridge__quote` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

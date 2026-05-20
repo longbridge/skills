@@ -107,7 +107,7 @@ ACTION ITEMS
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to `mcp__longbridge__portfolio`, `mcp__longbridge__positions`, and `mcp__longbridge__exchange_rate`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

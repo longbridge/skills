@@ -156,7 +156,7 @@ Present at most 5 most-recent patterns. Conclude with the composite signal and a
 
 ## MCP fallback
 
-If `longbridge` binary is unavailable, call `mcp__longbridge__kline` with equivalent parameters. Surface the same analysis.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

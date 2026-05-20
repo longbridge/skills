@@ -78,11 +78,7 @@ If `longbridge` is not installed, the shell returns a `command not found` error 
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `kline` | `mcp__longbridge__candlesticks` |
-| `kline history` | `mcp__longbridge__history_candlesticks_by_offset` or `mcp__longbridge__history_candlesticks_by_date` |
-| `intraday` | `mcp__longbridge__intraday` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

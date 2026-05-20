@@ -132,12 +132,7 @@ From `quote`:
 
 ## MCP fallback
 
-| CLI command | MCP tool |
-|---|---|
-| `longbridge quote` | `mcp__longbridge__quote` |
-| `longbridge constituent` | `mcp__longbridge__constituent` |
-| `longbridge kline` | `mcp__longbridge__candlesticks` |
-| `longbridge calc-index` | `mcp__longbridge__calc_indexes` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

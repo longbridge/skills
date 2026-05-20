@@ -117,7 +117,7 @@ The above is for informational purposes only and does not constitute investment 
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to `mcp__longbridge__news`, `mcp__longbridge__filing`, `mcp__longbridge__corp_action`, `mcp__longbridge__finance_calendar`, and `mcp__longbridge__kline`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

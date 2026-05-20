@@ -122,11 +122,7 @@ Next likely phase: {phase}  |  Trigger signals to watch: {signals}
 
 If `longbridge` CLI is not installed, use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__security_candlesticks` | `longbridge kline --period day` |
-| `mcp__longbridge__capital_flow` | `longbridge capital --flow` |
-| `mcp__longbridge__index_constituents` | `longbridge constituent` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

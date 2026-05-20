@@ -32,7 +32,7 @@ metadata:
 1. 提取标的代码，标准化为 `<CODE>.<MARKET>` 格式。
 2. 获取日线 OHLCV 数据（200 根 K 线）：
    ```bash
-   longbridge kline <SYMBOL> --period day --count 200 --format json
+   longbridge kline <SYMBOL> --period day --format json   # run --help for available flags
    ```
 3. **Zigzag 识别摆动点**（threshold 默认 5%），取最近 5 个有效摆动点作为 X-A-B-C-D 候选。
 4. **计算各段斐波那契比率**：
@@ -58,10 +58,10 @@ metadata:
 
 ```bash
 # 日线数据（主要数据源）
-longbridge kline AAPL.US --period day --count 200 --format json
+longbridge kline AAPL.US --period day --format json   # run --help for available flags
 
 # 4 小时线（辅助确认短周期形态，可选）
-longbridge kline TSLA.US --period 60m --count 200 --format json
+longbridge kline TSLA.US --period 60m --format json
 ```
 
 ## Output
@@ -82,7 +82,7 @@ longbridge kline TSLA.US --period 60m --count 200 --format json
 |---|---|
 | `command not found: longbridge` | 尝试 MCP fallback；否则告知用户安装 longbridge-terminal |
 | stderr 含 `not logged in` | 告知用户运行 `longbridge auth login` |
-| Zigzag 摆动点不足（少于 5 个） | 建议增大 `--count` 或切换周线 `--period week` |
+| Zigzag 摆动点不足（少于 5 个） | 建议切换更长周期（如周线），运行 `longbridge kline --help` 查看可用参数 |
 | 无法匹配任何谐波形态 | 告知"当前未检测到满足标准谐波比率的 XABCD 结构" |
 | 其他 stderr | 原样透传，不静默重试 |
 
@@ -90,9 +90,7 @@ longbridge kline TSLA.US --period 60m --count 200 --format json
 
 若 CLI 不可用且已配置 MCP：
 
-| CLI 命令 | MCP 工具 |
-|---|---|
-| `longbridge kline` | `mcp__longbridge__history_candlesticks` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

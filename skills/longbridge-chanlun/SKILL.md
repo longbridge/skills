@@ -103,9 +103,7 @@ longbridge kline 700.HK --period week --count 100 --format json
 
 若 CLI 不可用且已配置 MCP：
 
-| CLI 命令 | MCP 工具 |
-|---|---|
-| `longbridge kline` | `mcp__longbridge__history_candlesticks` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

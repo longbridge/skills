@@ -109,12 +109,7 @@ Date: <today>
 
 If `longbridge` CLI is not installed, use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__portfolio` | `longbridge portfolio` |
-| `mcp__longbridge__positions` | `longbridge positions` |
-| `mcp__longbridge__history_candlesticks` | `longbridge kline --period day` |
-| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` + `trade_read` scopes).
 

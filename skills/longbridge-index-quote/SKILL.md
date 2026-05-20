@@ -92,7 +92,7 @@ For multiple indices: a comparison table sorted by today's change.
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to `mcp__longbridge__quote` with the index symbol.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

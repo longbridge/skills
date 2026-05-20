@@ -59,10 +59,7 @@ If `longbridge` is missing, fall back to MCP. If stderr says *"Only US market is
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `security-list` | `mcp__longbridge__security_list` |
-| `participants` | `mcp__longbridge__participants` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

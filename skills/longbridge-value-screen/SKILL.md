@@ -99,12 +99,7 @@ Rank  Symbol      Name         PE    PB    ROE    Div.Yield  Score   Note
 
 If `longbridge` CLI is not installed, use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__constituent` | `longbridge constituent` |
-| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
-| `mcp__longbridge__valuation` | `longbridge valuation` |
-| `mcp__longbridge__dividend` | `longbridge dividend` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

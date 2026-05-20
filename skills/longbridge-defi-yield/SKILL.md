@@ -90,7 +90,7 @@ Always include a risk disclaimer: *"DeFi 投资存在智能合约风险、无常
 
 ## MCP fallback
 
-For spot crypto prices: `mcp__longbridge__quote` with `.HAS` symbols. DeFi protocol data has no Longbridge MCP equivalent — WebSearch is required.
+For spot crypto prices: the equivalent MCP tool with `.HAS` symbols. DeFi protocol data has no Longbridge MCP equivalent — WebSearch is required.
 
 ## Related skills
 

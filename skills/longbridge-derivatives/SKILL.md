@@ -83,15 +83,7 @@ longbridge warrant issuers                                       --format json
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `option quote` | `mcp__longbridge__option_quote` |
-| `option chain` (no date) | `mcp__longbridge__option_chain_expiry_date_list` |
-| `option chain --date` | `mcp__longbridge__option_chain_info_by_date` |
-| `option volume` | `mcp__longbridge__option_volume` / `mcp__longbridge__option_volume_daily` |
-| `warrant quote` | `mcp__longbridge__warrant_quote` |
-| `warrant <UNDERLYING>` (list) | `mcp__longbridge__warrant_list` |
-| `warrant issuers` | `mcp__longbridge__warrant_issuers` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Error handling
 

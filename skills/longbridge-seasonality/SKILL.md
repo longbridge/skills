@@ -72,7 +72,7 @@ Output: one table per effect (Month / DOW / Holiday / Earnings), then a "Top Pat
 
 ## MCP fallback
 
-Use `mcp__longbridge__candlesticks` with `period=Day`, `count=1260` when CLI is unavailable.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

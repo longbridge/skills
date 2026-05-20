@@ -32,31 +32,19 @@ For a quick KPI snapshot use `longbridge-fundamental`. For valuation use `longbr
 
 ## CLI
 
-Run `longbridge financial-report --help` to verify exact flags before use. Primary calls:
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed:
+
+- Financial statements (income statement, balance sheet, cash flow) — single statement or all three at once
+- Period selection (annual, semi-annual, quarterly — exact flag values differ by CLI version; check `--help`)
+- Raw line-item access with field-level hierarchy (a separate subcommand may exist for this)
 
 ```bash
-# Fetch all three statements (preferred — one call)
-longbridge financial-report TSLA.US --kind ALL --format json
+# Always check available flags first:
+longbridge <subcommand> --help
 
-# Or fetch individual statements
-longbridge financial-report TSLA.US --kind IS --format json   # Income Statement
-longbridge financial-report TSLA.US --kind BS --format json   # Balance Sheet
-longbridge financial-report TSLA.US --kind CF --format json   # Cash Flow
-
-# Period options (verify exact values with --help)
-longbridge financial-report 700.HK --kind ALL --report af  --format json   # Annual
-longbridge financial-report 700.HK --kind ALL --report saf --format json   # Semi-annual
-longbridge financial-report 700.HK --kind ALL --report q1  --format json   # Q1
-longbridge financial-report 700.HK --kind ALL --report 3q  --format json   # Three-quarter (9-month)
-longbridge financial-report 700.HK --kind ALL --report qf  --format json   # Quarterly final
-
-# If unsure about flags, always run first:
-longbridge financial-report --help
-
-# Note: v0.20.1 also adds `longbridge financial-statement` — different data structure
-# (returns field-level rows with display_order/level hierarchy).
-# Use financial-report for KPI extraction; use financial-statement for raw line-item access.
-longbridge financial-statement <SYMBOL> --kind IS --report af --format json
+# Then fetch financials — example structure (verify flags with --help):
+longbridge <subcommand> TSLA.US --format json
+longbridge <subcommand> 700.HK --format json
 ```
 
 ## Workflow
@@ -64,7 +52,7 @@ longbridge financial-statement <SYMBOL> --kind IS --report af --format json
 1. **Resolve symbol** to `<CODE>.<MARKET>` format (e.g. `TSLA.US`, `700.HK`, `600519.SH`).
 2. **Determine scope** from user intent:
    - Single statement requested → fetch that kind only.
-   - Reconciliation / DuPont / earnings quality → fetch `--kind ALL`.
+   - Reconciliation / DuPont / earnings quality → fetch all three statements (use `--help` to find the flag that requests all statements at once).
 3. **Call CLI** (or MCP fallback). If `longbridge` not installed, fall back to MCP.
 4. **In-LLM analysis** per requested depth:
 
@@ -131,11 +119,7 @@ ROE {X%} = Net margin {Y%} × Asset turnover {Z×} × Equity multiplier {W×}
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__financial_report` | `longbridge financial-report --kind ALL` |
-| `mcp__longbridge__financial_statement` | `longbridge financial-statement --kind ALL` |
-| `mcp__longbridge__latest_financial_report` | `longbridge financial-report --latest` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

@@ -83,7 +83,7 @@ Output: Brinson table by industry → factor decomposition → timing verdict �
 
 ## MCP fallback
 
-- `mcp__longbridge__positions` for holdings; `mcp__longbridge__candlesticks` for price series when CLI is unavailable.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 
