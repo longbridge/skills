@@ -3,7 +3,7 @@ name: Update skills.json in developers
 on:
   push:
     branches: [main]
-
+  workflow_dispatch:
 jobs:
   update-skills-json:
     runs-on: ubuntu-latest
