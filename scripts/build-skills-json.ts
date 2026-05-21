@@ -45,6 +45,25 @@ function parseYaml(text: string): Record<string, unknown> {
         i++
       }
       result[key] = buf.join("\n").trimEnd()
+    } else if (rest.trimEnd() === ">") {
+      const buf: string[] = []
+      while (i < lines.length && (lines[i].startsWith("  ") || lines[i] === "")) {
+        buf.push(lines[i].startsWith("  ") ? lines[i].slice(2) : "")
+        i++
+      }
+      // Folded scalar: join lines with spaces, blank lines become newlines
+      const folded: string[] = []
+      let chunk: string[] = []
+      for (const ln of buf) {
+        if (ln === "") {
+          if (chunk.length) { folded.push(chunk.join(" ")); chunk = [] }
+          folded.push("")
+        } else {
+          chunk.push(ln)
+        }
+      }
+      if (chunk.length) folded.push(chunk.join(" "))
+      result[key] = folded.join("\n").trimEnd()
     } else if (rest === "") {
       const obj: Record<string, unknown> = {}
       while (i < lines.length && lines[i].startsWith("  ")) {
@@ -98,7 +117,6 @@ for (const entry of readdirSync(SKILLS_DIR, { withFileTypes: true }).sort((a, b)
 
 const output = {
   version: "1.0",
-  generated_at: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
   skills,
 }
 
