@@ -23,7 +23,7 @@ Loaded by `longbridge-hkipo-analysis` SKILL.md on demand. Numeric thresholds are
 | 定价合理性 (Valuation) | 40% | 4.0 | `longbridge ipo detail` + `longbridge peer-comparison` + `longbridge valuation` |
 | 发行质量 (Quality) | 35% | 3.5 | `longbridge ipo detail` + `longbridge news` + WebSearch（基石 / 承销商排名） |
 | 市场时机 (Timing) | 20% | 2.0 | `longbridge index-quote HSI.HK` + `longbridge ipo listed` + `longbridge sector-monitor` |
-| 基本面展望 (Fundamentals) | 25% | 2.5 | `longbridge sec-filings`（招股书） + `longbridge basicinfo` + `longbridge industry-overview` |
+| 基本面展望 (Fundamentals) | 25% | 2.5 | `longbridge ipo detail`（招股书摘要 / 财务 / 募资 / 风险 / 管理层）+ `longbridge basicinfo` + `longbridge industry-overview`；招股书更深章节通过 `longbridge ipo --help` 发现专用子命令，仍缺则 WebSearch HKEXnews |
 
 > **归一化**：四维原始分之和满分为 12.0（4.0 + 3.5 + 2.0 + 2.5），最终对外按 10 分制输出，即 `final = raw × (10 / 12)`，保留 1 位小数。
 
@@ -102,7 +102,7 @@ Loaded by `longbridge-hkipo-analysis` SKILL.md on demand. Numeric thresholds are
 
 ## 招股书章节提取 (Prospectus extraction) — 优先级 + 字段映射
 
-按以下顺序读取招股书（先 `longbridge sec-filings` 或对应 HK filings endpoint，缺章节用 WebSearch 拿 HKEXnews 原文）：
+按以下顺序读取招股书（先 `longbridge ipo --help` 看 `ipo` 子命令族是否覆盖；典型情况 `longbridge ipo detail <SYMBOL>` 已展开主要章节字段。`ipo detail` 没覆盖到的更深章节，再按 `--help` 选其他 `ipo` 子命令补拉，仍缺则用 WebSearch 拿 HKEXnews 原文）：
 
 1. **行业概况 / Industry Overview** → TAM 规模、CAGR、增长驱动叙述、行业地位。
 2. **财务摘要 / Financial Summary** → 近 3 年营收、毛利率、净利润 / 净亏损、经营性现金流。

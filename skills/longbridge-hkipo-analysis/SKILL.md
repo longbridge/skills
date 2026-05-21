@@ -73,8 +73,8 @@ For US / A-share IPOs → defer to `longbridge-ipo` (lifecycle hub) + an equity 
 | 数据需求 | 语义关键词 | 示例子命令 |
 |---|---|---|
 | 港股 IPO 日历 | `ipo` + `calendar` / `subscriptions` / `wait-listing` / `listed` | `longbridge ipo calendar --format json` / `longbridge ipo subscriptions --format json` / `longbridge ipo wait-listing --format json` / `longbridge ipo listed --format json` |
-| 单只新股招股书与时间线 | `ipo` + `detail` | `longbridge ipo detail <SYMBOL> --format json` |
-| 招股书章节级原文（财务摘要 / 募资用途 / 风险因素 / 管理层） | `sec-filings` / `prospectus` / `corporate` | `longbridge sec-filings <SYMBOL> --format json` （HK 用对应 filings endpoint，先 `--help`） |
+| 单只新股招股书摘要、发行价、时间线、基石、超购倍数 | `ipo` + `detail` | `longbridge ipo detail <SYMBOL> --format json` |
+| 招股书章节级数据（财务摘要 / 募资用途 / 风险因素 / 管理层 / 锁定期） | 先 `longbridge ipo --help` 看 `ipo` 子命令族能否覆盖；典型情况 `ipo detail` 已展开主要章节字段 | `longbridge ipo --help` → 选合适子命令 → `longbridge ipo <sub> <SYMBOL> --format json`；仍缺章节 → WebSearch 拿 HKEXnews 原文 |
 | 同业上市公司估值（PE / PS / PB 均值与中位数） | `valuation` / `peer` / `peer-comparison` | `longbridge peer-comparison <SYMBOL> --format json` / `longbridge valuation <SYMBOL> --format json` |
 | 近期港股新股首日表现（用于计算近 3 月破发率） | `ipo` + `listed` + `performance` | `longbridge ipo listed --format json` |
 | 恒生指数近月行情（市场时机维度） | `index-quote` / `kline` + HSI | `longbridge index-quote HSI.HK --format json` / `longbridge kline HSI.HK --period day --count 60 --format json` |
@@ -83,7 +83,7 @@ For US / A-share IPOs → defer to `longbridge-ipo` (lifecycle hub) + an equity 
 | 公司基础信息（行业归属 / 注册地） | `basicinfo` / `company-profile` | `longbridge basicinfo <SYMBOL> --format json` / `longbridge company-profile <SYMBOL> --format json` |
 | 次新股模式：上市后实际行情 + 暗盘相关数据 | `quote` / `kline` / `derivatives` / `ipo` + `grey market` | `longbridge quote <SYMBOL> --format json` / `longbridge kline <SYMBOL> --period day --count 60 --format json` |
 
-并行调用：模式确定后，单股 / 次新股模式默认并行拉取 `ipo detail`、`peer-comparison`、`ipo listed`（破发率）、`index-quote HSI.HK`、`news`、`basicinfo`、`sec-filings`；日历模式只拉 `ipo subscriptions` + `ipo wait-listing` + `ipo listed`（计算近期破发率作为市场时机锚）。
+并行调用：模式确定后，单股 / 次新股模式默认并行拉取 `ipo detail`、`peer-comparison`、`ipo listed`（破发率）、`index-quote HSI.HK`、`news`、`basicinfo`；招股书更深章节缺失时再按 `longbridge ipo --help` 选具体子命令补拉，仍缺则 WebSearch HKEXnews。日历模式只拉 `ipo subscriptions` + `ipo wait-listing` + `ipo listed`（计算近期破发率作为市场时机锚）。
 
 ### WebSearch fallback — only for data Longbridge does not provide
 
@@ -147,8 +147,6 @@ Map data needs to MCP capabilities by semantic match (same keywords as the [§CL
 | [`longbridge-sector-monitor`](../longbridge-sector-monitor) | 同行业近月走势 |
 | [`longbridge-index-quote`](../longbridge-index-quote) | 恒生指数近月行情（市场时机维度） |
 | [`longbridge-news`](../longbridge-news) | 基石公告、招股舆情 |
-| [`longbridge-sec-filings`](../longbridge-sec-filings) | 招股书原文 / 章节查询 |
-| [`longbridge-calendar`](../longbridge-calendar) | 通用 IPO / 财报 / 分红日历的轻量视图 |
 | [`longbridge-stock-research`](../longbridge-stock-research) | 已上市 > 30 天的标的转交此 Skill |
 
 ## File layout
