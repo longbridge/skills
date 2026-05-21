@@ -95,6 +95,8 @@ Each dimension is tagged **强 (strong) / 中 (medium) / 弱 (weak)** with one-l
 | R&D intensity | `financial-report --kind IS` (R&D ÷ revenue) | Materially above industry median | Near industry median | Below industry median |
 | Management innovation vision | `news` + `sec-filings` + IR materials | Quantified innovation roadmap in deck / call / letter; named platform or convergence direction | Innovation mentioned but no quantification | No clear innovation narrative |
 
+> When **Young-company mode** is active, dimensions are evaluated on whatever periods exist (pro-rated, tagged history-limited in the appendix) and the **Management innovation vision** bar is raised — see [§Young-company mode](#young-company-mode) for the exact adjustments and the additional forward-looking inputs required.
+
 ### Pass / reject matrix
 
 | Combination | Result |
@@ -118,9 +120,11 @@ Revenue is driven by macro cycles, regulation, brand & distribution; growth path
 The company belongs to a legacy industry that is the target of disruption. This framework analyses **disruptors**, not the disrupted.
 *Example phrasing — "ExxonMobil is on the receiving end of storage / EV displacement, not the disruptor."*
 
-**C — Data basis insufficient**
-The company is pre-revenue, listed for less than two fiscal years, or has no scale revenue history; the TAM × share × margin model has no anchor point.
-*Example phrasing — "The company has not yet reached commercial scale; the model lacks data anchors."*
+**C — Data basis insufficient (genuinely pre-revenue)**
+The company is **truly pre-revenue** — no recurring product or service revenue, or revenue is < ~$10M annualised with no clear path to commercial scale within 18 months; the TAM × share × margin model has no anchor point at all.
+*Example phrasing — "The company has not yet reached commercial revenue scale; the model lacks any data anchor."*
+
+> ⚠️ **Important distinction**: do **not** use reason C just because a company has been listed for < 3 years. Many ARK-style disruptors (RIVN, RXRX, IONQ, BEAM, NTLA, COIN's recent business pivot) have **scale revenue but short public history** — those names enter [§Young-company mode](#young-company-mode), they are **not rejected**. Reason C is reserved for names with **no commercial revenue base at all**.
 
 **D — Disruption premium already realised**
 The core technology has matured; Wright's-Law cost decline is already largely priced into the current multiple, with limited remaining curve.
@@ -145,6 +149,65 @@ Output format (per alternative recommended):
 - **Why this fits**: one or two specific sentences citing *this* company's data — never generic.
 
 If no method in the live library is a clean match, say so plainly: *"No matching method in the current library; suggest reviewing basic data first."* Never force-fit an unrelated method.
+
+---
+
+## Young-company mode
+
+Many ARK-style disruptors have **scale revenue but short public history**: 1–3 fiscal years since IPO, often pre-profit, capital structures that are still evolving, and a thesis that lives almost entirely in the **next** 3–5 years rather than in the past 5–10. The skill must analyse these names — not reject them — and lean explicitly on forward-looking inputs.
+
+### Trigger (any one is sufficient)
+
+A name enters Young-company mode if **any** of the following holds:
+
+- Listed (or commercial revenue-recognising) for **< 3 fiscal years** at the as-of date.
+- **< 3 fiscal years** of scale revenue (≥ ~$50M trailing 12 months — adjust threshold to industry; for biotech / hardware-pre-launch, use commercial milestone instead).
+- Business model **pivoted within the last 2 years** to a new platform tier (e.g. MSTR's bitcoin-treasury pivot, COIN's stablecoin/derivatives pivot, PLTR's commercial AI pivot) — old history is not meaningful for the new thesis.
+- Post-SPAC / post-IPO < 12 months and no comparable peer with similar revenue mix.
+
+If none of these hold but commercial revenue exists with ≥ 3 years of history → **standard mode**. If revenue is truly absent or trivial (< ~$10M annualised, no commercial pathway in 18 months) → **reject under reason C**, not Young-company mode.
+
+### What changes when Young-company mode is active
+
+| Aspect | Standard mode | Young-company mode |
+|---|---|---|
+| History windows | 5–10 years preferred | **Whatever exists**, pro-rated; tagged `history-limited (N quarters)` in appendix |
+| Innovation revenue share dimension | Computed on TTM with multi-year trend | Computed on TTM; trend window may be a single year; tag the short window |
+| R&D intensity dimension | Compared to multi-year sector median | Compared to current-year sector median; one-off spikes from a small revenue base are explained, not penalised |
+| Management innovation vision dimension | Quantified roadmap is "strong" | **Higher bar** — quantified roadmap **with specific milestones, capacity numbers, and dated regulatory or commercial gates** is now the "strong" bar. Vague "we believe in this market" is "weak". |
+| Reconciliation gate | All 12 checks at full tolerance | Same 12 checks, but **period-alignment** uses whatever periods exist; checks that require N-year history are pro-rated and the appendix says so |
+| Three-scenario inputs | Anchored on revenue-growth trajectory + margin history | Anchored on **TAM × share × margin** plus **dilution-adjusted share count**; backward operating leverage is a secondary input only |
+| Risk catalogue | Standard 8 items | Standard 8 + 4 young-company-specific items (see [§Risk catalogue](#risk-catalogue)) |
+
+### Forward-looking inputs (required in Young-company mode)
+
+These inputs **must** appear in section [2b] of the output and have appendix rows. If any cannot be sourced (no consensus, no IR deck guidance, no regulatory pathway disclosure), the report must say so and **cap suitability at 中 (medium) on the management-vision dimension**.
+
+| Input | Source priority | Why it matters |
+|---|---|---|
+| **Forward revenue consensus (next 4–8 quarters)** | `longbridge analyst-estimates` → `longbridge consensus` → IR deck guidance | Anchors the slope from current revenue to year-5 implied revenue |
+| **Cash runway** = cash + ST investments ÷ trailing-4Q burn rate | `financial-report --kind BS` + `financial-report --kind CF` | If runway < 18 months, equity raise is near-certain — affects dilution assumption |
+| **5-year dilution path** | `longbridge corporate` (share-count history) + S-1 / 10-K share-authorisation footnotes + recent ATM filings | The model's year-5 shares-outstanding input — must reflect realistic dilution, not current count |
+| **Capex / capacity roadmap** | IR deck, earnings call transcripts, `sec-filings` | Anchors when scale economics turn on |
+| **Regulatory / commercial milestone calendar** | `sec-filings` + WebSearch (FDA, FCC, agency dockets), industry calendar | The next observation node for the action frame |
+| **Customer pipeline / pilot list** | IR deck, recent `news`, earnings call transcripts | Validates the "demand exists" leg of the thesis |
+| **Technology readiness signal** | Peer-reviewed papers, regulatory clearances, certified benchmarks | Distinguishes "technology proved" from "technology hoped-for" |
+
+### How the three-scenario model adjusts
+
+- **Year-5 shares outstanding** must use the dilution path, not current shares. If model implies a 30% share-count increase by year 5 from cash-burn raises, all three scenarios use the diluted count.
+- **Bull case** still uses ARK incumbent-displacement TAM, but the **path from current revenue to year-5 revenue** must clear a sanity check: implied CAGR consistent with the highest analyst forecast within 1.5× headroom. If Bull implies a CAGR more than 1.5× the high-end consensus, **flag it explicitly** in the assumption row — "this Bull case assumes execution materially above current sell-side consensus".
+- **Bear case** must include a **runway-exhaustion sub-scenario**: if cash runway < 24 months, Bear scenarios must price in a dilutive raise at a discount to current price.
+- The output report **must show year-5 implied share count next to year-5 implied price** so the reader can spot dilution drag.
+
+### Reconciliation under Young-company mode
+
+The 12 reconciliation checks still apply. Specific accommodations:
+
+- **History windows** in checks that span periods (e.g. "BS — current assets sum") apply to whatever periods exist; the appendix labels each affected row `history-limited (N quarters)`.
+- **Innovation-revenue share / R&D ratio** consistency checks still apply on the available period — these are intra-period, not multi-year.
+- **Period alignment** is enforced strictly: if IS covers FY{a}–FY{b} but CF only covers FY{b−1}–FY{b}, the appendix names both periods.
+- The reconciliation summary line in the appendix still uses the standard variants (✅ / ⚠️ / ❌); no separate "young-company" variant — the history-limited tag lives on individual appendix rows, not on the summary.
 
 ---
 
@@ -298,6 +361,8 @@ Never use the phrase "expected return"; use "model-implied 5-year price" / "mode
 
 For each report, surface exactly **three** risks, drawn from this catalogue. Each must be tied to *this* company's data, not abstract.
 
+**Standard items (all modes):**
+
 - TAM assumption error (alternative authority's TAM differs by ≥ 3x).
 - Market-share assumption error (competitor TBD; slower-than-expected adoption).
 - Margin / Wright's-Law shortfall (learning rate stalls or commoditisation eats margin).
@@ -306,6 +371,13 @@ For each report, surface exactly **three** risks, drawn from this catalogue. Eac
 - Capital structure / dilution (cash burn forces equity raises; share count grows materially over 5 years).
 - Technology substitution (a newer architecture leapfrogs the current curve — name it specifically).
 - Concentration risk (single customer / single product / single regulator > 30%).
+
+**Young-company-specific items (in Young-company mode, at least one of the three risks must come from this group):**
+
+- **Cash runway exhaustion** — current cash + ST investments ÷ burn rate is < 24 months, equity raise is near-certain, at what valuation is uncertain.
+- **Dilution path** — if cash burn continues, year-5 share count grows by N% (cite source) — anything above ~25% materially erodes per-share target.
+- **Execution / scale-up risk** — unit economics inflection has not yet been demonstrated; bull case requires it within 18–36 months.
+- **Tech-readiness gap** — bull-case assumptions require regulatory / technical milestones (named, with target dates) that are not yet achieved; risk that they slip beyond 5-year horizon.
 
 ---
 
@@ -329,3 +401,7 @@ ARK methodology is a **5-year** lens.
 - Never present ARK's historical performance (ARKK ETF) as a credibility anchor for this skill — the skill is independent from ARK Invest.
 - Never default to "mature-stage P/E" for a company still growing revenue at >30% at year 5 — use PEG ≈ 1 as the calibration anchor.
 - Never use consensus new-market TAM as the High tier. The High tier must be ARK-style incumbent-displacement TAM; consensus goes to Base; conservative sub-market goes to Low. Explain the difference in the plain-language block.
+- Never reject a name under reason C just because it has short public history. If it has commercial revenue, enter Young-company mode and lean on the forward-looking inputs — reject reason C is reserved for **truly pre-revenue** names.
+- In Young-company mode, never skip the forward-looking inputs (cash runway, dilution path, capacity roadmap, regulatory milestones, customer pipeline). If any cannot be sourced, cap management-vision at 中 and say so — do **not** silently fill them with optimistic placeholders.
+- In Young-company mode, never use current shares outstanding as the year-5 input if the model's cash runway is < 24 months — use the dilution-adjusted share count and show it in the output.
+- Never let a Bull-case revenue CAGR exceed 1.5× the highest sell-side analyst forecast without an explicit flag in the assumption row.

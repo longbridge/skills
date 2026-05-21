@@ -80,6 +80,22 @@ When the user's input language is Chinese, render every English label in the tem
 | No authoritative source | 无权威数据 | 無權威數據 |
 | Substituted | 替代来源 | 替代來源 |
 | Unavailable | 不可得 | 不可得 |
+| Mode | 模式 | 模式 |
+| Standard mode | 标准模式 | 標準模式 |
+| Young-company mode | 年轻公司模式 | 年輕公司模式 |
+| Forward-looking inputs | 前瞻输入 | 前瞻輸入 |
+| Forward revenue consensus | 远期收入一致预期 | 遠期收入一致預期 |
+| Cash runway | 现金跑道 | 現金跑道 |
+| Quarterly burn rate | 单季现金消耗 | 單季現金消耗 |
+| Dilution path | 稀释路径 | 稀釋路徑 |
+| Year-5 share count (diluted) | 第 5 年股本（稀释后） | 第 5 年股本（稀釋後） |
+| Capex / capacity roadmap | 资本开支 / 产能路线图 | 資本開支 / 產能路線圖 |
+| Regulatory / commercial milestones | 监管 / 商业里程碑 | 監管 / 商業里程碑 |
+| Customer pipeline | 客户管线 | 客戶管線 |
+| Technology readiness | 技术成熟度 | 技術成熟度 |
+| History-limited | 历史数据有限 | 歷史數據有限 |
+| Bull CAGR sanity check | Bull 增速合理性校验 | Bull 增速合理性校驗 |
+| Runway-exhaustion sub-scenario | 现金跑道耗尽子情景 | 現金跑道耗盡子情景 |
 
 ---
 
@@ -89,7 +105,7 @@ Translate every label, header, and narrative phrase below into the user's langua
 
 ```
 {Company name} ({code}) — ARK-Style Disruptive-Innovation Diagnostic
-As-of: {date}   Currency: {ccy}   Current price: {p}
+As-of: {date}   Currency: {ccy}   Current price: {p}   Mode: {Standard mode | Young-company mode}
 Source: Longbridge Securities + WebSearch (see appendix)
 
 [1] One-line conclusion
@@ -109,6 +125,34 @@ Source: Longbridge Securities + WebSearch (see appendix)
      Management innovation vision:    {Strong / Medium / Weak} — {one-line evidence + citation}
      Convergence (if any):            {AI × Robotics | AI × Multiomic | none}
      → Pass {— note: "framework applies; some assumptions lower-confidence" if applicable}
+
+[2b] Forward-looking inputs   (Young-company mode only — omit this section in Standard mode)
+
+     Forward revenue consensus:     Next 4Q ≈ {amt} / next 8Q ≈ {amt}
+                                     Source: {analyst-estimates | consensus | IR guidance}
+                                     Sell-side dispersion: low {x} / mid {y} / high {z}
+
+     Cash runway:                   Cash + ST investments {amt} ÷ TTM burn {amt/qtr}
+                                     ≈ {N months}  {flag if < 24 months}
+
+     Dilution path (5y):            Current shares {S0} → year-5 diluted {S5}
+                                     Implied dilution {(S5/S0 − 1) × 100}%
+                                     Basis: {ATM filings / convertible notes / RSU vesting / cash-burn raise model}
+
+     Capex / capacity roadmap:      {one-line summary tying capex spend to capacity milestones
+                                     and the year when scale economics turn on}
+
+     Regulatory / commercial gates: 1. {milestone — date}
+                                    2. {milestone — date}
+                                    3. {milestone — date}
+
+     Customer pipeline:             {top customers / signed pilots / RFP pipeline — one line}
+
+     Technology readiness:          {Lab / Field-tested / Commercial / Regulated — with citation}
+
+     {If any of the above could not be sourced, list missing inputs explicitly here AND
+      cap section [2] management-vision dimension at 中, with the reason stated.}
+
 
 [3] TAM (Total Addressable Market)
      Target market: {market description}
@@ -133,16 +177,24 @@ Source: Longbridge Securities + WebSearch (see appendix)
                                    economically viable}
 
 [5] 5-year target — three scenarios
-       | Scenario   | Weight | Market share | Net margin | Terminal multiple | 5-yr implied price | Discounted target |
-       |------------|--------|--------------|------------|-------------------|--------------------|-------------------|
-       | 🐂 Bull    | 25%    | {a}%         | {b}%       | {c}× P/E or P/S   | {price_undiscounted}| {price}          |
-       | 📊 Base    | 50%    | {a}%         | {b}%       | {c}×              | {price_undiscounted}| {price}          |
-       | 🐻 Bear    | 25%    | {a}%         | {b}%       | {c}×              | {price_undiscounted}| {price}          |
+       | Scenario   | Weight | Market share | Net margin | Terminal multiple | Year-5 shares | 5-yr implied price | Discounted target |
+       |------------|--------|--------------|------------|-------------------|---------------|--------------------|-------------------|
+       | 🐂 Bull    | 25%    | {a}%         | {b}%       | {c}× P/E or P/S   | {S5} {diluted}| {price_undiscounted}| {price}          |
+       | 📊 Base    | 50%    | {a}%         | {b}%       | {c}×              | {S5}          | {price_undiscounted}| {price}          |
+       | 🐻 Bear    | 25%    | {a}%         | {b}%       | {c}×              | {S5}          | {price_undiscounted}| {price}          |
        Weighted 5-yr implied price: {weighted_implied}   (before discounting)
        Discount rate: 15% (5-year horizon)         {note any user override}
        Weighted target: {weighted_target}
        Current price:   {p}
        Upside / Downside: {▲/▼ XX.X%}
+
+       {Young-company mode only — append:}
+       Bull CAGR sanity check:           Bull implies revenue CAGR {x}% vs sell-side high-end {y}%
+                                          — {within 1.5× headroom | ⚠️ exceeds 1.5× headroom, see assumption row}.
+       Runway-exhaustion sub-scenario (Bear):  if cash runway < 24 months, a dilutive raise at
+                                          ≈ {discount}% to current price is priced in — the
+                                          year-5 share count above already reflects this.
+
        Note: scenarios are model inputs, not predictions. The Bull case is one of three —
        not a forecast.
 
@@ -182,6 +234,14 @@ Source: Longbridge Securities + WebSearch (see appendix)
 | Industry runway / disruption signal  | WebSearch — {publisher}, {date}, {url}              | YYYY-MM-DD HH:MM     | {article date}     |
 | Regulatory / policy references       | WebSearch — {publisher}, {date}, {url}              | YYYY-MM-DD HH:MM     | {article date}     |
 | (Add one row per WebSearch hit)      | …                                                   | …                    | …                  |
+| **— Young-company mode only rows below —** | | | |
+| Forward revenue consensus            | Longbridge `analyst-estimates` + `consensus`        | YYYY-MM-DD HH:MM     | next 4–8 quarters  |
+| Cash runway calculation              | Longbridge `financial-report --kind BS` + `--kind CF` | YYYY-MM-DD HH:MM   | last 4 quarters    |
+| Share-count history (dilution path)  | Longbridge `corporate` + `sec-filings` (ATM / convertibles) | YYYY-MM-DD HH:MM | trailing 8 quarters |
+| Capex / capacity roadmap             | IR deck + earnings call (WebSearch — {url}, {date}) | YYYY-MM-DD HH:MM     | latest             |
+| Regulatory / commercial milestones   | Longbridge `sec-filings` + `calendar` + WebSearch   | YYYY-MM-DD HH:MM     | next 24 months     |
+| Customer pipeline / pilots           | IR materials + recent `news` (WebSearch — {url}, {date}) | YYYY-MM-DD HH:MM | last 6 months      |
+| Technology readiness signals         | Peer-reviewed papers / agency clearances (WebSearch — {url}, {date}) | YYYY-MM-DD HH:MM | as published |
 
 Footnote conventions:
 - Tag every WebSearch row with publisher + report or article + year + URL + access date.
@@ -189,6 +249,7 @@ Footnote conventions:
 - Learning-rate rows without a citable publisher use `无权威数据 / no authoritative source` — and the cost-curve discussion in section [4] is qualitative, with no numeric learning rate displayed.
 - If a Longbridge field was unavailable and substituted via WebSearch, mark the row `[substituted]`.
 - If a field is missing entirely (no Longbridge, no WebSearch), mark the row `[unavailable]` and explain in the relevant section how it affected the analysis.
+- Rows that cover fewer periods than the canonical window (Young-company mode) are tagged `history-limited (N quarters)` in the Period column.
 
 Source-identifier values — endpoint names, URLs, fetch timestamps, dates — stay as-is regardless of language; only field-group labels are translated.
 
