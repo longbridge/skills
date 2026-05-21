@@ -117,7 +117,6 @@ for (const entry of readdirSync(SKILLS_DIR, { withFileTypes: true }).sort((a, b)
 
 const output = {
   version: "1.0",
-  generated_at: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
   skills,
 }
 
