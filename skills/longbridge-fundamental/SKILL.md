@@ -23,11 +23,11 @@ Prompt-only analysis skill. Orchestrates Longbridge CLI commands to deliver a fi
 
 LLM picks based on prompt verbosity:
 
-| Tier | Trigger phrases | Tools called |
+| Tier | Trigger phrases | Data needed |
 |---|---|---|
-| **snapshot** | *"X 怎么样"*, *"how is X"*, brief curiosity | `financial-report --latest` + `analyst-estimates` + `consensus` |
-| **standard** (default) | *"X 基本面 / 业绩 / 财报"*, *"X fundamentals"* | snapshot + `financial-statement` (IS/BS/CF) + `dividend` |
-| **full** | *"X 全面分析"*, *"detailed fundamentals"* | standard + `company` + `operating` + `corp_action` + `institution-rating` (with `--history` + `detail`) |
+| **snapshot** | *"X 怎么样"*, *"how is X"*, brief curiosity | Latest financial report KPIs + analyst estimates + consensus |
+| **standard** (default) | *"X 基本面 / 业绩 / 财报"*, *"X fundamentals"* | Snapshot + full income/balance/cash-flow statements + dividend history |
+| **full** | *"X 全面分析"*, *"detailed fundamentals"* | Standard + company profile + operating data + corporate actions + institution ratings (distribution, history, per-institution detail, industry rank) |
 
 Tiers are additive — don't pull all 8+ tools when the user asks a casual question.
 
@@ -43,30 +43,29 @@ For valuation lens (PE, PB) → `longbridge-valuation`. For comparison → `long
 
 ## CLI
 
-Run `longbridge <subcommand> --help` to verify exact flags. Standard tier example (run concurrently):
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed by tier:
+
+**Snapshot tier** (run concurrently):
+- Latest financial report KPIs (revenue / EPS / ROE)
+- Analyst EPS estimates (high / low / mean / median)
+- Coverage count, rating distribution, consensus target price
+
+**Standard tier** — add:
+- Full line-item financial statements (income statement, balance sheet, cash flow)
+- Dividend history
+- Forward EPS by period
+
+**Full tier** — add:
+- Company profile
+- Operating metrics
+- Corporate actions
+- Institution rating distribution + target price
+- Rating and target price change history
+- Per-institution rating detail
+- Industry-wide analyst coverage rank
 
 ```bash
-# Snapshot tier
-longbridge financial-report NVDA.US --latest --format json   # key KPI summary (revenue/EPS/ROE)
-longbridge analyst-estimates NVDA.US --format json           # EPS consensus (high/low/mean/median)
-longbridge consensus NVDA.US --format json                   # coverage and target price
-
-# Standard tier — add
-longbridge financial-statement NVDA.US --kind ALL --format json   # full line-item IS/BS/CF
-longbridge dividend NVDA.US --format json
-longbridge forecast-eps NVDA.US --format json
-```
-
-Full tier — add:
-
-```bash
-longbridge company NVDA.US --format json
-longbridge operating NVDA.US --format json
-longbridge corp-action NVDA.US --format json
-longbridge institution-rating NVDA.US --format json              # rating distribution + target price
-longbridge institution-rating NVDA.US --history --format json    # rating/target price change history
-longbridge institution-rating detail NVDA.US --format json       # per-institution rating detail
-longbridge institution-rating NVDA.US --industry-rank --format json  # industry-wide analyst coverage rank
+longbridge <subcommand> NVDA.US --format json   # run --help for available flags and subcommand names
 ```
 
 ## Workflow
@@ -134,30 +133,16 @@ Heuristics differ by sector. Anchor on **vs industry mean** or **vs own history*
 | Situation | Reply |
 |---|---|
 | `command not found: longbridge` | Fall back to MCP; if MCP also unavailable, tell user to install longbridge-terminal. |
-| `financial-report` returns empty | "{symbol} has no reported earnings (newly listed?)." |
-| `consensus` < 3 analysts | Caveat: "small coverage — consensus is indicative only" |
-| `dividend` returns empty | "{symbol} pays no dividends or has no dividend record." |
+| Financial report data returns empty | "{symbol} has no reported earnings (newly listed?)." |
+| Analyst consensus has < 3 analysts | Caveat: "small coverage — consensus is indicative only" |
+| Dividend history data returns empty | "{symbol} pays no dividends or has no dividend record." |
 | stderr `not logged in` | Tell user to run `longbridge auth login`. |
 
 ## MCP fallback
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
 
-| MCP tool | CLI equivalent | Tier |
-|---|---|:---:|
-| `mcp__longbridge__latest_financial_report` | `longbridge financial-report --latest` | snapshot |
-| `mcp__longbridge__analyst_estimates` | `longbridge analyst-estimates` | snapshot |
-| `mcp__longbridge__forecast_eps` | `longbridge forecast-eps` | snapshot |
-| `mcp__longbridge__consensus` | `longbridge consensus` | snapshot |
-| `mcp__longbridge__financial_statement` | `longbridge financial-statement` | standard |
-| `mcp__longbridge__financial_report` | `longbridge financial-report` | standard |
-| `mcp__longbridge__dividend` | `longbridge dividend` | standard |
-| `mcp__longbridge__company` | `longbridge company` | full |
-| `mcp__longbridge__operating` | `longbridge operating` | full |
-| `mcp__longbridge__corp_action` | `longbridge corp-action` | full |
-| `mcp__longbridge__institution_rating` | `longbridge institution-rating` | full |
-| `mcp__longbridge__institution_rating_history` | `longbridge institution-rating --history` | full |
-| `mcp__longbridge__institution_rating_detail` | `longbridge institution-rating detail` | full |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

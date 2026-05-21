@@ -54,8 +54,8 @@ Trigger on prompts asking for:
 # Crypto spot quote
 longbridge quote BTCUSD.HAS --format json
 
-# 90-day daily price trend (ETH example)
-longbridge kline ETHUSD.HAS --period day --count 90 --format json
+# Recent daily price trend (ETH example); run --help for period/count flags
+longbridge kline ETHUSD.HAS --format json   # run --help for available flags
 ```
 
 Supported crypto symbols use the `.HAS` suffix (e.g. `BTCUSD.HAS`, `ETHUSD.HAS`, `SOLUSD.HAS`).
@@ -99,7 +99,7 @@ On-chain: <Glassnode | Dune | User-supplied>
 
 ## MCP fallback
 
-If `longbridge` binary is not found, fall back to `mcp__longbridge__quote` and `mcp__longbridge__kline`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

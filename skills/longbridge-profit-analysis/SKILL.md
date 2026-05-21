@@ -98,11 +98,7 @@ End every response with:
 
 If `longbridge` CLI is not installed, use:
 
-| CLI usage | MCP tool |
-|---|---|
-| `profit-analysis` | `mcp__longbridge__profit_analysis` |
-| `profit-analysis detail <SYMBOL>` | `mcp__longbridge__profit_analysis_detail` |
-| `profit-analysis by-market` | `mcp__longbridge__profit_analysis_by_market` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

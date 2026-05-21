@@ -83,7 +83,7 @@ Note: ESG ratings and credit ratings (Moody's / S&P) are not available via Longb
 
 ## MCP fallback
 
-If CLI is unavailable: `mcp__longbridge__institution_rating`, `mcp__longbridge__consensus`, and `mcp__longbridge__forecast_eps`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

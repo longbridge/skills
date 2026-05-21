@@ -137,11 +137,7 @@ longbridge news <SYMBOL> --format json
 
 ## MCP fallback
 
-| CLI command | MCP tool |
-|---|---|
-| `longbridge filing` | `mcp__longbridge__filing` |
-| `longbridge financial-report` | `mcp__longbridge__latest_financial_report` |
-| `longbridge news` | `mcp__longbridge__news` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -117,13 +117,7 @@ When summarising, give a small table of dates + keys; never re-format the sectio
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `statement` / `statement list` | `mcp__longbridge__statement_list` (or fall back via the equivalent MCP tool) |
-| `statement export` | `mcp__longbridge__statement_export` (or fall back via the equivalent MCP tool) |
-| `bank-cards` | `mcp__longbridge__bank_cards` |
-| `withdrawals` | `mcp__longbridge__withdrawals` |
-| `deposits` | `mcp__longbridge__deposits` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If the exact MCP names differ, the CLI is the canonical path.
 

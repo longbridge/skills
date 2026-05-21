@@ -218,21 +218,7 @@ After the cards, every output must include:
 
 If `longbridge` CLI is not installed, use MCP tools (`claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, `quote` scope):
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__constituent` | `longbridge constituent` |
-| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
-| `mcp__longbridge__quote` | `longbridge quote` |
-| `mcp__longbridge__basicinfo` | `longbridge basicinfo` |
-| `mcp__longbridge__financial_report` | `longbridge financial-report` |
-| `mcp__longbridge__kline` | `longbridge kline` |
-| `mcp__longbridge__dividend` | `longbridge dividend` |
-| `mcp__longbridge__corporate` | `longbridge corporate` |
-| `mcp__longbridge__ownership` | `longbridge ownership` |
-| `mcp__longbridge__insresearch` | `longbridge insresearch` |
-| `mcp__longbridge__company_profile` | `longbridge company-profile` |
-| `mcp__longbridge__peer_comparison` | `longbridge peer-comparison` |
-| `mcp__longbridge__sector_screener` | `longbridge sector-screener` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -89,7 +89,7 @@ Price alerts are tied to the user's Longbridge account but do not place trades, 
 
 ## MCP fallback (only after confirmation)
 
-If the CLI binary is unavailable, an MCP equivalent may be wired up under names such as `mcp__longbridge__create_price_alert` / `mcp__longbridge__delete_price_alert` / `mcp__longbridge__list_price_alerts`. Tool names are environment-specific — discover them via `ListMcpResourcesTool` rather than hard-coding.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 > **Important**: the preview / confirm cycle still applies when going through MCP. MCP write tools have no built-in confirmation prompt; this SKILL is responsible for the gate.
 

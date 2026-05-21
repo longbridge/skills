@@ -42,13 +42,16 @@ Prompt-only skill that takes 2–5 symbols, runs the same per-symbol orchestrati
 
 ## CLI
 
-Run `longbridge <subcommand> --help` to verify exact flags. Per-symbol calls (run concurrently for all symbols):
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed per symbol (run concurrently for all symbols):
+
+- Real-time quote (last price, change)
+- Valuation indices (PE, PB, PS, dividend yield, market cap)
+- Financial KPIs from the most recent report (revenue, net income, ROE) — headline figures only, not full statements
+- Historical valuation data
 
 ```bash
-longbridge quote NVDA.US --format json
-longbridge calc-index NVDA.US --format json
-longbridge financial-report NVDA.US --format json   # headline KPIs only — no need for full IS/BS/CF
-longbridge valuation NVDA.US --format json
+# Always check flags first, then call — example structure:
+longbridge <subcommand> NVDA.US --format json
 ```
 
 ## Workflow
@@ -117,12 +120,7 @@ longbridge valuation NVDA.US --format json
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead (per symbol):
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__quote` | `longbridge quote` |
-| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
-| `mcp__longbridge__latest_financial_report` | `longbridge financial-report` |
-| `mcp__longbridge__valuation` | `longbridge valuation` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

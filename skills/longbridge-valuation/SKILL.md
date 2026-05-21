@@ -31,17 +31,17 @@ For multi-symbol comparison route to `longbridge-peer-comparison`. For business-
 
 ## CLI
 
-Run `longbridge <subcommand> --help` to verify exact flags. Primary calls (run concurrently):
+Run `longbridge --help` to see all available subcommands, then `longbridge <subcommand> --help` before calling. Types of data needed (run concurrently):
+
+- Current valuation snapshot + peer comparison
+- Historical valuation series (PE, PB — run `--help` for available indicators and range flags)
+- Daily industry percentile rank for PE / PB / PS (run `--help` for date range flags)
+- Industry median + distribution
+- Industry percentile distribution
+- Optional intraday valuation correction (for live mid-day prices — run `--help` for the relevant subcommand)
 
 ```bash
-longbridge valuation TSLA.US --format json               # current snapshot + peer comparison
-longbridge valuation TSLA.US --history --range 3 --format json   # 3-year historical series
-longbridge valuation TSLA.US --history --indicator pb --range 5 --format json  # PB 5-year series
-longbridge valuation-rank TSLA.US --format json          # daily PE/PB/PS industry percentile rank (past 1 year)
-longbridge valuation-rank TSLA.US --start 20230101 --end 20251231 --format json  # custom date range
-longbridge industry-valuation TSLA.US --format json      # industry median + distribution
-longbridge industry-valuation dist TSLA.US --format json # percentile distribution
-longbridge calc-index TSLA.US --format json              # optional intraday PE correction
+longbridge <subcommand> TSLA.US --format json   # run --help for available flags and subcommand names
 ```
 
 ## Workflow
@@ -50,16 +50,16 @@ longbridge calc-index TSLA.US --format json              # optional intraday PE 
 2. **Concurrently call** CLI commands above. If `longbridge` is not installed, fall back to MCP (see MCP fallback section).
 3.
 
-   Optional intraday correction (only when needed): `longbridge calc-index` — `valuation` is often EOD; `calc-index` reflects the live mid-day price.
+   Optional intraday correction (only when needed): run `longbridge --help` to find the subcommand for live intraday valuation — note that the standard valuation subcommand is often EOD only.
 
 4. **Compute** in the LLM:
 
    | Quantity | Method |
    |---|---|
-   | Historical PE percentile | prefer `valuation-rank` daily rank series; fallback: rank current PE against `valuation --history` series |
+   | Historical PE percentile | prefer the daily valuation-rank series from CLI; fallback: rank current PE against historical valuation series |
    | Historical PB percentile | same |
    | Industry premium | `(current PE − industry median PE) / industry median PE` |
-   | Industry rank | bucket from `industry-valuation dist` |
+   | Industry rank | bucket from industry valuation distribution data |
 
    If history is sparse (< 1y) or the industry has fewer than 5 peers, **degrade gracefully** — show snapshot + relative-to-industry only, drop the percentile claim.
 
@@ -110,7 +110,7 @@ Energy / chemicals / steel / shipping / banks / property are cyclical: PE invert
 |---|---|
 | `command not found: longbridge` | Fall back to MCP; if MCP also unavailable, tell user to install longbridge-terminal. |
 | stderr `not logged in` | Tell user to run `longbridge auth login`. |
-| `valuation` returns empty | "{symbol} has no valuation data (likely an obscure or newly listed name)." |
+| Valuation data returns empty | "{symbol} has no valuation data (likely an obscure or newly listed name)." |
 | history < 1 year | Degrade to snapshot + industry-only |
 | Industry < 5 peers | Caveat: "industry sample sparse; industry percentile is indicative only" |
 
@@ -118,15 +118,7 @@ Energy / chemicals / steel / shipping / banks / property are cyclical: PE invert
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
 
-| MCP tool | CLI equivalent |
-|---|---|
-| `mcp__longbridge__valuation` | `longbridge valuation` |
-| `mcp__longbridge__valuation_history` | `longbridge valuation --history --range 3` |
-| `mcp__longbridge__valuation_rank` | `longbridge valuation-rank` |
-| `mcp__longbridge__industry_valuation` | `longbridge industry-valuation` |
-| `mcp__longbridge__industry_valuation_dist` | `longbridge industry-valuation dist` |
-| `mcp__longbridge__latest_financial_report` | `longbridge financial-report --latest` |
-| `mcp__longbridge__calc_indexes` | `longbridge calc-index` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (`quote` scope).
 

@@ -33,39 +33,36 @@ Do **not** use for financial KPIs / earnings (→ `longbridge-fundamental` / `lo
 ## Workflow
 
 1. Resolve the user's symbol to `<CODE>.<MARKET>` (e.g. `AAPL.US`, `700.HK`, `600519.SH`).
-2. Run `longbridge news --help`, `longbridge filing --help`, and `longbridge corp-action --help` to confirm current flag names.
-3. Fetch **latest news and announcements** with `longbridge news <SYMBOL> --format json`.
-4. Fetch **regulatory filings** with `longbridge filing <SYMBOL> --format json`.
-5. Fetch **corporate actions** (dividends, splits, rights, buyback notices) with `longbridge corp-action <SYMBOL> --format json`.
-6. Fetch **major shareholder changes** with `longbridge shareholder <SYMBOL> --format json`.
-7. Optionally fetch **earnings / event calendar** with `longbridge finance-calendar --category financial --format json` to surface upcoming catalysts.
+2. Run `longbridge --help` to see available subcommands; run `longbridge <subcommand> --help` to confirm current flags for each.
+3. Fetch **latest news and announcements** using the news subcommand with `--format json`.
+4. Fetch **regulatory filings** using the filings subcommand with `--format json`.
+5. Fetch **corporate actions** (dividends, splits, rights, buyback notices) using the corporate-actions subcommand with `--format json`.
+6. Fetch **major shareholder changes** using the shareholder subcommand with `--format json`.
+7. Optionally fetch **earnings / event calendar** using the finance-calendar subcommand with `--format json` to surface upcoming catalysts.
 8. Classify each event into one of the standard types (see Output), assess sentiment (+/−/neutral), and estimate the expected price-impact window.
 9. Output the event ledger and a summary directional signal.
 
 ## CLI
 
 ```bash
-# Confirm current flags before use
-longbridge news --help
-longbridge filing --help
-longbridge corp-action --help
-longbridge shareholder --help
-longbridge finance-calendar --help
+# Discover available subcommands and their flags
+longbridge --help
+longbridge <subcommand> --help   # run for each subcommand before use
 
 # Latest news and announcements
-longbridge news AAPL.US --format json
+longbridge <news-subcommand> AAPL.US --format json
 
 # Regulatory filings (SEC 8-K, HKEx announcements, CSRC disclosures)
-longbridge filing AAPL.US --format json
+longbridge <filing-subcommand> AAPL.US --format json
 
 # Corporate actions (dividends, splits, rights, buybacks)
-longbridge corp-action AAPL.US --format json
+longbridge <corp-action-subcommand> AAPL.US --format json
 
 # Major shareholder changes
-longbridge shareholder AAPL.US --format json
+longbridge <shareholder-subcommand> AAPL.US --format json
 
 # Upcoming earnings / event calendar
-longbridge finance-calendar --category financial --format json
+longbridge <finance-calendar-subcommand> --format json
 ```
 
 ## Output
@@ -117,13 +114,7 @@ When no significant events are found, state so explicitly — do not invent sign
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `news` | `mcp__longbridge__news` |
-| `filing` | `mcp__longbridge__filing` |
-| `corp-action` | `mcp__longbridge__corp_action` |
-| `shareholder` | `mcp__longbridge__shareholder` |
-| `finance-calendar` | `mcp__longbridge__finance_calendar` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

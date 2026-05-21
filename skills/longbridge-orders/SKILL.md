@@ -90,16 +90,9 @@ If `longbridge` is missing, fall back to MCP. Long history ranges may take a whi
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `order` (today) | `mcp__longbridge__today_orders` |
-| `order --history` | `mcp__longbridge__history_orders` |
-| `order detail <id>` | `mcp__longbridge__order_detail` |
-| `order executions` (today) | `mcp__longbridge__today_executions` |
-| `order executions --history` | `mcp__longbridge__history_executions` |
-| `cash-flow` | `mcp__longbridge__cash_flow` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
-MCP-only extensions: `mcp__longbridge__statement_*` (account statements / report exports).
+MCP-only extensions are available; discover them from the MCP server's tool list at runtime.
 
 ## Related skills
 

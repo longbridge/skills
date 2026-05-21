@@ -32,17 +32,17 @@ For intraday large/medium/small-order capital flow → `longbridge-capital-flow`
 
 > Run `longbridge <subcommand> --help` if unsure of current flags. The CLI's built-in help is the canonical source.
 
-| CLI command | Returns | Markets |
+| Capability | Returns | Markets |
 |---|---|---|
-| `longbridge investors --format json` | Live top-50 active fund-manager rankings by AUM (no CIK). | global |
-| `longbridge investors <CIK> --top N --format json` | Latest 13F holdings snapshot for a CIK; `--top` defaults to 50. | US (SEC EDGAR) |
-| `longbridge investors changes <CIK> --format json` | Quarter-over-quarter position changes (NEW / ADDED / REDUCED / EXITED). | US |
-| `longbridge fund-holder <SYMBOL> --count N --format json` | Funds and ETFs holding the symbol — name, ticker, currency, weight, report date. `--count -1` returns all. | global |
-| `longbridge insider-trades <SYMBOL> --count N --format json` | SEC Form 4 trades — BUY (P) / SELL (S) / GRANT (A) / DISP (D) / TAX (F) / EXERCISE (M/X) / GIFT (G). | **US only** |
-| `longbridge short-positions <SYMBOL> --count N --format json` | Short interest, short ratio, days to cover (1–100, default 20). | **US only** |
-| `longbridge broker-holding <SYMBOL> --period rct_1\|rct_5\|rct_20\|rct_60 --format json` | Top buy / sell brokers over the period. | **HK only** |
-| `longbridge broker-holding detail <SYMBOL> --format json` | Full broker-holding detail list. | HK only |
-| `longbridge broker-holding daily <SYMBOL> --broker B0xxxx --format json` | Daily holding history for a specific broker. | HK only |
+| Fund-manager AUM rankings (no symbol) | Live active fund-manager rankings by AUM. | global |
+| 13F holdings for a manager (by CIK) | Latest 13F holdings snapshot; run `--help` for count/filter flags. | US (SEC EDGAR) |
+| 13F quarter-over-quarter changes | Position changes (NEW / ADDED / REDUCED / EXITED). | US |
+| Funds and ETFs holding a symbol | Fund name, ticker, currency, weight, report date; run `--help` for count flags. | global |
+| SEC Form 4 insider trades | BUY / SELL / GRANT / DISP / TAX / EXERCISE / GIFT; run `--help` for count flags. | **US only** |
+| Short interest history | Short interest, short ratio, days to cover; run `--help` for range flags. | **US only** |
+| Broker holdings over a period | Top buy / sell brokers; run `--help` for period options. | **HK only** |
+| Broker holdings detail | Full broker-holding detail list. | HK only |
+| Daily holding history for a broker | Single broker's daily history; run `--help` for broker-filter flags. | HK only |
 
 Single symbol per call (except `investors` rankings).
 
@@ -57,18 +57,20 @@ Single symbol per call (except `investors` rankings).
 ## CLI
 
 ```bash
-longbridge investors                                  --format json   # AUM rankings (no CIK)
-longbridge investors 1067983 --top 20                 --format json   # Berkshire 13F top 20
-longbridge investors changes 1067983                  --format json   # QoQ changes
-longbridge fund-holder AAPL.US --count 30             --format json
-longbridge insider-trades TSLA.US --count 40          --format json   # US only
-longbridge short-positions AAPL.US --count 50         --format json   # US only
-longbridge broker-holding 700.HK --period rct_5       --format json   # HK only
-longbridge broker-holding detail 700.HK               --format json
-longbridge broker-holding daily 700.HK --broker B01224 --format json
-```
+# Discover available subcommands and their flags first
+longbridge --help
+longbridge <subcommand> --help   # run for each subcommand before use
 
-If `--help` shows newer flags, follow the help output rather than hard-coding here.
+longbridge <investors-subcommand> --format json                   # AUM rankings (no CIK)
+longbridge <investors-subcommand> 1067983 --format json           # Berkshire 13F
+longbridge <investors-changes-subcommand> 1067983 --format json   # QoQ changes
+longbridge <fund-holder-subcommand> AAPL.US --format json
+longbridge <insider-trades-subcommand> TSLA.US --format json      # US only
+longbridge <short-positions-subcommand> AAPL.US --format json     # US only
+longbridge <broker-holding-subcommand> 700.HK --format json       # HK only
+longbridge <broker-holding-detail-subcommand> 700.HK --format json
+longbridge <broker-holding-daily-subcommand> 700.HK --format json
+```
 
 ## Output
 
@@ -100,16 +102,7 @@ When a result is empty, state so. Do not invent.
 
 When the CLI binary is missing, fall back via the equivalent MCP tool. Tool names typically mirror CLI subcommand names (snake_case).
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `investors` (rankings / 13F) | `mcp__longbridge__investors` |
-| `investors changes` | `mcp__longbridge__investors_changes` |
-| `fund-holder` | `mcp__longbridge__fund_holder` |
-| `insider-trades` | `mcp__longbridge__insider_trades` |
-| `short-positions` | `mcp__longbridge__short_positions` |
-| `broker-holding` | `mcp__longbridge__broker_holding` |
-| `broker-holding detail` | `mcp__longbridge__broker_holding_detail` |
-| `broker-holding daily` | `mcp__longbridge__broker_holding_daily` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 If a name above does not resolve, fall back via the equivalent MCP tool when CLI is missing.
 

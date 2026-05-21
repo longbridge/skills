@@ -92,7 +92,7 @@ Merge the three JSON responses by `symbol` and present key fields:
 
 ## MCP fallback
 
-If the CLI binary is unavailable, fall back to `mcp__longbridge__static_info` and `mcp__longbridge__company_profile` when the MCP server is configured.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

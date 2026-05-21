@@ -35,16 +35,16 @@ For single-stock capital flow route to `longbridge-capital-flow`. For single-sto
    - A-share: 申万一级行业指数 (SW L1); common symbols like `801010.SH` (agriculture), `801020.SH` (mining), `801030.SH` (chemicals), `801040.SH` (steel), `801050.SH` (non-ferrous), `801080.SH` (electronics), `801130.SH` (media), `801140.SH` (retail), `801150.SH` (F&B), `801160.SH` (home appliances), `801170.SH` (auto), `801180.SH` (property), `801200.SH` (retail), `801710.SH` (building materials), `801720.SH` (construction), `801730.SH` (utilities), `801740.SH` (defense), `801750.SH` (IT), `801760.SH` (telecom), `801770.SH` (biotech), `801780.SH` (financials), `801790.SH` (brokers).
    - HK: use sector ETFs or HSI sub-indices.
    - US: use SPDR sector ETFs (`XLK.US`, `XLF.US`, `XLE.US`, `XLV.US`, `XLY.US`, `XLI.US`, `XLP.US`, `XLB.US`, `XLRE.US`, `XLU.US`, `XLC.US`).
-3. **Fetch kline data** for each sector symbol to compute momentum. Run `longbridge kline --help` to verify flags:
+3. **Fetch kline data** for each sector symbol to compute momentum. Run `longbridge kline --help` to verify exact flags, then call:
    ```bash
-   longbridge kline <SYMBOL> --period day --count 65 --format json
+   longbridge kline <SYMBOL> --format json   # run --help for available period/count flags
    ```
 4. **Compute momentum score** for each sector (LLM in-context):
    - 20-day return: `(close[-1] / close[-20]) - 1`
    - 60-day return: `(close[-1] / close[-60]) - 1`
-5. **Fetch capital flow** for top candidates (up to 5 by momentum):
+5. **Fetch capital flow** for top candidates (up to 5 by momentum). Run `longbridge capital --help` to verify flags, then call:
    ```bash
-   longbridge capital <SYMBOL> --flow --format json
+   longbridge capital <SYMBOL> --format json   # run --help for time-series vs snapshot flags
    ```
 6. **Fetch industry valuation** for context:
    ```bash
@@ -59,18 +59,18 @@ For single-stock capital flow route to `longbridge-capital-flow`. For single-sto
 Run `--help` before calling any subcommand if unsure of flags.
 
 ```bash
-# Step 1: kline for momentum (repeat per sector symbol)
-longbridge kline 801750.SH --period day --count 65 --format json
+# Step 1: kline for momentum (repeat per sector symbol); run --help for period/count flags
+longbridge kline 801750.SH --format json
 
-# Step 2: capital flow for shortlisted sectors
-longbridge capital 801750.SH --flow --format json
+# Step 2: capital flow for shortlisted sectors; run --help for time-series vs snapshot flags
+longbridge capital 801750.SH --format json
 
 # Step 3: industry valuation for context
 longbridge industry-valuation 801750.SH --format json
 
 # Sector ETFs for US market
-longbridge kline XLK.US --period day --count 65 --format json
-longbridge capital XLK.US --flow --format json
+longbridge kline XLK.US --format json
+longbridge capital XLK.US --format json
 ```
 
 ## Output
@@ -106,11 +106,7 @@ tilt toward growth sectors.
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `kline <SYMBOL> --period day` | `mcp__longbridge__security_candlesticks` |
-| `capital <SYMBOL> --flow` | `mcp__longbridge__capital_flow` |
-| `industry-valuation <SYMBOL>` | `mcp__longbridge__industry_valuation` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

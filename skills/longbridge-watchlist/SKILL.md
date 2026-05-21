@@ -57,11 +57,9 @@ If `longbridge` is missing, fall back to MCP. The watchlist read endpoint does n
 
 ## MCP fallback
 
-| CLI behaviour | MCP tool |
-|---|---|
-| List watchlist (with optional filter) | `mcp__longbridge__watchlist` (returns all groups; LLM filters) |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
-MCP-only extensions: `mcp__longbridge__sharelist_*` — community-shared watchlists (8 tools: list / detail / create / update / delete / member_add / member_remove / popular). For *"hot lists"*, *"what's trending"*, route to `sharelist_*` directly.
+MCP-only extensions are available; discover them from the MCP server's tool list at runtime.
 
 ## Related skills
 

@@ -86,9 +86,7 @@ Where YoY / QoQ changes are computable from the returned data, add a `Δ%` colum
 
 If `longbridge` CLI is not installed, use:
 
-| CLI usage | MCP tool |
-|---|---|
-| `operating <SYMBOL>` | `mcp__longbridge__operating_data` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -125,12 +125,7 @@ Date: YYYY-MM-DD
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `capital <SYMBOL> --flow` | `mcp__longbridge__capital_flow` |
-| `ah-premium <SYMBOL>` | `mcp__longbridge__calc_indexes` (AH premium index) |
-| `quote <SYMBOL>` | `mcp__longbridge__quote` |
-| `broker-holding <SYMBOL>` | `mcp__longbridge__broker_holding` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -5,9 +5,9 @@
 - [ ] Confirmed earnings date and time (pre-market vs. after-hours)
 - [ ] Consensus estimates sourced with date (revenue, EPS, key metrics)
 - [ ] Prior quarter results and management guidance reviewed
-- [ ] Recent filings checked via `longbridge filing SYMBOL --count 5 --format json 2>/dev/null`
-- [ ] Recent news scanned via `longbridge news SYMBOL --count 10 --format json 2>/dev/null`
-- [ ] Current price and valuation via `longbridge quote` and `longbridge calc-index`
+- [ ] Recent filings checked via `longbridge <filing-subcommand> SYMBOL --format json` (run `--help` for count/limit flags)
+- [ ] Recent news scanned via `longbridge <news-subcommand> SYMBOL --format json` (run `--help` for count/limit flags)
+- [ ] Current price and valuation fetched via appropriate quote and valuation index subcommands (run `longbridge --help` to discover)
 - [ ] Historical earnings reaction pattern researched (web search)
 - [ ] Options-implied move checked (web search)
 

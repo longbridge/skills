@@ -33,9 +33,9 @@ Do **not** use this skill for historical (multi-day) flow analysis — route to 
 ## Workflow
 
 1. Resolve the user's symbol to `<CODE>.<MARKET>` (e.g. `NVDA.US`, `700.HK`, `600519.SH`).
-2. Run `longbridge depth --help` and `longbridge trades --help` to confirm current flag names.
-3. Fetch **orderbook depth** with `longbridge depth <SYMBOL> --format json`.
-4. Fetch **recent tick trades** (last 100) with `longbridge trades <SYMBOL> --count 100 --format json`.
+2. Run `longbridge --help` to see available subcommands; run `longbridge <subcommand> --help` to confirm current flags for each.
+3. Fetch **orderbook depth** using the depth subcommand with `--format json`.
+4. Fetch **recent tick trades** using the trades subcommand with `--format json` (check `--help` for count/range flags).
 5. Fetch **capital-flow distribution** (large / medium / small orders) with `longbridge capital <SYMBOL> --format json`.
 6. For **HK symbols only**, also fetch `longbridge brokers <SYMBOL> --format json` to identify large broker queues (potential institutional blocks).
 7. Compute or estimate:
@@ -49,23 +49,21 @@ Do **not** use this skill for historical (multi-day) flow analysis — route to 
 ## CLI
 
 ```bash
-# Confirm current flags before use
-longbridge depth --help
-longbridge trades --help
-longbridge capital --help
-longbridge brokers --help
+# Discover available subcommands and their flags first
+longbridge --help
+longbridge <subcommand> --help   # run for each subcommand before use
 
 # Orderbook depth (5/10-level bid/ask)
-longbridge depth NVDA.US --format json
+longbridge <depth-subcommand> NVDA.US --format json
 
-# Recent 100 tick trades
-longbridge trades NVDA.US --count 100 --format json
+# Recent tick trades (check --help for count/range flags)
+longbridge <trades-subcommand> NVDA.US --format json
 
 # Capital flow (large/medium/small order distribution)
-longbridge capital NVDA.US --format json
+longbridge <capital-subcommand> NVDA.US --format json
 
 # Broker queue — HK symbols only
-longbridge brokers 700.HK --format json
+longbridge <brokers-subcommand> 700.HK --format json
 ```
 
 ## Output
@@ -106,12 +104,7 @@ Key field translations (LLM maps JSON keys → user language):
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `depth` | `mcp__longbridge__depth` |
-| `trades` | `mcp__longbridge__trades` |
-| `brokers` | `mcp__longbridge__brokers` |
-| `capital` | `mcp__longbridge__capital_distribution` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -84,7 +84,7 @@ Output: cointegration verdict → spread statistics table → current signal →
 
 ## MCP fallback
 
-Use `mcp__longbridge__candlesticks` with `period=Day`, `count=252` for each symbol when CLI is unavailable.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

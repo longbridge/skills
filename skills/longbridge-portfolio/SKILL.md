@@ -162,15 +162,7 @@ Same for the contribution ranking — list the top 10 (mix of leaders and laggar
 
 If `longbridge` CLI is not installed (`command not found`), use MCP tools instead:
 
-| MCP tool | CLI equivalent | Scope |
-|---|---|---|
-| `mcp__longbridge__profit_analysis` | `longbridge profit-analysis` | trade |
-| `mcp__longbridge__profit_analysis_detail` | `longbridge profit-analysis detail` | trade |
-| `mcp__longbridge__stock_positions` | `longbridge positions` | trade |
-| `mcp__longbridge__account_balance` | `longbridge assets` | trade |
-| `mcp__longbridge__fund_positions` | `longbridge fund-positions` | trade |
-| `mcp__longbridge__exchange_rate` | `longbridge exchange-rate` | quote |
-| `mcp__longbridge__static_info` | `longbridge static` | quote |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (trade scope required).
 

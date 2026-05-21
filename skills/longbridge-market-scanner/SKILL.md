@@ -82,7 +82,7 @@ Note: Technical indicators are computed in-context from `kline` OHLCV data and a
 
 ## MCP fallback
 
-If CLI is unavailable: `mcp__longbridge__quote`, `mcp__longbridge__capital_flow`, and `mcp__longbridge__candlesticks`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

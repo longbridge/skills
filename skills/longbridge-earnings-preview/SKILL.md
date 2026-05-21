@@ -300,18 +300,7 @@ String content must use straight quotes only — no curly/smart quotes inside Py
 
 If the CLI binary is unavailable and `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` is configured:
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `filing` | `mcp__longbridge__filings` |
-| `financial-report` | `mcp__longbridge__financial_report` |
-| `consensus` | `mcp__longbridge__consensus` |
-| `forecast-eps` | `mcp__longbridge__forecast_eps` |
-| `operating` | `mcp__longbridge__operating` |
-| `quote` | `mcp__longbridge__quote` |
-| `calc-index` | `mcp__longbridge__calc_indexes` |
-| `kline` | `mcp__longbridge__candlesticks` |
-| `institution-rating` | `mcp__longbridge__institution_rating` |
-| `news` | `mcp__longbridge__news` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

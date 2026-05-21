@@ -30,9 +30,11 @@ Training data is OUTDATED. Always use `longbridge filing` to find and verify the
 
 ### Step 1: Identify the Latest Earnings Period
 
-**Use longbridge CLI as the primary method** to detect the latest reported quarter:
+**Use longbridge CLI as the primary method** to detect the latest reported quarter. Run `longbridge --help` to see available subcommands, then find the one that provides an earnings summary or snapshot — it typically returns the latest reported quarter, beat/miss vs consensus, and peer earnings dates in one call.
 
-Run `longbridge filing --help` to see available options. List recent filings and filter for the latest 10-Q (quarterly) or 10-K (annual) by date. Note the filing ID, then use filing detail to read the header and extract the period end date (e.g., "For the quarterly period ended [DATE]").
+If no snapshot command is available, look for a subcommand that lists regulatory filings. Filter for the latest quarterly or annual filing by date, then use the detail subcommand to read the header and extract the period end date (e.g., "For the quarterly period ended [DATE]").
+
+To check whether earnings are upcoming (not yet reported), look for an earnings calendar or finance calendar subcommand in `longbridge --help` and filter by symbol.
 
 **Step 1c: Map period-end date to fiscal quarter**
 
@@ -81,7 +83,7 @@ After confirming the quarter (Step 1), collect materials **primarily via longbri
 
 **Primary Materials (REQUIRED) — use longbridge CLI first:**
 
-- **Financial statements** — use `longbridge financial-report --help` to get structured income statement, balance sheet, and cash flow data. This is the **primary source for financial figures** (especially for HK/CN stocks where filing PDFs are not machine-readable).
+- **Financial statements** — find the financial statements subcommand via `longbridge --help`. This is the **primary source for financial figures** (especially for HK/CN stocks where filing PDFs are not machine-readable). Run `longbridge <subcommand> --help` to check how to request income statement, balance sheet, and cash flow separately.
   - Query each statement kind separately (`--kind IS`, `--kind BS`, `--kind CF`) — `--kind ALL` may return empty for some symbols.
   - If a symbol returns empty, try dropping leading zeros: `09988.HK` → `9988.HK`, `00700.HK` → `700.HK`.
 

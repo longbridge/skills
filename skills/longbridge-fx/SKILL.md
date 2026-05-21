@@ -76,9 +76,7 @@ Render the relevant row(s) only; don't dump the full table unless the user asked
 
 ## MCP fallback
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `exchange-rate` | `mcp__longbridge__exchange_rate` (or fall back via the equivalent MCP tool) |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

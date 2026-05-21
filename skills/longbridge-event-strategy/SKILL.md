@@ -97,7 +97,7 @@ The above is for informational purposes only and does not constitute investment 
 
 ## MCP fallback
 
-If CLI is unavailable: `mcp__longbridge__news`, `mcp__longbridge__filings`, `mcp__longbridge__calendar`, and `mcp__longbridge__candlesticks`.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 

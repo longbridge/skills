@@ -84,11 +84,7 @@ Mutating operations require the **trade scope**. Without it, both CLI and MCP fa
 
 ## MCP fallback (only after confirmation)
 
-| CLI subcommand | MCP tool |
-|---|---|
-| `watchlist create` | `mcp__longbridge__create_watchlist_group` |
-| `watchlist update` | `mcp__longbridge__update_watchlist_group` |
-| `watchlist delete` | `mcp__longbridge__delete_watchlist_group` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 > **Important**: the preview / confirm cycle still applies when going through MCP. MCP write tools have no built-in confirmation prompt; this SKILL is responsible for the gate.
 

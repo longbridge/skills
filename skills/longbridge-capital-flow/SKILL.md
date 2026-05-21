@@ -72,10 +72,7 @@ If `longbridge` is missing, fall back to MCP. Other stderr messages get relayed 
 
 ## MCP fallback
 
-| CLI usage | MCP tool |
-|---|---|
-| `capital <SYMBOL>` (snapshot) | `mcp__longbridge__capital_distribution` |
-| `capital <SYMBOL> --flow` (time series) | `mcp__longbridge__capital_flow` |
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 
 ## Related skills
 

@@ -74,7 +74,7 @@ Present: (1) full correlation matrix table with colour coding (high ≥ 0.8 = re
 
 ## MCP fallback
 
-Use `mcp__longbridge__candlesticks` with `period=Day`, `count=252` per symbol when CLI is unavailable.
+When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime.
 
 ## Related skills
 
