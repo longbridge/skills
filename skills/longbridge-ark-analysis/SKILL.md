@@ -34,33 +34,38 @@ For Buffett-style moat analysis → `longbridge-buffett-moat-analyzer`. For Grah
 
 ## Cognitive frame (do not skip)
 
-ARK's reference is **5-year ownership of disruptive-innovation companies**, with three-scenario thinking around a TAM × market-share × margin × multiple terminal value, discounted back. Two things every output must surface:
+ARK's reference is **5-year ownership of disruptive-innovation companies**, with three-scenario thinking around a TAM × market-share × margin × multiple terminal value, discounted back. Three things every output must surface:
 
 1. **Suitability is a gate, not a soft preference.** If the company is not in one of ARK's five innovation platforms (**Artificial Intelligence · Robotics & Autonomous Mobility · Energy Storage & EV Adoption · Multiomic Sequencing & AI Drug Discovery · Public Blockchains & Digital Assets** — see `references/scoring.md` §Suitability for the value-chain decomposition into upstream / core / downstream / adjacent tiers, and the convergence themes), **reject** and recommend an alternative method — do not produce a "for reference" ARK report on a bank, oil major, or consumer staple. A company qualifies if its revenue depends materially on **any tier** of a platform (upstream / core / downstream / adjacent) — not only on being the platform's headline name.
 2. **5-year predictions are wide ranges, not point estimates.** TAM and market share are deeply uncertain. The output always shows three scenarios (Bull / Base / Bear) with explicit assumptions; never collapse them to a single confident number, and never present the weighted target price as a forecast — call it a model-derived expectation.
+3. **Many disruptors have short history — analyse them anyway, on forward inputs.** A large share of ARK-style names (RIVN, RXRX, IONQ, BEAM, NTLA, COIN post-pivot, PLTR's commercial-AI era) have 1–3 fiscal years of public history and live almost entirely in the **forward** thesis. The skill enters **Young-company mode** (see `references/scoring.md` §Young-company mode) and explicitly anchors on forward consensus, cash runway, dilution path, capacity roadmap, regulatory milestones, and customer pipeline — not on a backward 5-year operating-leverage curve. **Short history alone is not a rejection.** Reject reason C is reserved for genuinely pre-revenue names.
 
-Two failure modes the user must be able to distinguish:
+Three failure modes the user must be able to distinguish:
 - **"Right platform, wrong company"** → platform fit strong but innovation revenue < 20% or no quantified management vision → ❌ reject; recommend a method that fits the actual revenue mix.
-- **"Right company, framework limit"** → fits the platform but pre-revenue / no comparable history → ❌ reject (data-basis insufficient); recommend an early-stage framework.
+- **"Right company, framework limit (pre-revenue)"** → fits the platform but truly no commercial revenue base → ❌ reject (reason C); recommend an early-stage framework.
+- **"Right company, short history but commercial"** → fits the platform, has commercial revenue, but < 3 yrs of public scale history → ✅ **enter Young-company mode**, do **not** reject.
 
 ## Workflow
 
 1. **Resolve symbol** to `<CODE>.<MARKET>` (e.g. `TSLA.US`, `00700.HK`, `300750.SZ`).
-2. **Sector triage**:
+2. **Sector triage** (decides mode + reject branch):
    - Traditional industry (bank / insurance / oil / real estate / staples / utilities not in energy-transition) → halt with reject reason **A — Traditional industry** (see `references/scoring.md` §Reject reasons).
    - Being-disrupted incumbent (e.g. ICE auto, fossil-fuel major, legacy media against streaming) → halt with reason **B — Being disrupted**.
-   - Pre-revenue / listed < 2 fiscal years / no meaningful revenue history → halt with reason **C — Data basis insufficient**.
    - Mature tech with disruption already priced in (e.g. mature consumer electronics supply chain) → halt with reason **D — Disruption premium already realised**.
+   - **Truly pre-revenue** (no commercial product/service revenue, or revenue is < ~$10M annualised with no commercial path in 18 months) → halt with reason **C — Data basis insufficient**.
+   - **Has commercial revenue but short public history** (listed < 3 fiscal years OR < 3 yrs of scale revenue OR recent business-model pivot OR post-SPAC < 12 months) → **enter Young-company mode** (see `references/scoring.md` §Young-company mode). Do **not** reject. The mode loosens history requirements and adds **mandatory forward-looking inputs** (forward consensus, cash runway, dilution path, capacity roadmap, regulatory milestones, customer pipeline).
+   - **Standard mode** (commercial revenue + ≥ 3 yrs scale history + no recent pivot) → proceed without mode flag.
 3. **Fetch raw data via Longbridge CLI first** (parallel where possible). See [§CLI](#cli). If `longbridge` is missing, fall back to MCP (see [§MCP fallback](#mcp-fallback)). Use WebSearch **only** for items genuinely outside Longbridge — TAM figures, Wright's-Law learning rates, qualitative management innovation signals, industry-runway evidence.
 4. **Reconciliation gate** (勾稽校验) — runs **before** suitability scoring or any analysis. See [§Reconciliation](#reconciliation-勾稽校验). Two-state outcome:
    - **Pass (every check within tolerance)** → proceed. A one-line summary of the result still appears at the end of the data-source appendix.
    - **Fail (any check exceeds tolerance)** → halt all downstream analysis, emit a halt message naming the failing check and gap, still print the data-source appendix and the reconciliation summary describing the failure.
-5. **Suitability scoring** — score 4 dimensions on 强/中/弱; apply the pass/reject matrix in `references/scoring.md` §Suitability. If reject, emit the reject layout (see `references/output.md` §Reject case) with an alternative-method recommendation matched from `references/scoring.md` §Alternative-method matching. **Do not** produce a "for reference" ARK analysis on a rejected name.
+5. **Suitability scoring** — score 4 dimensions on 强/中/弱; apply the pass/reject matrix in `references/scoring.md` §Suitability. If Young-company mode is active, dimensions are evaluated on the available history (pro-rated, tagged in the appendix) and the **management-vision bar is raised** — quantified milestones + dated regulatory or commercial gates are now required for 强. If reject, emit the reject layout (see `references/output.md` §Reject case) with an alternative-method recommendation matched from `references/scoring.md` §Alternative-method matching. **Do not** produce a "for reference" ARK analysis on a rejected name.
 6. **TAM** — three tiers (low / base / high), each tagged with a source priority (权威机构 > 公司自披露 > 学术/智库 > ARK 公开报告 > 估算). Estimation-only TAM must be explicitly labelled `估算`. See `references/scoring.md` §TAM rules.
 7. **Wright's-Law note** — pick the technology learning rate from the table in `references/scoring.md` §Wright's Law and refresh it via WebSearch against the cited authority (BloombergNEF / IRENA / NHGRI / Epoch AI / ARK). Never use the embedded historical figure as the current value without verification.
-8. **Three-scenario 5-year target** — Bull / Base / Bear with explicit (TAM, market share, net margin, terminal multiple) for each; weights 25 / 50 / 25 by default; discount rate 15% over 5 years; report each scenario price plus weighted expectation and upside/downside vs current price. See `references/scoring.md` §Scenario.
-9. **Risks, action-frame, key observation node** — three concrete risks, condition-based action sentences (no buy/sell command), one explicit next observation event/date.
-10. **Output** the report from `references/output.md` — summary line → suitability → TAM → cost curve → 3 scenarios → risks → action frame → **Data Source Appendix (mandatory)** ending with the reconciliation summary line. Close with the ARK disclaimer variant matching the user's input language (single-language only — see `references/output.md` §Disclaimer variants).
+8. **Three-scenario 5-year target** — Bull / Base / Bear with explicit (TAM, market share, net margin, terminal multiple) for each; weights 25 / 50 / 25 by default; discount rate 15% over 5 years; report each scenario price plus weighted expectation and upside/downside vs current price. See `references/scoring.md` §Scenario. **In Young-company mode**: year-5 share count uses the dilution path (not current shares); Bull CAGR must clear a 1.5× sell-side high-end sanity check or be flagged explicitly; Bear must include a runway-exhaustion sub-scenario if cash runway < 24 months.
+9. **Forward-looking inputs panel (Young-company mode only)** — fetch the mode's required inputs (forward consensus, cash runway, 5-year dilution path, capex / capacity roadmap, regulatory / commercial milestone calendar, customer pipeline, technology-readiness signal). If any cannot be sourced, cap management-vision at 中 and say so in the report. See `references/output.md` §Forward inputs panel.
+10. **Risks, action-frame, key observation node** — three concrete risks (in Young-company mode, at least one must come from the young-company sub-catalogue: cash runway / dilution / execution / tech-readiness gap), condition-based action sentences (no buy/sell command), one explicit next observation event/date.
+11. **Output** the report from `references/output.md` — summary line → suitability → (forward-inputs panel if Young-company mode) → TAM → cost curve → 3 scenarios → risks → action frame → **Data Source Appendix (mandatory)** ending with the reconciliation summary line. Close with the ARK disclaimer variant matching the user's input language (single-language only — see `references/output.md` §Disclaimer variants).
 
 ## CLI
 
@@ -93,6 +98,12 @@ longbridge company-profile <SYMBOL> --format json
 # Recent news + filings — for verifying management innovation vision claims
 longbridge news <SYMBOL> --format json
 longbridge sec-filings <SYMBOL> --format json     # US; for HK use the appropriate filings endpoint per --help
+
+# Forward consensus + share-count history — REQUIRED in Young-company mode
+longbridge analyst-estimates <SYMBOL> --format json   # forward EPS / revenue consensus
+longbridge consensus <SYMBOL> --format json           # alternate consensus / sell-side dispersion
+longbridge corporate <SYMBOL> --format json           # share-count history for the dilution path
+longbridge calendar <SYMBOL> --format json            # upcoming events for key-observation node
 ```
 
 ### WebSearch fallback — only for items not available from Longbridge
@@ -136,6 +147,7 @@ Output rules for reconciliation:
 - **All pass within tolerance** → final appendix row uses the clean-pass variant from `references/output.md` §Reconciliation summary, rendered in the user's input language only.
 - **Some residuals within tolerance but material to displayed figures** → final appendix row lists each material residual on its own sub-line (which figure it affects).
 - **Any check fails > tolerance** → halt all analysis; emit the halt message defined in `references/output.md` §Reject case-reconciliation and still print the appendix with the reconciliation summary describing the failure.
+- **Young-company mode**: the 12 checks still apply, but rows that span more periods than the company has are pro-rated and tagged `history-limited (N quarters)` in the appendix; the reconciliation **summary line** still uses the standard ✅ / ⚠️ / ❌ variants — there is no separate young-company variant.
 
 ## Output
 
@@ -165,6 +177,7 @@ Followed by the **Data Source Appendix (mandatory)** — every figure in section
 | Learning-rate authority WebSearch returns nothing | 标注「学习率暂无公开权威数据」；不得直接使用本 Skill 中嵌入的历史数字。 | 標註「學習率暫無公開權威數據」；不得直接使用本 Skill 中嵌入的歷史數字。 | Tag "no publicly available authoritative learning rate"; do not silently use the embedded historical figure as current. |
 | Suitability < pass threshold | 拒绝并匹配替代方法，不得给出「仅供参考」的 ARK 分析。 | 拒絕並匹配替代方法，不得給出「僅供參考」的 ARK 分析。 | Reject and match an alternative method; do not produce a "for reference" ARK analysis. |
 | User horizon < 3 years stated | 提示 ARK 框架是 5 年视角，与短期需求不匹配。 | 提示 ARK 框架是 5 年視角，與短期需求不匹配。 | Warn that the ARK framework is a 5-year lens and does not fit a < 3-year horizon. |
+| Young-company mode active, forward inputs missing | 报告中明示缺失项，把管理层愿景维度封顶到「中」，不得用乐观占位符填充。 | 報告中明示缺失項，把管理層願景維度封頂到「中」，不得用樂觀佔位符填充。 | Disclose the missing input(s) in the report and cap management-vision at 中; do not silently fill with optimistic placeholders. |
 | Other stderr | 原样透传错误，不静默重试。 | 原樣透傳錯誤，不靜默重試。 | Surface stderr verbatim; never silently retry. |
 
 ## MCP fallback
@@ -180,6 +193,10 @@ If `longbridge` CLI is not installed, use MCP tools (`claude mcp add --transport
 | `mcp__longbridge__basicinfo` | `longbridge basicinfo` |
 | `mcp__longbridge__news` | `longbridge news` |
 | `mcp__longbridge__sec_filings` | `longbridge sec-filings` |
+| `mcp__longbridge__analyst_estimates` | `longbridge analyst-estimates` (Young-company mode) |
+| `mcp__longbridge__consensus` | `longbridge consensus` (Young-company mode) |
+| `mcp__longbridge__corporate` | `longbridge corporate` (dilution path) |
+| `mcp__longbridge__calendar` | `longbridge calendar` (key observation node) |
 
 ## Related skills
 
