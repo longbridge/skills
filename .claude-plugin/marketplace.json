@@ -13,8 +13,8 @@
     {
       "name": "longbridge",
       "source": "./",
-      "description": "Longbridge securities skill family: 17 skills covering market quotes, account read-only, watchlist mutations, and analysis-tier composites (valuation / fundamentals / peer comparison / portfolio / news). Multilingual triggers (Simplified Chinese, Traditional Chinese, English).",
-      "version": "1.0.0",
+      "description": "Longbridge securities skill family: 125+ skills covering real-time quotes, K-line, fundamentals, valuation, portfolio, news, options, earnings, sector analysis, and more. Multilingual triggers (Simplified Chinese, Traditional Chinese, English). Markets: HK / US / A-share (SH/SZ) / Singapore.",
+      "version": "1.1.0",
       "author": {
         "name": "longbridge",
         "url": "https://longbridge.com"
