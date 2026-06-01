@@ -14,7 +14,7 @@ Use this when the user's input language is Chinese. Pick the column matching the
 
 | English (canonical) | 简体中文 (zh-Hans) | 繁體中文 (zh-Hant) |
 |---|---|---|
-| Buffett Moat Stock Screener | 巴菲特护城河选股 | 巴菲特護城河選股 |
+| Buffett Moat Stock Screener | 巴菲特护城河筛股 | 巴菲特護城河篩股 |
 | Market | 市场 | 市場 |
 | Universe | 候选池 | 候選池 |
 | As-of | 截至 | 截至 |
@@ -40,7 +40,7 @@ Use this when the user's input language is Chinese. Pick the column matching the
 | 5+ years / 3–5 years / 1–3 years | 5 年以上 / 3–5 年 / 1–3 年 | 5 年以上 / 3–5 年 / 1–3 年 |
 | Deep-dive | 深度诊断 | 深度診斷 |
 | Market Summary | 市场总结 | 市場總結 |
-| Selection rationale | 选股理由 | 選股理由 |
+| Selection rationale | 筛股理由 | 篩股理由 |
 | Data Anomaly Footer | 数据异常脚注 | 數據異常腳註 |
 | Failing reconciliation check | 失败的勾稽校验项 | 失敗的勾稽校驗項 |
 | Gap | 差距 | 差距 |
@@ -287,7 +287,7 @@ Print exactly **one** variant, matching the user's input language. Never print m
 
 ```
 ⚠️ 免责声明：本筛选结果由长桥 AI 基于巴菲特价值投资框架与公开数据自动生成，仅供参考，
-   不构成任何投资建议。本工具复刻巴菲特选股方法（量化硬指标 + 五维质性评估），
+   不构成任何投资建议。本工具复刻巴菲特筛股方法（量化硬指标 + 五维质性评估），
    不代表巴菲特本人的实际观点或操作。巴菲特策略需要 3 年以上持有周期才可能兑现，
    不适合 3 年内有明确资金使用计划的资金。命中候选请用 `longbridge-buffett-moat-analyzer`
    做单股深度诊断，并结合自身资金使用周期与风险承受能力独立做出决策。
@@ -297,7 +297,7 @@ Print exactly **one** variant, matching the user's input language. Never print m
 
 ```
 ⚠️ 免責聲明：本篩選結果由長橋 AI 基於巴菲特價值投資框架與公開資料自動生成，僅供參考，
-   不構成任何投資建議。本工具復刻巴菲特選股方法（量化硬指標 + 五維質性評估），
+   不構成任何投資建議。本工具復刻巴菲特篩股方法（量化硬指標 + 五維質性評估），
    不代表巴菲特本人之實際觀點或操作。巴菲特策略需 3 年以上持有週期方可兌現，
    不適合 3 年內有明確資金使用計畫之資金。命中候選請以 `longbridge-buffett-moat-analyzer`
    做單股深度診斷，並結合自身資金週期與風險承受能力獨立決策。
