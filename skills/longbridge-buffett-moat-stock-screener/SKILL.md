@@ -1,7 +1,7 @@
 ---
 name: longbridge-buffett-moat-stock-screener
 description: |
-  Buffett-style stock screener — "What would Buffett buy now?" Generates 3–5 candidate stocks from a market / sector / preference query via a two-layer model: hard quant filter (ROE 5y ≥15%, debt/asset ≤50%, FCF positive 3y, listed ≥5y, gross margin ≥30%) → qualitative moat scoring (moat 35% / capital allocation 20% / earnings predictability 20% / valuation 15% / runway 10%). Longbridge CLI first, MCP fallback, WebSearch for gaps only. Output: candidate cards with moat-type tag, quantitative highlights, verdict (🟢 meets Buffett criteria / 🟡 partially meets criteria / 🔴 does not meet criteria), deep-dive CTA to `longbridge-buffett-moat-analyzer`. Mandatory holding-period education + data-source appendix. Disqualifies airlines, pre-revenue biotech, ST, listing<5y. Triggers: "巴菲特会买什么", "巴菲特选股", "巴菲特风格的股票", "护城河选股", "宽护城河股票", "价值投资选股", "10年不动的股票", "定价权强的公司", "巴菲特會買什麼", "巴菲特選股", "護城河選股", "寬護城河股票", "Buffett screener", "what would Buffett buy", "wide-moat screener", "quality compounder screen", "Berkshire-style screen", "pricing-power screen".
+  Buffett-style stock screener — "What would Buffett buy now?" Generates 3–5 candidate stocks from a market / sector / preference query via a two-layer model: hard quant filter (ROE 5y ≥15%, debt/asset ≤50%, FCF positive 3y, listed ≥5y, gross margin ≥30%) → qualitative moat scoring (moat 35% / capital allocation 20% / earnings predictability 20% / valuation 15% / runway 10%). Longbridge CLI first, MCP fallback, WebSearch for gaps only. Output: candidate cards with moat-type tag, quantitative highlights, verdict (🟢 meets Buffett criteria / 🟡 partially meets criteria / 🔴 does not meet criteria), deep-dive CTA to `longbridge-buffett-moat-analyzer`. Mandatory holding-period education + data-source appendix. Disqualifies airlines, pre-revenue biotech, ST, listing<5y. Triggers: "巴菲特会买什么", "巴菲特筛股", "巴菲特风格的股票", "护城河筛股", "宽护城河股票", "价值投资筛股", "10年不动的股票", "定价权强的公司", "巴菲特會買什麼", "巴菲特篩股", "護城河篩股", "寬護城河股票", "Buffett screener", "what would Buffett buy", "wide-moat screener", "quality compounder screen", "Berkshire-style screen", "pricing-power screen".
 license: MIT
 metadata:
   author: longbridge
@@ -67,7 +67,7 @@ Failure modes the screener must flag honestly:
    - Moat type & width (35%) · Capital allocation (20%) · Earnings predictability (20%) · Valuation reasonableness (15%) · Long-term industry runway (10%).
    Full rubric in `references/criteria.md`. Each dimension also gets a 1–5 star rating shown on the candidate card.
 8. **Verdict matrix** — combine Layer 2 quality stars (moat + financials) with valuation tier. See `references/criteria.md` §Verdict matrix. Maps to one of three card verdicts:
-   - 🟢 **符合巴菲特选股标准 / Meets Buffett criteria** — wide moat + clean financials + price 充足/一般.
+   - 🟢 **符合巴菲特筛股标准 / Meets Buffett criteria** — wide moat + clean financials + price 充足/一般.
    - 🟡 **部分符合，关注估值变化 / Partially meets criteria** — wide moat + clean financials + price 偏贵.
    - 🔴 **当前不符合标准 / Does not meet criteria** — wide moat but price 高估, OR moat narrow at any price (redirect to Graham).
 9. **Holding-period mapping** — derive expected min hold from moat width (★★★★★ → 5y+, ★★★★ → 3–5y, ★★★ → 1–3y, ★★ or below → not a Buffett candidate). See `references/criteria.md`.
@@ -185,7 +185,7 @@ Default rank key = Layer-2 composite (high to low). User can override to: moat-s
 Name (Code) · Market · Sector              Quality stars: ★★★★★
 Moat type: {brand / network / cost / switching / regulatory / resource}
 Top-3 highlights (quantitative first): {ROE x%}, {Gross margin x%}, {FCF / capex intensity}
-评级参考: 🟢 符合巴菲特选股标准 / 🟡 部分符合，关注估值变化 / 🔴 当前不符合标准
+评级参考: 🟢 符合巴菲特筛股标准 / 🟡 部分符合，关注估值变化 / 🔴 当前不符合标准
 Valuation read: {充足 / 一般 / 偏贵 / 高估} — current price vs 10y band
 Min. holding period: {5y+ / 3–5y / 1–3y}
 [深度诊断这只股票 → longbridge-buffett-moat-analyzer <CODE>]
@@ -207,7 +207,7 @@ After the cards, every output must include:
 | `command not found: longbridge` | 回退到 MCP；若不可用，请安装 longbridge-terminal。 | 回退到 MCP；若不可用，請安裝 longbridge-terminal。 | Fall back to MCP; if unavailable install longbridge-terminal. |
 | stderr `not logged in` / `unauthorized` | 请运行 `longbridge auth login`。 | 請執行 `longbridge auth login`。 | Run `longbridge auth login`. |
 | `constituent` / `sector-screener` returns empty | 未能获取候选池，请确认指数或行业关键词。 | 未能獲取候選池，請確認指數或行業關鍵詞。 | Cannot fetch universe; verify the index or sector keyword. |
-| User-named sector is on the excluded list (e.g. 航空 / pre-revenue biotech) | 该行业整体不符合巴菲特选股逻辑（已说明原因），推荐改看 {替代行业}；如仍想分析，可改用 `longbridge-fundamental`。 | 該行業整體不符合巴菲特選股邏輯（已說明原因），推薦改看 {替代行業}；如仍想分析，可改用 `longbridge-fundamental`。 | The sector does not fit Buffett's framework (reason given); suggest {alternative sector}; for early-stage analysis use `longbridge-fundamental`. |
+| User-named sector is on the excluded list (e.g. 航空 / pre-revenue biotech) | 该行业整体不符合巴菲特筛股逻辑（已说明原因），推荐改看 {替代行业}；如仍想分析，可改用 `longbridge-fundamental`。 | 該行業整體不符合巴菲特篩股邏輯（已說明原因），推薦改看 {替代行業}；如仍想分析，可改用 `longbridge-fundamental`。 | The sector does not fit Buffett's framework (reason given); suggest {alternative sector}; for early-stage analysis use `longbridge-fundamental`. |
 | BS / IS / CF partial fetch for a symbol | 该标的数据不完整，跳过并在「数据异常」脚注列出。 | 該標的數據不完整，跳過並於「數據異常」腳註列出。 | Symbol has incomplete fundamentals; skipped and listed in the data-anomaly footer. |
 | Industry runway / qualitative data missing (Longbridge + WebSearch both empty) | 维度评分仅用财务证据，标注「定性数据缺失」。 | 維度評分僅用財務證據，標註「定性數據缺失」。 | Score the dimension on financial evidence only and tag "qualitative data unavailable". |
 | Per-row reconciliation gap >3% | 从候选卡片剔除并在「数据异常」附录列出失败项及差异。 | 自候選卡片剔除並於「數據異常」附錄列出失敗項及差異。 | Drop from candidate cards; list failing check + gap in data-anomaly appendix. |
