@@ -33,14 +33,16 @@ description: >
 **Step 1 — Collect everything in ONE call.** Do NOT run `--help` exploration, do NOT call CLI commands one by one:
 
 ```bash
-bash scripts/collect.sh 700.HK          # paths are relative to this skill directory
+python3 scripts/collect.py 700.HK       # macOS / Linux (paths relative to this skill directory)
+python  scripts/collect.py 700.HK       # Windows
 ```
 
-The script fetches all data sources in parallel (snapshot, income statement,
-consensus vs actual, EPS forecasts, quote, PE/PB, ratings, segments, news,
-kline), trims them with jq, and prints a compact digest (~3-4K tokens). Raw
-JSON is kept under `/tmp/lb_earnings_<symbol>/` — the full-report path reuses
-it. If the script fails entirely (no CLI, no jq), see Fallbacks below.
+The script (pure stdlib, no third-party deps) fetches all data sources in
+parallel (snapshot, income statement, consensus vs actual, EPS forecasts,
+quote, PE/PB, ratings, segments, news, kline), trims the JSON, and prints a
+compact digest (~3-4K tokens). Raw JSON is kept under the `RAW_DIR` printed
+on the digest's third line — the full-report path reuses it. If Python is
+unavailable, see Fallbacks below.
 
 **Step 2 — Output the summary card directly.** No DOCX, no DCF, no transcript
 search, no mid-flow user confirmation. The reporting period comes from the
@@ -70,17 +72,18 @@ no file deliverable, no Sources section in chat, total CLI round-trips = 1.
 
 Read [references/full-report.md](references/full-report.md) and follow it. In short:
 
-1. Reuse `/tmp/lb_earnings_<symbol>/` if present; otherwise `bash scripts/collect.sh <SYMBOL> --full`.
+1. Reuse the `RAW_DIR` from a previous lite run if present; otherwise `python3 scripts/collect.py <SYMBOL> --full`.
 2. One web search for the earnings call transcript; one for pre-earnings consensus vintage if needed.
 3. Full analysis depth: beat/miss → segments → margins → guidance → model update → three-method valuation (read [references/valuation-methodologies.md](references/valuation-methodologies.md), show the math) → rating decision.
 4. Deliverable: `[SYMBOL]_Q[N]_[YEAR]_Earnings_Update.md` — Markdown only, charts as Markdown tables + Unicode bars. No DOCX, no Python, no image files.
 
 ## Fallbacks
 
-- **Script fails / partial N/A sections**: the digest marks failed sources as `N/A (reason)`. Work with what succeeded; fetch a missing critical source directly (`longbridge <cmd> <SYMBOL> --format json`), checking `--help` only when a command errors.
-- **HK symbols**: leading zeros are stripped automatically (`09988.HK` → `9988.HK`).
+- **Partial N/A sections**: the digest marks failed sources as `N/A (reason)`. Work with what succeeded; fetch a missing critical source directly (`longbridge <cmd> <SYMBOL> --format json`), checking `--help` only when a command errors.
+- **No Python (script-less path)**: issue the CLI calls yourself — in PARALLEL (multiple tool calls in one message), never sequentially, and keep raw output small: use `--format json` everywhere, `kline ... --count 30`, `news ... --count 10`, and SKIP the full income statement (`financial-report --kind IS` is ~100KB raw) — take revenue/NI/EPS trends from `consensus` (it carries ~6 periods of estimate + actual) and margins from `financial-report snapshot`.
+- **HK symbols**: leading zeros are stripped automatically (`09988.HK` → `9988.HK`); do the same when calling the CLI directly.
 - **No `longbridge` CLI**: if the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, the same data is reachable through MCP. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
-- **CLI + Python pattern** (full mode, when digging into raw JSON): read from a file, not `python3 -c` with inline JSON — e.g. `python3 -c "import json; d = json.load(open('/tmp/lb_earnings_700_hk/consensus.json'))"`, or use jq.
+- **Digging into raw JSON** (full mode): read from a file, not inline JSON on a command line — e.g. `python3 -c "import json; d = json.load(open('<RAW_DIR>/consensus.json'))"`.
 
 **CLI docs**: https://open.longbridge.com/zh-CN/docs/cli/
 
@@ -105,4 +108,4 @@ If the user wants the full report _plus_ one of the above (e.g. "earnings update
 | -------------------------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------- |
 | [full-report.md](references/full-report.md)                          | Full-report workflow: analysis framework, Markdown report structure, quality checklist | Full report mode only      |
 | [valuation-methodologies.md](references/valuation-methodologies.md) | DCF, trading comps, precedent transactions — full methodology          | Full report valuation step |
-| [scripts/collect.sh](scripts/collect.sh)                             | Parallel data collector (lite + `--full`)                              | Never — just run it        |
+| [scripts/collect.py](scripts/collect.py)                             | Parallel data collector (lite + `--full`), pure stdlib, cross-platform | Never — just run it        |

@@ -6,13 +6,13 @@ Deliverable: `[SYMBOL]_Q[N]_[YEAR]_Earnings_Update.md` — a single Markdown fil
 
 ## Phase 1 — Data Collection
 
-1. **Reuse the lite digest.** If `/tmp/lb_earnings_<symbol>/` exists (from a lite run), reuse it. Otherwise:
+1. **Reuse the lite digest.** If a lite run already printed a `RAW_DIR`, reuse it. Otherwise:
 
    ```bash
-   bash scripts/collect.sh <SYMBOL> --full
+   python3 scripts/collect.py <SYMBOL> --full     # `python` on Windows
    ```
 
-   `--full` adds: balance sheet + cash flow statements, filing list, industry valuation percentiles, peer compare, and rating history. Raw JSON lives in the printed `RAW_DIR` — query it with `jq` instead of re-calling the CLI.
+   `--full` adds: balance sheet + cash flow statements, filing list, industry valuation percentiles, peer compare, and rating history. Raw JSON lives in the printed `RAW_DIR` — read those files (Python `json` or jq if available) instead of re-calling the CLI.
 
 2. **Identify the reporting period** from the digest: `SNAPSHOT.fp_end` + the latest CONSENSUS period with `actual` filled. Map period-end date to fiscal quarter using the company's fiscal calendar (Apple FY ends Sep, Nike May, Walmart Jan; most others calendar year). State the detected quarter in the report header — do not pause to ask the user unless the data is contradictory.
 
