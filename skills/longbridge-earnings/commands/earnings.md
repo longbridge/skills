@@ -1,5 +1,5 @@
 ---
-description: Generate an institutional-grade post-earnings update report (DOCX) and conversation summary for a stock
+description: Post-earnings analysis for a stock — fast in-chat summary card by default, full Markdown research report on request
 argument-hint: "<SYMBOL> e.g. TSLA.US 700.HK 600519.SH"
 ---
 
