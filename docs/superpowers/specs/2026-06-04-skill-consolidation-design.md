@@ -1,20 +1,21 @@
-# Skill Consolidation Design — 11 大方向 Skills
+# Skill Consolidation Design — 18 大方向 Skills
 
 **Date:** 2026-06-04  
+**Updated:** 2026-06-05  
 **Status:** Approved  
-**Scope:** CLI 命令对应 skill 的合并重构，不涉及基础 `longbridge` skill 及 PR 外部贡献 skill
+**Scope:** 全量 skill 重构——CLI 对应 skill + 框架/分析类 skill，不涉及基础 `longbridge` skill 及 PR 外部贡献 skill
 
 ---
 
 ## 背景与目标
 
-当前 `skills/` 目录有 127 个 skill，其中约 77 个与 `longbridge` CLI 命令一一对应，粒度过细，导致：
+当前 `skills/` 目录有 127 个 skill，粒度过细，导致：
 
 - 用户安装负担重（需选择合适的 skill）
 - 内容重复（多个 skill 调用同一类命令）
 - 维护成本高（CLI 升级需修改多个文件）
 
-**目标**：将 CLI 对应的 skill 合并为 11 个「大方向 skill」，每个 skill 覆盖一个功能域的所有相关 CLI 命令。
+**目标**：将全部 skill 合并为 **18 个大方向 skill**（11 个 CLI 域 + 7 个框架域），正文不超过 200 行，细节移入 `references/`。
 
 ---
 
@@ -30,29 +31,9 @@
 - longbridge-ml-strategy、longbridge-defi-yield、longbridge-onchain
 - longbridge-earnings（外部贡献）、longbridge-earnings-preview（外部贡献）
 
-### 纯框架/分析类 skill（无 CLI 直接对应，独立保留）
-longbridge-portfolio-diagnosis、longbridge-portfolio-rebalance、longbridge-asset-allocation、
-longbridge-risk-analysis、longbridge-risk-return、longbridge-tax-harvesting、
-longbridge-pairs-trading、longbridge-volatility-strategy、longbridge-seasonality、
-longbridge-performance-attribution、longbridge-dcf、longbridge-behavioral-finance、
-longbridge-competitive-analysis、longbridge-coverage-initiation、longbridge-investment-ideas、
-longbridge-investment-proposal、longbridge-morning-brief、longbridge-catalyst-radar、
-longbridge-stock-research、longbridge-industry-overview、longbridge-tech-hype、
-longbridge-supply-chain、longbridge-event-strategy、longbridge-event-opportunity、
-longbridge-etf-analysis、longbridge-etf-flow、longbridge-sector-rotation、
-longbridge-sector-monitor、longbridge-market-microstructure、longbridge-hkipo-analysis、
-longbridge-financial-planning、longbridge-smallcap-growth、longbridge-value-screen、
-longbridge-multifactor、longbridge-factor-research、longbridge-factor-screen、
-longbridge-correlation、longbridge-quant-stats、longbridge-strategy-optimizer、
-longbridge-thesis-tracker、longbridge-post-investment、longbridge-hedging、
-longbridge-execution-model、longbridge-valuation-methodology、longbridge-adr-premium、
-longbridge-fx-carry、longbridge-sec-filings、longbridge-insresearch（部分框架）、
-longbridge-ichimoku、longbridge-candlestick、longbridge-technical、longbridge-harmonic、
-longbridge-elliott、longbridge-fx
-
 ---
 
-## 11 个新 Skill 设计
+## Part 1：11 个 CLI 大方向 Skill
 
 ### 1. `longbridge-market-data`
 
@@ -106,11 +87,13 @@ longbridge-industry-valuation
 `industry-rank` `industry-peers`
 
 **取代的现有 skills：**
-longbridge-insresearch（部分）, longbridge-consensus, longbridge-earnings-revision,
+longbridge-insresearch, longbridge-consensus, longbridge-earnings-revision,
 longbridge-analyst-estimates, longbridge-flows, longbridge-ownership,
 longbridge-investors, longbridge-calendar
 
-**触发场景：** 机构评级、一致预期、内部人交易、空头数据、行业排名
+**注：** `longbridge-insresearch` 功能与本 skill 完全重叠（institution-rating / consensus / forecast-eps），直接合并，不保留旧 slug。
+
+**触发场景：** 机构评级、一致预期、分析师目标价、内部人交易、空头数据、行业排名
 
 ---
 
@@ -172,7 +155,7 @@ longbridge-quant（slug 保留，内容核对更新）
 **取代的现有 skills：**
 longbridge-watchlist, longbridge-watchlist-admin, longbridge-alert, longbridge-sharelist
 
-**注意：** `watchlist` 包含读写操作（create/update/delete），mutating 操作需保留 dry-run + confirm 协议
+**注意：** mutating 操作（create/update/delete）需保留 dry-run + confirm 协议
 
 **触发场景：** 自选股管理、价格提醒、公开股票清单
 
@@ -203,11 +186,97 @@ longbridge-constituent
 
 ---
 
+## Part 2：7 个框架大方向 Skill
+
+框架 skill 没有直接对应的单一 CLI 命令，每个 SKILL.md 正文 ≤ 200 行，细节内容迁入 `references/<sub-skill>.md`。
+
+### 12. `longbridge-portfolio-risk`
+
+**覆盖：**
+portfolio-diagnosis, portfolio-rebalance, asset-allocation, risk-analysis,
+risk-return, performance-attribution, tax-harvesting
+
+**references/：** portfolio-diagnosis.md, portfolio-rebalance.md, asset-allocation.md,
+risk-analysis.md, risk-return.md, performance-attribution.md, tax-harvesting.md
+
+**触发场景：** 组合诊断、再平衡、资产配置、风险分析、绩效归因、税损收割
+
+---
+
+### 13. `longbridge-investment-research`
+
+**覆盖：**
+investment-ideas, investment-proposal, coverage-initiation, stock-research,
+competitive-analysis, thesis-tracker, post-investment, hkipo-analysis, financial-planning
+
+**references/：** 9 个对应文件
+
+**触发场景：** 投资想法、投资提案、首次覆盖报告、股票研究、竞争格局、投资逻辑跟踪
+
+---
+
+### 14. `longbridge-quant-strategy`
+
+**覆盖：**
+pairs-trading, volatility-strategy, seasonality, multifactor, factor-research,
+factor-screen, correlation, quant-stats, strategy-optimizer, execution-model, hedging
+
+**references/：** 11 个对应文件
+
+**触发场景：** 配对交易、波动率策略、季节性、多因子选股、量化统计、对冲
+
+---
+
+### 15. `longbridge-technical`
+
+**覆盖：**
+ichimoku, candlestick, technical, harmonic, elliott
+
+（slug 保留，扩展为覆盖全部技术分析框架）
+
+**references/：** ichimoku.md, candlestick.md, technical.md, harmonic.md, elliott.md
+
+**触发场景：** 一目均衡表、蜡烛图形态、技术指标、谐波形态、艾略特波浪
+
+---
+
+### 16. `longbridge-value-analysis`
+
+**覆盖：**
+dcf, valuation-methodology, behavioral-finance, value-screen, smallcap-growth
+
+**references/：** 5 个对应文件
+
+**触发场景：** DCF 现金流折现、估值方法论、行为金融、低估值筛选、小盘成长
+
+---
+
+### 17. `longbridge-market-intel`
+
+**覆盖：**
+morning-brief, catalyst-radar, event-strategy, event-opportunity, industry-overview,
+tech-hype, sector-rotation, sector-monitor, market-microstructure, supply-chain
+
+**references/：** 10 个对应文件
+
+**触发场景：** 晨报、催化剂雷达、事件驱动、行业概览、科技炒作识别、产业链
+
+---
+
+### 18. `longbridge-cross-market`
+
+**覆盖：**
+etf-analysis, etf-flow, adr-premium, fx-carry, sec-filings, fx
+
+**references/：** 6 个对应文件
+
+**触发场景：** ETF 分析、ETF 资金流、ADR 溢价、外汇套息、SEC 文件、外汇
+
+---
+
 ## SKILL.md 结构规范
 
-每个新 skill 的 SKILL.md：
-
-```
+```yaml
 ---
 name: longbridge-<domain>
 description: |
@@ -222,36 +291,37 @@ metadata:
   requires_mcp: false
   tier: read
 ---
+```
 
+**正文结构：**
+```
 # Longbridge <Domain>
 
-> **Response language**: match the user's input language —
-> Simplified Chinese / Traditional Chinese / English.
+> Response language directive
+> Data-source policy directive
 
 ## When to use
 ## Workflow
-## Commands
-  ### <command-name>
-  ### <command-name>
-  ...
-## Output
+## Commands / Frameworks  （每个子命令/子框架一节，简述 + 加载对应 references/ 文件）
 ## Error handling
 ## MCP fallback
 ## Related skills
 ## File layout
 ```
 
-- **正文不超过 200 行**，命令详情（字段表、示例）移入 `references/<command>.md`
-- **不硬编码子命令 flag 名**，指示 LLM 用 `longbridge <cmd> --help` 发现
-- description 不超过 1024 字符
+**约束：**
+- 正文 ≤ 200 行
+- 不硬编码 flag 名，指示 LLM 用 `longbridge <cmd> --help` 发现
+- description ≤ 1024 字符
+- 框架 skill 每个子框架的完整内容在 `references/<sub>.md`
 
 ---
 
-## 退役处理
+## 退役 Skill 列表
 
-重构完成后，以下 slug 对应的旧 skill 目录**删除**（用户重新安装新 skill 获取等效功能）：
+重构完成后删除以下旧目录（约 55 个）：
 
-共约 40 个旧目录，主要包括：
+**CLI 类退役：**
 longbridge-quote, longbridge-kline, longbridge-depth, longbridge-capital-flow,
 longbridge-market-temp, longbridge-security-list, longbridge-subscriptions,
 longbridge-ah-premium, longbridge-index-quote, longbridge-northbound-flow,
@@ -259,20 +329,55 @@ longbridge-fundamental, longbridge-financial-report, longbridge-financial-analys
 longbridge-financial-checkup, longbridge-valuation, longbridge-valuation-rank,
 longbridge-peer-comparison, longbridge-operating, longbridge-dividend-screen,
 longbridge-basicinfo, longbridge-business-query, longbridge-finance-query,
-longbridge-industry-valuation, longbridge-consensus, longbridge-earnings-revision,
-longbridge-analyst-estimates, longbridge-flows, longbridge-ownership,
-longbridge-investors, longbridge-calendar, longbridge-positions,
-longbridge-statement, longbridge-profit-analysis, longbridge-dca,
-longbridge-watchlist-admin, longbridge-alert, longbridge-sharelist,
-longbridge-news, longbridge-market-scanner, longbridge-sector-screener,
-longbridge-anomaly, longbridge-constituent
+longbridge-industry-valuation, longbridge-insresearch, longbridge-consensus,
+longbridge-earnings-revision, longbridge-analyst-estimates, longbridge-flows,
+longbridge-ownership, longbridge-investors, longbridge-calendar,
+longbridge-positions, longbridge-statement, longbridge-profit-analysis, longbridge-dca,
+longbridge-watchlist-admin, longbridge-alert, longbridge-sharelist, longbridge-news,
+longbridge-market-scanner, longbridge-sector-screener, longbridge-anomaly,
+longbridge-constituent
+
+**框架类退役（内容迁入 references/）：**
+longbridge-portfolio-diagnosis, longbridge-portfolio-rebalance, longbridge-asset-allocation,
+longbridge-risk-analysis, longbridge-risk-return, longbridge-performance-attribution,
+longbridge-tax-harvesting, longbridge-investment-ideas, longbridge-investment-proposal,
+longbridge-coverage-initiation, longbridge-stock-research, longbridge-competitive-analysis,
+longbridge-thesis-tracker, longbridge-post-investment, longbridge-hkipo-analysis,
+longbridge-financial-planning, longbridge-pairs-trading, longbridge-volatility-strategy,
+longbridge-seasonality, longbridge-multifactor, longbridge-factor-research,
+longbridge-factor-screen, longbridge-correlation, longbridge-quant-stats,
+longbridge-strategy-optimizer, longbridge-execution-model, longbridge-hedging,
+longbridge-ichimoku, longbridge-candlestick, longbridge-harmonic, longbridge-elliott,
+longbridge-dcf, longbridge-valuation-methodology, longbridge-behavioral-finance,
+longbridge-value-screen, longbridge-smallcap-growth, longbridge-morning-brief,
+longbridge-catalyst-radar, longbridge-event-strategy, longbridge-event-opportunity,
+longbridge-industry-overview, longbridge-tech-hype, longbridge-sector-rotation,
+longbridge-sector-monitor, longbridge-market-microstructure, longbridge-supply-chain,
+longbridge-etf-analysis, longbridge-etf-flow, longbridge-adr-premium,
+longbridge-fx-carry, longbridge-sec-filings, longbridge-fx
+
+---
+
+## 重构后 Skill 总数
+
+| 类型 | 数量 |
+|---|---|
+| 11 个 CLI 大方向 skill | 11 |
+| 7 个框架大方向 skill | 7 |
+| 外部 PR 贡献 skill（保留） | 14 |
+| 基础 `longbridge` skill | 1 |
+| **合计** | **33** |
+
+从 127 → 33，减少 74%。
 
 ---
 
 ## 验收标准
 
-1. 11 个新 SKILL.md 均通过 `brew style`（如适用）和手动 trigger 测试
-2. 每个新 skill 覆盖所有对应 CLI 命令的触发词（中/繁/英）
-3. Response language 指令存在于每个 SKILL.md
-4. 旧目录已删除，README/docs/install.md skill 数量更新
-5. `well-known-skills-index.json` 和 `index.json` 重新生成
+1. 18 个新 SKILL.md 正文均 ≤ 200 行
+2. 每个新 skill 覆盖所有对应命令/框架的触发词（ZH-Hans / ZH-Hant / EN）
+3. Response language + Data-source policy 指令存在于每个 SKILL.md
+4. 框架 skill 各子框架内容已迁入 `references/<sub>.md`
+5. 旧目录已删除，README / docs/install.md / CLAUDE.md skill 数量更新为 33
+6. `well-known-skills-index.json` 和 `index.json` 重新生成
+7. `longbridge-watchlist` mutating 操作保留 dry-run + confirm 协议
