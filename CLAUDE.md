@@ -4,14 +4,14 @@ This file briefs Claude Code when working **inside this repo** (adding new skill
 
 ## What this repo is
 
-127 [Agent Skills](https://agentskills.io/specification) that wrap the [Longbridge Securities](https://longbridge.com) platform — quotes, charts, fundamentals, valuation, news, watchlist, account analytics, etc. Multilingual triggers (Simplified Chinese / Traditional Chinese / English). The default style is **prompt-only** (SKILL.md tells the LLM what `longbridge ...` command to run); `scripts/` and `commands/` subfolders are allowed but should be opt-in for clear runtime needs (DOCX generation, chart helpers, slash commands), not as a wrapper-by-default.
+~22 [Agent Skills](https://agentskills.io/specification) that wrap the [Longbridge Securities](https://longbridge.com) platform — quotes, charts, fundamentals, valuation, news, watchlist, account analytics, etc. Multilingual triggers (Simplified Chinese / Traditional Chinese / English). The default style is **prompt-only** (SKILL.md tells the LLM what `longbridge ...` command to run); `scripts/` and `commands/` subfolders are allowed but should be opt-in for clear runtime needs (DOCX generation, chart helpers, slash commands), not as a wrapper-by-default.
 
 ## Layout
 
 ```
 longbridge-skills/
 ├── .claude-plugin/marketplace.json    # plugin marketplace entry
-├── skills/                            # 127 skill folders
+├── skills/                            # ~22 skill folders
 │   ├── <slug>/
 │   │   ├── SKILL.md                   # required
 │   │   ├── references/                # optional — on-demand detail loaded by the LLM

@@ -118,7 +118,7 @@ You should see `longbridge@longbridge-skills` enabled. Open a new Claude Code se
 
 ### Path C — Symlink individual skills to `~/.claude/skills/` (cherry-pick; clone first)
 
-Useful when you want only a few skills out of the 127. Clone the repo first, then create symlinks from your local checkout into `~/.claude/skills/`.
+Useful when you want only a few skills out of the ~22. Clone the repo first, then create symlinks from your local checkout into `~/.claude/skills/`.
 
 ```bash
 # Clone the repo locally (anywhere is fine)
