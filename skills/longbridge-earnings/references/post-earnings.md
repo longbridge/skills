@@ -1,27 +1,15 @@
 ---
 name: longbridge-earnings
 description: >
-  Earnings analysis skill (pre- and post-earnings) — pre-earnings preview: prior guidance
-  review, events tracking, earnings call Q&A summary, key focus framework; post-earnings
-  update: institutional-grade 8–12 page DOCX with beat/miss analysis, segment breakdown,
-  margin trends, guidance assessment, updated estimates, and valuation. Supports US, HK,
-  and A-share markets.
-  Triggers: "earnings update", "quarterly results", "Q1/Q2/Q3/Q4 results", "earnings report",
-  "post-earnings analysis", "beat/miss", "guidance update", "earnings preview", "pre-earnings",
-  "prior guidance", "what to watch this earnings", "before earnings",
-  "财报分析", "业绩更新", "季度业绩", "季报", "年报", "盈利分析", "财报点评",
-  "财报前瞻", "财报预览", "业绩前瞻", "财报要关注什么", "上季度指引",
-  "財報分析", "業績更新", "季度業績", "季報", "年報", "財報點評",
-  "財報前瞻", "業績前瞻", "財報要關注什麼".
-license: MIT
-metadata:
-  author: longbridge
-  version: "1.1.0"
-  risk_level: read_only
-  requires_login: false
-  default_install: true
-  requires_mcp: false
-  tier: analysis
+  Post-earnings analysis skill — generates institutional-grade earnings update reports
+  (8–12 page DOCX) and structured conversation summaries for companies under coverage.
+  Covers beat/miss analysis, segment breakdown, margin trends, guidance assessment,
+  updated estimates, and valuation. Supports US, HK, and A-share markets.
+  Use this skill whenever the user wants a post-earnings analysis or quarterly-results
+  writeup, even if they do not say "earnings update" verbatim. Triggers: "earnings update",
+  "quarterly results", "Q1/Q2/Q3/Q4 results", "earnings report", "post-earnings analysis",
+  "beat/miss", "guidance update", "财报分析", "业绩更新", "季度业绩", "季报", "年报",
+  "盈利分析", "财报点评", "財報分析", "業績更新", "季度業績", "季報", "年報", "財報點評".
 ---
 
 # Earnings Update Skill
@@ -39,13 +27,6 @@ metadata:
 | Quarterly results       | "Q1/Q2/Q3/Q4 results for [company]"                        |
 
 **Do not trigger if:** user wants an initiation report.
-
-## Sub-topic Routing
-
-| User intent | Load references file |
-|---|---|
-| Pre-earnings preview / 财报前瞻 | [references/pre-earnings.md](references/pre-earnings.md) |
-| Post-earnings analysis / 财报后分析 | [references/post-earnings.md](references/post-earnings.md) |
 
 ## Data Sources
 
@@ -121,8 +102,6 @@ This skill is the heaviest in the family (institutional-grade 8–12 page DOCX).
 
 | User asks for ...                                                                                    | Use                                                           |
 | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Analyst consensus / EPS forecasts                                                                    | `longbridge-research`                                         |
-| Financial statements                                                                                 | `longbridge-fundamentals`                                     |
 | Historical PE/PB percentile, "is X expensive vs its own history / industry?"                         | [`longbridge-valuation`](../longbridge-valuation)             |
 | 5-dimension KPI overview (revenue / margins / ROE / dividend / consensus) without a DOCX deliverable | [`longbridge-fundamental`](../longbridge-fundamental)         |
 | Cross-symbol matrix, "X vs Y vs Z"                                                                   | [`longbridge-peer-comparison`](../longbridge-peer-comparison) |
