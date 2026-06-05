@@ -186,7 +186,7 @@ Followed by the **Data Source Appendix (mandatory)** — every figure in section
 
 ## MCP fallback
 
-If `longbridge` CLI is not installed, use MCP tools (`claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, `quote` scope):
+If `longbridge` CLI is not installed, use MCP tools (`claude mcp add --transport http longbridge https://mcp.longbridge.com`, `quote` scope):
 
 | MCP tool                             | CLI equivalent                                      |
 | ------------------------------------ | --------------------------------------------------- |

@@ -29,7 +29,7 @@ Different tiers of skills have different runtime dependencies — install only w
 **Longbridge MCP server** (the analysis-tier skills `valuation / fundamental / news / peer-comparison / portfolio / catalyst-radar` depend entirely on this):
 
    ```bash
-   claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp
+   claude mcp add --transport http longbridge https://mcp.longbridge.com
    ```
 
    The first MCP tool call triggers an OAuth flow in your browser. `portfolio` requires the **Trade** permission; the other four analysis skills only need the **Quote** permission.

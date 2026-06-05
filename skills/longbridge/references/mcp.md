@@ -4,7 +4,7 @@ Longbridge provides MCP (Model Context Protocol) support in two modes: a hosted 
 
 ## Hosted MCP Service
 
-**Endpoint:** `https://openapi.longbridge.com/mcp`
+**Endpoint:** `https://mcp.longbridge.com`
 
 No API keys needed — uses OAuth 2.1. The AI client handles the browser authorization flow automatically.
 
@@ -16,7 +16,7 @@ Add to MCP config in any compatible client:
 {
   "mcpServers": {
     "longbridge": {
-      "url": "https://openapi.longbridge.com/mcp"
+      "url": "https://mcp.longbridge.com"
     }
   }
 }
@@ -25,7 +25,7 @@ Add to MCP config in any compatible client:
 **Per-client setup:**
 
 - **Cursor**: Settings → MCP Servers → Add Remote MCP Server
-- **Claude Code**: `claude mcp add longbridge https://openapi.longbridge.com/mcp`
+- **Claude Code**: `claude mcp add longbridge https://mcp.longbridge.com`
 - **ChatGPT**: Settings → Connectors
 - **Zed**: `context_servers` in `settings.json`
 - **Cherry Studio**: Settings → MCP Servers → Add (requires latest version for OAuth support)
