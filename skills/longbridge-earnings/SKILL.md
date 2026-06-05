@@ -82,7 +82,7 @@ Read [references/full-report.md](references/full-report.md) and follow it. In sh
 - **Partial N/A sections**: the digest marks failed sources as `N/A (reason)`. Work with what succeeded; fetch a missing critical source directly (`longbridge <cmd> <SYMBOL> --format json`), checking `--help` only when a command errors.
 - **No Python (script-less path)**: issue the CLI calls yourself — in PARALLEL (multiple tool calls in one message), never sequentially, and keep raw output small: use `--format json` everywhere, `kline ... --count 30`, `news ... --count 10`, and SKIP the full income statement (`financial-report --kind IS` is ~100KB raw) — take revenue/NI/EPS trends from `consensus` (it carries ~6 periods of estimate + actual) and margins from `financial-report snapshot`.
 - **HK symbols**: leading zeros are stripped automatically (`09988.HK` → `9988.HK`); do the same when calling the CLI directly.
-- **No `longbridge` CLI**: if the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, the same data is reachable through MCP. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
+- **No `longbridge` CLI**: if the user has run `claude mcp add --transport http longbridge https://mcp.longbridge.com`, the same data is reachable through MCP. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 - **Digging into raw JSON** (full mode): read from a file, not inline JSON on a command line — e.g. `python3 -c "import json; d = json.load(open('<RAW_DIR>/consensus.json'))"`.
 
 **CLI docs**: https://open.longbridge.com/zh-CN/docs/cli/

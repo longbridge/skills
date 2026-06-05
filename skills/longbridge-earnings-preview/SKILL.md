@@ -71,7 +71,7 @@ format and available options — the CLI is updated frequently and flags may cha
 Do not assume flag names or argument positions.
 
 **CLI docs**: https://open.longbridge.com/zh-CN/docs/cli/
-**MCP endpoint**: `https://openapi.longbridge.com/mcp`
+**MCP endpoint**: `https://mcp.longbridge.com`
 
 | Data Needed                 | CLI Entry Point                                            |
 | --------------------------- | ---------------------------------------------------------- |
@@ -308,7 +308,7 @@ String content must use straight quotes only — no curly/smart quotes inside Py
 
 ## MCP fallback
 
-If the CLI binary is unavailable and `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` is configured:
+If the CLI binary is unavailable and `claude mcp add --transport http longbridge https://mcp.longbridge.com` is configured:
 
 When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 

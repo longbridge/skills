@@ -107,7 +107,7 @@ Each subcommand returns a JSON array, one object per requested symbol. Missing p
 
 ## MCP fallback
 
-If the CLI binary is unavailable and the user has run `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`, fall back to:
+If the CLI binary is unavailable and the user has run `claude mcp add --transport http longbridge https://mcp.longbridge.com`, fall back to:
 
 When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
 

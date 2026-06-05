@@ -310,7 +310,7 @@ When `longbridge` CLI is not installed, fall back to MCP tools:
 | `longbridge kline <SYMBOL> --period week --format json` | `mcp__longbridge__candlesticks` (period=Week) |
 | `longbridge news <SYMBOL> --format json`                | `mcp__longbridge__news`                       |
 
-MCP setup: `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp` (Quote scope).
+MCP setup: `claude mcp add --transport http longbridge https://mcp.longbridge.com` (Quote scope).
 
 ## Reference Files
 
