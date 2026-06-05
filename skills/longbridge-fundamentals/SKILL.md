@@ -41,6 +41,8 @@ Trigger when user asks about: financial statements (income/balance sheet/cash fl
 | Equity / subsidiary relations | references/invest-relation.md |
 | Valuation rank in industry | references/valuation-rank.md |
 | Multi-stock comparison | references/compare.md |
+| Corporate overview / 公司概况 | references/corporate.md |
+| Corporate events calendar | references/corporate-events.md |
 | DCF valuation model | references/dcf.md |
 | Valuation methodology | references/valuation-methodology.md |
 | Behavioral finance | references/behavioral-finance.md |

@@ -53,6 +53,8 @@ Trigger when user asks about: analyst ratings / price targets, EPS/revenue conse
 | Financial planning | references/financial-planning.md |
 | DeFi yield analysis | references/defi-yield.md |
 | On-chain data analysis | references/onchain.md |
+| Company profile / pitch book | references/company-profile.md |
+| Company tear sheet / one-pager | references/company-tearsheet.md |
 
 ## CLI Commands
 

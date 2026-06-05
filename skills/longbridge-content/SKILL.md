@@ -34,6 +34,7 @@ Trigger when user asks about: latest news for a stock, company announcements / r
 | Company filings / announcements | references/filing.md |
 | Community topics / discussions | references/topic.md |
 | SEC EDGAR document analysis | references/sec-filings.md |
+| Regulatory rules / 监管规则 | references/regulatory-kb.md |
 
 ## CLI Commands
 

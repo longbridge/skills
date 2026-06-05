@@ -32,6 +32,10 @@ Trigger when user asks about: options quotes, option chains, Greeks (Delta/Gamma
 |---|---|
 | Option quote / chain / Greeks | references/option.md |
 | HK warrants / CBBC | references/warrant.md |
+| Options strategy framework | references/options-strategy.md |
+| Options P&L / payoff diagram | references/options-pnl.md |
+| Implied volatility / IV analysis | references/options-volatility.md |
+| Advanced options (vol surface / skew) | references/options-advanced.md |
 
 ## CLI Commands
 

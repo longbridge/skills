@@ -13,29 +13,9 @@
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge"
     },
     {
-      "name": "longbridge-company-profile",
-      "description": "Pitch-book company profile page via Longbridge — generates a professional company profile for trading materials and client presentations: positioning quadrant (market position / growth), business high",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-company-profile"
-    },
-    {
-      "name": "longbridge-company-tearsheet",
-      "description": "Company tear sheet / one-pager via Longbridge Securities — generates a high-density 1–2 page company snapshot: business overview, key financials (revenue / net income / EPS / ROE), valuation multiples",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-company-tearsheet"
-    },
-    {
       "name": "longbridge-content",
-      "description": "Latest news articles, regulatory filings, community discussion topics for listed stocks, and SEC EDGAR filing analysis (10-K/10-Q/8-K/proxy/Form 4) via Longbridge",
+      "description": "Latest news articles, regulatory filings, community discussion topics for listed stocks, and SEC EDGAR filing analysis (10-K/10-Q/8-K/proxy/Form 4) via Longbridge.   Triggers: \"新闻\", \"公告\", \"资讯\", \"话题\", ",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-content"
-    },
-    {
-      "name": "longbridge-corporate",
-      "description": "Corporate-structure profile for a single listed company via Longbridge Securities — institutional/major shareholders, executives and key personnel, company overview (founding, employees, IPO, address)",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-corporate"
-    },
-    {
-      "name": "longbridge-corporate-events",
-      "description": "Corporate event-driven analysis via Longbridge Securities — captures and classifies events that create pricing dislocations: major-shareholder increases/decreases, equity incentives, private placement",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-corporate-events"
     },
     {
       "name": "longbridge-derivatives",
@@ -49,7 +29,7 @@
     },
     {
       "name": "longbridge-fundamentals",
-      "description": "Financial statements, business segments, dividends, valuation multiples (PE/PB/PS), industry comparison, operating data, corporate actions, company and executive profiles, cross-stock comparison, and",
+      "description": "Financial statements, business segments, dividends, valuation multiples (PE/PB/PS), industry comparison, operating data, corporate actions, company and executive profiles, cross-stock comparison, and ",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-fundamentals"
     },
     {
@@ -63,39 +43,14 @@
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-market-data"
     },
     {
-      "name": "longbridge-options-advanced",
-      "description": "Advanced options strategy framework via Longbridge — volatility surface concepts (SABR/local vol), dynamic Delta hedging, calendar spread, diagonal spread, volatility arbitrage (long vol/short vol), a",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-options-advanced"
-    },
-    {
-      "name": "longbridge-options-pnl",
-      "description": "Options P&L analysis via Longbridge — payoff diagrams, breakeven points, max profit/loss, and Greeks sensitivity (Delta/Gamma/Theta/Vega) for single-leg and multi-leg strategies",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-options-pnl"
-    },
-    {
-      "name": "longbridge-options-strategy",
-      "description": "Options strategy framework via Longbridge — covered call, protective put, straddle, strangle, bull spread, bear spread selection and comparison based on market view and IV level",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-options-strategy"
-    },
-    {
-      "name": "longbridge-options-volatility",
-      "description": "Implied volatility analysis for options via Longbridge — IV vs HV comparison, IV percentile rank, volatility smile and skew, options pricing assessment, strategy selection guidance",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-options-volatility"
-    },
-    {
       "name": "longbridge-portfolio",
-      "description": "Account assets, equity and fund positions, P&L, cash flow records, account statements, margin ratios, buy-power estimates, order management, and DCA recurring investments via Longbridge (most require",
+      "description": "Account assets, equity and fund positions, P&L, cash flow records, account statements, margin ratios, buy-power estimates, order management, and DCA recurring investments via Longbridge (most require ",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-portfolio"
     },
     {
       "name": "longbridge-quant",
       "description": "Quantitative strategy frameworks: pairs trading/cointegration, volatility regime strategies, seasonality/calendar effects, multi-factor models (IC/IR), factor research and screening, correlation analy",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-quant"
-    },
-    {
-      "name": "longbridge-regulatory-kb",
-      "description": "Financial regulatory knowledge base — A-shares (10% / 5% ST price limits, T+1 settlement, short-selling rules, new delisting rules), HK (T+0 short-selling, no price limits, odd-lot / grey market, prof",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-regulatory-kb"
     },
     {
       "name": "longbridge-research",
@@ -106,11 +61,6 @@
       "name": "longbridge-technical",
       "description": "Technical analysis frameworks — candlestick patterns, Ichimoku cloud, technical indicators (RSI/MACD/EMA/Bollinger), harmonic patterns (Gartley/Bat/Butterfly/Crab), Elliott Wave, Chan Theory (缠论 bi/zh",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-technical"
-    },
-    {
-      "name": "longbridge-topic",
-      "description": "Longbridge community topics for stocks — list topics by symbol, search by keyword, view topic detail and replies, browse your own topics, and post new topics or replies. Read operations require no log",
-      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-topic"
     },
     {
       "name": "longbridge-value-investing",
