@@ -25,11 +25,25 @@
 - `longbridge` — Longbridge 开发者平台入口，保持原样
 
 ### 外部 PR 贡献 skill（独立保留）
-- longbridge-turtle-signal、longbridge-chanlun、longbridge-smc、longbridge-elliott-wave
-- longbridge-ark-analysis、longbridge-buffett-moat-analyzer、longbridge-buffett-moat-stock-screener
-- longbridge-graham-stock-analysis、longbridge-graham-screener
-- longbridge-ml-strategy、longbridge-defi-yield、longbridge-onchain
-- longbridge-earnings（外部贡献）、longbridge-earnings-preview（外部贡献）
+
+| Skill | 来源 PR |
+|---|---|
+| longbridge-earnings | PR #1（userjsabc1）|
+| longbridge-earnings-preview | PR #14（userjsabc1）|
+| longbridge-chanlun | PR #17（batch 1）|
+| longbridge-smc | PR #17（batch 1）|
+| longbridge-elliott | PR #17（batch 1）|
+| longbridge-harmonic | PR #17（batch 1）|
+| longbridge-ml-strategy | PR #18（batch 2）|
+| longbridge-defi-yield | PR #18（batch 2）|
+| longbridge-onchain | PR #18（batch 2）|
+| longbridge-graham-screener | PR #24 |
+| longbridge-graham-stock-analysis | PR #24 |
+| longbridge-buffett-moat-analyzer | PR #25 |
+| longbridge-buffett-moat-stock-screener | PR #25 / #42 |
+| longbridge-elliott-wave | PR #28 |
+| longbridge-ark-analysis | PR #29 |
+| longbridge-turtle-signal | PR #36 |
 
 ---
 
