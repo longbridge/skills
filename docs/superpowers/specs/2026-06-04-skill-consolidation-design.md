@@ -30,13 +30,13 @@
 |---|---|
 | longbridge-earnings | PR #1（userjsabc1）|
 | longbridge-earnings-preview | PR #14（userjsabc1）|
-| longbridge-chanlun | PR #17（batch 1）|
-| longbridge-smc | PR #17（batch 1）|
-| longbridge-elliott | PR #17（batch 1）|
-| longbridge-harmonic | PR #17（batch 1）|
-| longbridge-ml-strategy | PR #18（batch 2）|
-| longbridge-defi-yield | PR #18（batch 2）|
-| longbridge-onchain | PR #18（batch 2）|
+| longbridge-chanlun | PR #17（batch 1）→ 并入 `longbridge-technical` |
+| longbridge-smc | PR #17（batch 1）→ 并入 `longbridge-technical` |
+| longbridge-elliott | PR #17（batch 1）→ 并入 `longbridge-technical` |
+| longbridge-harmonic | PR #17（batch 1）→ 并入 `longbridge-technical` |
+| longbridge-ml-strategy | PR #18（batch 2）→ 并入 `longbridge-quant-strategy` |
+| longbridge-defi-yield | PR #18（batch 2）→ 并入 `longbridge-cross-market` |
+| longbridge-onchain | PR #18（batch 2）→ 并入 `longbridge-cross-market` |
 | longbridge-graham-screener | PR #24 |
 | longbridge-graham-stock-analysis | PR #24 |
 | longbridge-buffett-moat-analyzer | PR #25 |
@@ -233,9 +233,10 @@ competitive-analysis, thesis-tracker, post-investment, hkipo-analysis, financial
 
 **覆盖：**
 pairs-trading, volatility-strategy, seasonality, multifactor, factor-research,
-factor-screen, correlation, quant-stats, strategy-optimizer, execution-model, hedging
+factor-screen, correlation, quant-stats, strategy-optimizer, execution-model, hedging,
+ml-strategy（PR #18）
 
-**references/：** 11 个对应文件
+**references/：** 12 个对应文件
 
 **触发场景：** 配对交易、波动率策略、季节性、多因子选股、量化统计、对冲
 
@@ -244,13 +245,14 @@ factor-screen, correlation, quant-stats, strategy-optimizer, execution-model, he
 ### 15. `longbridge-technical`
 
 **覆盖：**
-ichimoku, candlestick, technical, harmonic, elliott
+ichimoku, candlestick, technical, harmonic, elliott,
+chanlun（PR #17）, smc（PR #17）
 
 （slug 保留，扩展为覆盖全部技术分析框架）
 
-**references/：** ichimoku.md, candlestick.md, technical.md, harmonic.md, elliott.md
+**references/：** ichimoku.md, candlestick.md, technical.md, harmonic.md, elliott.md, chanlun.md, smc.md
 
-**触发场景：** 一目均衡表、蜡烛图形态、技术指标、谐波形态、艾略特波浪
+**触发场景：** 一目均衡表、蜡烛图形态、技术指标、谐波形态、艾略特波浪、缠论分型笔中枢、Smart Money Concepts
 
 ---
 
@@ -280,11 +282,12 @@ tech-hype, sector-rotation, sector-monitor, market-microstructure, supply-chain
 ### 18. `longbridge-cross-market`
 
 **覆盖：**
-etf-analysis, etf-flow, adr-premium, fx-carry, sec-filings, fx
+etf-analysis, etf-flow, adr-premium, fx-carry, sec-filings, fx,
+defi-yield（PR #18）, onchain（PR #18）
 
-**references/：** 6 个对应文件
+**references/：** 8 个对应文件
 
-**触发场景：** ETF 分析、ETF 资金流、ADR 溢价、外汇套息、SEC 文件、外汇
+**触发场景：** ETF 分析、ETF 资金流、ADR 溢价、外汇套息、SEC 文件、外汇、DeFi 收益、链上数据
 
 ---
 
@@ -361,14 +364,17 @@ longbridge-financial-planning, longbridge-pairs-trading, longbridge-volatility-s
 longbridge-seasonality, longbridge-multifactor, longbridge-factor-research,
 longbridge-factor-screen, longbridge-correlation, longbridge-quant-stats,
 longbridge-strategy-optimizer, longbridge-execution-model, longbridge-hedging,
+longbridge-ml-strategy,
 longbridge-ichimoku, longbridge-candlestick, longbridge-harmonic, longbridge-elliott,
+longbridge-chanlun, longbridge-smc,
 longbridge-dcf, longbridge-valuation-methodology, longbridge-behavioral-finance,
 longbridge-value-screen, longbridge-smallcap-growth, longbridge-morning-brief,
 longbridge-catalyst-radar, longbridge-event-strategy, longbridge-event-opportunity,
 longbridge-industry-overview, longbridge-tech-hype, longbridge-sector-rotation,
 longbridge-sector-monitor, longbridge-market-microstructure, longbridge-supply-chain,
 longbridge-etf-analysis, longbridge-etf-flow, longbridge-adr-premium,
-longbridge-fx-carry, longbridge-sec-filings, longbridge-fx
+longbridge-fx-carry, longbridge-sec-filings, longbridge-fx,
+longbridge-defi-yield, longbridge-onchain
 
 ---
 
@@ -378,11 +384,11 @@ longbridge-fx-carry, longbridge-sec-filings, longbridge-fx
 |---|---|
 | 11 个 CLI 大方向 skill | 11 |
 | 7 个框架大方向 skill | 7 |
-| 外部 PR 贡献 skill（保留） | 14 |
+| 外部 PR 贡献 skill（保留） | 7 |
 | 基础 `longbridge` skill | 1 |
-| **合计** | **33** |
+| **合计** | **26** |
 
-从 127 → 33，减少 74%。
+从 127 → 26，减少 80%。
 
 ---
 
