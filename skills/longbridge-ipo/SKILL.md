@@ -1,21 +1,21 @@
 ---
 name: longbridge-ipo
 description: |
-  IPO full-lifecycle management via Longbridge Securities — HK/US IPO calendar, subscription/pending/listed rosters, individual IPO details and timelines, account IPO orders, and P&L analysis. Calendar and stock lists require no login; account order and P&L queries require Trade permission. Triggers: "新股", "IPO", "打新", "新股申购", "新股日历", "IPO日历", "待上市", "认购", "新股盈亏", "上市首日", "打新收益", "新股申購", "新股日曆", "IPO日曆", "認購", "新股盈虧", "new IPO", "IPO calendar", "subscribe IPO", "new listing", "IPO orders", "IPO profit loss", "new stock listing", "upcoming IPO", "grey market".
+  新股（IPO）全流程：港股/美股 IPO 日历、认购期查询、个人申购状态、中签结果查询、港股打新四维分析（定价合理性/发行量/市场热度/涨幅预测）。需要 Longbridge 登录查看个人认购记录。Triggers: "新股", "打新", "IPO", "认购", "中签", "港股IPO", "美股IPO", "新股日历", "打新分析", "上市", "新股申购", "港股新股", "美股新股", "申购结果", "新股認購", "中籤", "港股IPO", "新股日曆", "申購", "打新分析", "IPO calendar", "IPO subscription", "new listing", "IPO analysis", "HK IPO", "US IPO", "allotment result", "listing date", "subscribe", "new shares", "IPO打新".
 license: MIT
 metadata:
   author: longbridge
   version: "1.0.0"
   risk_level: account_read
-  requires_login: false
+  requires_login: true
   default_install: true
   requires_mcp: false
-  tier: read
+  tier: analysis
 ---
 
 # longbridge-ipo
 
-IPO full-lifecycle hub: browse upcoming and recent IPOs in HK and US markets, view individual IPO details, and query your own IPO orders and profit/loss.
+新股（IPO）全流程管理与分析 — 从日历查询、认购状态追踪到港股打新四维评估。
 
 > **Response language**: match the user's input language — Simplified Chinese / Traditional Chinese / English.
 
@@ -23,97 +23,65 @@ IPO full-lifecycle hub: browse upcoming and recent IPOs in HK and US markets, vi
 
 ## When to use
 
-- _"近期港股新股"_, _"港股認購中"_, _"HK IPO subscriptions"_ → `longbridge ipo subscriptions`
-- _"待上市新股"_, _"等待上市"_, _"pending listings HK"_ → `longbridge ipo wait-listing`
-- _"最近上市的港股"_, _"近期上市"_, _"recently listed HK"_ → `longbridge ipo listed`
-- _"美股认购"_, _"US IPO subscriptions"_ → `longbridge ipo us-subscriptions`
-- _"美股新上市"_, _"US recent IPOs"_ → `longbridge ipo us-listed`
-- _"IPO 日历"_, _"新股日程"_, _"IPO calendar"_ → `longbridge ipo calendar`
-- _"XXXX.HK 打新详情"_, _"IPO detail"_ → `longbridge ipo detail <SYMBOL>`
-- _"我的打新订单"_, _"我的新股申購記錄"_, _"my IPO orders"_ → `longbridge ipo orders` (requires login + Trade)
-- _"我打新赚了多少"_, _"IPO 盈亏"_, _"IPO profit/loss"_ → `longbridge ipo profit-loss` (requires login + Trade)
-
-For general earnings/dividend calendars, defer to `longbridge-calendar`. For account orders on secondary-market stocks, defer to `longbridge-orders`.
+- IPO 日历：_"近期有哪些新股上市"_、_"本周港股IPO"_
+- 认购状态：_"我申请了哪些新股"_、_"我有没有中签"_
+- 打新分析：_"这只港股新股值得打吗"_、_"帮我分析 XX 的打新机会"_
 
 ## Workflow
 
-**Public data (no login required):**
+1. 区分日历查询（无需登录）和个人认购记录（需 trade 权限）
+2. 运行 `longbridge --help` → `longbridge <ipo-subcommand> --help`
+3. 获取 IPO 数据；如需打新分析，加载 [references/hk-ipo-analysis.md](references/hk-ipo-analysis.md)
+4. 输出：IPO 概览或四维分析评分；附投资提示免责声明
 
-1. Identify the market (HK / US) and the type of list requested.
-2. Call the appropriate subcommand with `--format json`.
-3. Render a table sorted by listing date or subscription close date.
+## 子模块导航
 
-**Account data (login + Trade permission required):**
-
-1. Confirm the user is asking about their own orders or P&L.
-2. Check login state — if not logged in, prompt `longbridge auth login` with Trade scope.
-3. Call `longbridge ipo orders` or `longbridge ipo profit-loss`.
-4. Summarise: total subscribed amount, filled lots, return%, P&L in home currency.
+| 需求 | 参考文件 |
+|---|---|
+| IPO 日历、认购期、申购状态、中签结果 | [references/ipo-management.md](references/ipo-management.md) |
+| 港股打新四维评估分析 | [references/hk-ipo-analysis.md](references/hk-ipo-analysis.md) |
 
 ## CLI
 
-> Run `longbridge ipo --help` before constructing calls — it is the canonical source for flags and subcommands.
-
 ```bash
-# Public — no login required
-longbridge ipo calendar --format json           # Full IPO calendar (all markets)
-longbridge ipo subscriptions --format json      # HK IPOs currently open for subscription
-longbridge ipo wait-listing --format json       # HK IPOs pending listing
-longbridge ipo listed --format json             # HK recently listed IPOs
-longbridge ipo us-subscriptions --format json   # US IPOs currently open for subscription
-longbridge ipo us-listed --format json          # US recently listed IPOs
-longbridge ipo detail <SYMBOL> --format json    # Individual IPO details + timeline
+longbridge auth login   # 个人认购记录需要 trade 权限
+longbridge --help
+longbridge <ipo-subcommand> --help
 
-# Account — requires login with Trade permission
-longbridge ipo orders --format json             # My IPO subscription orders
-longbridge ipo profit-loss --format json        # My IPO P&L analysis
-
-# Always check flags first
-longbridge ipo --help
+# 示例
+longbridge <ipo-calendar-subcommand> --format json
+longbridge <ipo-subscriptions-subcommand> --format json
 ```
-
-## Output
-
-**IPO list / calendar** — table: symbol / company name / market / price range / subscription open–close / listing date / lot size / status.
-
-**IPO detail** — structured timeline: announcement → subscription window → allotment → listing date → first-day open/close (if listed). Include: price range, lot size, fundraising size, industry, underwriters.
-
-**My orders** — table: symbol / company / applied lots / filled lots / applied amount / status / listing date.
-
-**P&L analysis** — table: symbol / company / filled lots / cost / listing price / current price / return% / P&L amount. Include a summary row for total P&L.
-
-Cite **Longbridge Securities** as the data source and note the data timestamp.
 
 ## Error handling
 
-| 情形                             | 简体回复                                                | 繁體回覆 / English reply                                   |
-| -------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
-| `command not found: longbridge`  | 请安装 longbridge-terminal                              | 請安裝 longbridge-terminal / Install longbridge-terminal   |
-| `not logged in` / 账户功能未登录 | 账户功能需要 Trade 权限，请运行 `longbridge auth login` | 請執行 `longbridge auth login` / Run with Trade permission |
-| `detail` 找不到新股              | 找不到该新股，请确认股票代码格式                        | 找不到該新股 / IPO detail not found — verify symbol        |
-| 结果为空                         | 当前无符合条件的新股                                    | 目前無符合條件的新股 / No IPOs match the filter            |
-| 其他 stderr                      | 原样返回错误，不静默重试                                | 原樣返回 / Surface verbatim, never retry                   |
+| 情况 | 简体中文 | 繁體中文 | English |
+|---|---|---|---|
+| `command not found: longbridge` | 回退到 MCP；如不可用，请安装 longbridge-terminal | 回退到 MCP；如不可用，請安裝 longbridge-terminal | Fall back to MCP; install longbridge-terminal if unavailable |
+| stderr `not logged in` | 查看个人认购记录需要 `longbridge auth login` | 查看個人認購記錄需 `longbridge auth login` | Run `longbridge auth login` to view personal subscriptions |
+| 无 IPO 数据 | "当前暂无在认购期的新股" | "當前暫無在認購期的新股" | "No IPOs currently in subscription period" |
+| 其他 stderr | 直接呈现，不静默重试 | 直接呈現，不靜默重試 | Surface verbatim, do not retry |
 
 ## MCP fallback
 
-When the CLI binary is missing, fall back via the equivalent MCP tool:
+CLI 不可用时，回退到 MCP 服务器。运行时发现可用工具——不要硬编码工具名称。
 
-When the CLI is unavailable, fall back to the MCP server. Discover available tools from the MCP server's tool list at runtime — do not rely on hardcoded tool names.
-
-If a tool name does not resolve, ask the user to install the CLI.
+MCP 设置：`claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`
 
 ## Related skills
 
-| Skill                    | Why                                                                    |
-| ------------------------ | ---------------------------------------------------------------------- |
-| `longbridge-calendar`    | General earnings / dividend / IPO / macro calendar (lighter IPO view). |
-| `longbridge-orders`      | Secondary-market order history and fills.                              |
-| `longbridge-fundamental` | Post-listing fundamentals once the company has reported.               |
-| `longbridge-quote`       | Real-time quote for a newly listed stock on its first day.             |
+| 用户需求 | 路由 |
+|---|---|
+| 已上市新股的基本面 | `longbridge-fundamentals` |
+| IPO 相关研报/分析师观点 | `longbridge-research` |
+| 实时行情（上市后） | `longbridge-market-data` |
 
 ## File layout
 
 ```
 longbridge-ipo/
-└── SKILL.md          # prompt-only, no scripts/
+├── SKILL.md
+└── references/
+    ├── ipo-management.md    # IPO日历/认购/中签全流程
+    └── hk-ipo-analysis.md   # 港股打新四维评估分析
 ```
