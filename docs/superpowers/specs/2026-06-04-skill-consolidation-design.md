@@ -315,6 +315,7 @@ metadata:
 **约束：**
 - 正文 ≤ 200 行；子命令/框架详情放 `references/<name>.md`
 - description ≤ 1024 字符，意图族 ≤ 12 个
+- **description 语言策略**：简体中文 + 英文为主；繁体只补简繁字形有差异的词（如 股价→股價、汇率→匯率），完全相同的词不重复
 - 不硬编码 flag 名，指示 LLM 用 `longbridge <cmd> --help` 发现
 - mutating 操作（watchlist 写）保留 dry-run + confirm 协议
 - `## Sub-topic Routing` 表是必须项，LLM 靠它决定加载哪个 references 文件

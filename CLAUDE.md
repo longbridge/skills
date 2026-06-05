@@ -58,16 +58,16 @@ metadata:
 
 `description` must be **≤ 1024 characters total**. The `Triggers:` list inside it is the **only** thing Claude Code uses to decide whether to activate the skill — pack it with multilingual keywords (see §3).
 
-### 3. Trilingual triggers
+### 3. Language coverage for triggers
 
-`description` MUST cover all three languages explicitly:
+`description` MUST cover **Simplified Chinese + English**. Traditional Chinese is only added where the glyph differs from Simplified (e.g. `股价`→`股價`, `汇率`→`匯率`, `经纪`→`經紀`). Identical glyphs appear once only.
 
 - **Simplified Chinese**: 现在多少钱 / 涨跌幅 / 持仓 / ...
-- **Traditional Chinese**: 現在多少 / 漲跌幅 / 持倉 / ...
 - **English**: stock price / current quote / my holdings / ...
+- **Traditional Chinese** (divergent glyphs only): 股價 / 漲跌幅 / 持倉 / ...
 - **Ticker examples**: NVDA.US, 700.HK, 600519.SH
 
-Glyphs identical in Simplified and Traditional only need to appear once. Divergent glyphs (`股价`/`股價`, `经纪`/`經紀`) must appear in both forms.
+This reduces description size by ~15–20%, freeing space for more trigger concepts within the 1024-character limit.
 
 ### 4. Body — "Response language" directive (mandatory)
 
