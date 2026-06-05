@@ -293,9 +293,25 @@ metadata:
 
 ---
 
+## 备份策略
+
+退役的旧 skill 目录在删除前统一备份到 `.deletions/` 目录（已加入 `.gitignore`，不进入版本控制）：
+
+```bash
+# 实施前执行
+mkdir -p .deletions
+for slug in <退役列表>; do
+  cp -r skills/$slug .deletions/$slug
+done
+```
+
+备份目的：实施期间可随时参考旧内容；全量验收通过后可手动清理 `.deletions/`。
+
+---
+
 ## 退役 Skill 完整列表（约 96 个）
 
-重构完成后删除以下旧目录：
+重构完成后删除以下旧目录（删除前先备份到 `.deletions/`）：
 
 longbridge-quote, longbridge-kline, longbridge-depth, longbridge-capital-flow,
 longbridge-market-temp, longbridge-security-list, longbridge-subscriptions,

@@ -33,3 +33,4 @@ build/
 
 # Internal historical specs (not shipped with the public plugin)
 docs/superpowers/
+.deletions/
