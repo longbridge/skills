@@ -7,7 +7,7 @@ description: |
   margin trends, guidance assessment, updated estimates, and valuation. Supports US, HK,
   and A-share markets.
   Triggers: "earnings update", "quarterly results", "Q1/Q2/Q3/Q4 results", "earnings report",
-  "post-earnings analysis", "beat/miss", "guidance update", "earnings preview", "pre-earnings",
+  "post-earnings analysis", "beat/miss", "超预期", "业绩超预期", "指引", "guidance update", "earnings preview", "pre-earnings",
   "prior guidance", "what to watch this earnings", "before earnings",
   "财报分析", "业绩更新", "季度业绩", "季报", "年报", "盈利分析", "财报点评",
   "财报前瞻", "财报预览", "业绩前瞻", "财报要关注什么", "上季度指引",
