@@ -163,7 +163,7 @@ The skills below are the consolidated sibling skills. Defer to them for speciali
 | Watchlist, price alerts, community lists | `longbridge-watchlist` |
 | News, filings, topics, SEC EDGAR, regulatory rules | `longbridge-content` |
 | Screener, rankings, anomalies, sector rotation, morning brief | `longbridge-intel` |
-| Pre/post earnings analysis, DOCX reports | `longbridge-earnings` |
+| Post-earnings analysis (summary card + Markdown report) | `longbridge-earnings` |
 | Graham / Buffett value investing | `longbridge-value-investing` |
 
 This base skill (`longbridge`) is the fallback for cross-cutting queries and developer topics (SDK, MCP, CLI reference) not covered by any specialist skill above.

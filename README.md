@@ -113,7 +113,7 @@ The right skill is picked automatically based on your question, in the language 
 | **Watchlist** | [`longbridge-watchlist`](./skills/longbridge-watchlist) — watchlist groups, price alerts, community lists |
 | **Content** | [`longbridge-content`](./skills/longbridge-content) — news, filings, topics, SEC EDGAR analysis |
 | **Intel** | [`longbridge-intel`](./skills/longbridge-intel) — screener, rankings, anomalies, sector rotation, morning brief, ETF flow |
-| **Earnings** | [`longbridge-earnings`](./skills/longbridge-earnings) — pre-earnings preview + post-earnings DOCX reports |
+| **Earnings** | [`longbridge-earnings`](./skills/longbridge-earnings) — post-earnings analysis: summary card + full Markdown report |
 | **Value Investing** | [`longbridge-value-investing`](./skills/longbridge-value-investing) — Graham NCAV/net-net + Buffett moat analysis |
 
 Click any name above to see what it can do.
@@ -125,7 +125,7 @@ Click any name above to see what it can do.
 You need one or both of these set up:
 
 - **Longbridge CLI** (for live quotes, your holdings, watchlist) — install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal), then run `longbridge auth login`.
-- **Longbridge MCP** (for analysis-tier features in fundamentals / research / portfolio / intel) — `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`.
+- **Longbridge MCP** (for analysis-tier features in fundamentals / research / portfolio / intel) — `claude mcp add --transport http longbridge https://mcp.longbridge.com`.
 
 Both authenticate with your Longbridge account. Pick "trade" permission during login if you want account-level skills (positions, orders, P&L).
 

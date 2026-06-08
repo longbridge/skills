@@ -11,7 +11,7 @@
 按以下顺序获取数据，优先使用上层，下层作为补充：
 
 1. **CLI（首选）**: `longbridge <command>` — Longbridge 命令行工具，结构化输出，最直接
-2. **MCP（次选）**: `https://openapi.longbridge.com/mcp` — 当 CLI 不覆盖或需要更细粒度数据时
+2. **MCP（次选）**: `https://mcp.longbridge.com` — 当 CLI 不覆盖或需要更细粒度数据时
 3. **Web Search（兜底）**: 仅在政策深度解读/做空报告/传闻事件/知名投资者动态等极少数场景使用
 
 ## 核心原则
