@@ -1,6 +1,6 @@
 ---
 name: longbridge-earnings
-description: >
+description: |
   Earnings analysis skill (pre- and post-earnings) — pre-earnings preview: prior guidance
   review, events tracking, earnings call Q&A summary, key focus framework; post-earnings
   update: institutional-grade 8–12 page DOCX with beat/miss analysis, segment breakdown,
@@ -102,6 +102,21 @@ See [references/summary-card-spec.md](references/summary-card-spec.md)
 2. **Conversation summary**: 8-module structured output directly in chat
 
 **IMPORTANT**: Do NOT append a Sources section or reference links to the conversation output. All citations belong in the DOCX only.
+
+
+## Auth requirements
+
+- `financial-report`, `financial-statement`, `consensus`, `forecast-eps`, `news`: Public — no login required
+- `filing`: Public — no login required
+
+## Error handling
+
+| Situation | Response |
+|---|---|
+| `command not found: longbridge` | Install longbridge-terminal: `brew tap longbridge/tap && brew install longbridge/tap/longbridge-terminal` |
+| `not logged in` | Run `longbridge auth login` |
+| No earnings data | Verify symbol is listed on US / HK / A-share; fiscal calendar may vary |
+| DOCX generation fails | Ensure `pip install python-docx` is installed; skill falls back to inline summary |
 
 ## MCP fallback
 

@@ -28,13 +28,17 @@ Trigger when user asks about: candlestick patterns, Ichimoku cloud, technical in
 
 ## Data dependency
 
-⚠️ All frameworks in this skill require OHLCV historical data. **Before running any analysis, first fetch K-line data:**
+⚠️ All frameworks in this skill require OHLCV historical data. **Before running any analysis, fetch K-line data:**
 
 ```bash
-longbridge kline <SYMBOL>.<MARKET> --format json
+longbridge kline <SYMBOL>.<MARKET> --period day --count 200 --format json
 ```
 
-Use `longbridge kline --help` for period and date-range options. This command is part of `longbridge-market-data`.
+Use `longbridge kline --help` for period and date-range options.
+
+- **If `longbridge` CLI is installed** (via `longbridge-market-data` or standalone): run the command above directly.
+- **If CLI is unavailable**: fall back to the Longbridge MCP server — call the kline/OHLCV tool at runtime to fetch the same data.
+- **If neither is available**: tell the user to install `longbridge-terminal` first, then re-run.
 
 ## Sub-topic Routing
 
