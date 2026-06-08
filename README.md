@@ -2,7 +2,7 @@
 
 Make your AI assistant fluent in [Longbridge](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-23 skills covering market data, fundamentals, valuation, options, technical analysis, quantitative strategies, portfolio risk, research, cross-market analysis, community, IPO, and automation across HK / US / A-share / Singapore markets.
+13 skills covering market data, fundamentals, valuation, options, technical analysis, quantitative strategies, portfolio risk, research, news, earnings, value investing, and market intelligence across HK / US / A-share / Singapore markets.
 
 ---
 
@@ -58,6 +58,38 @@ npx skills update longbridge-quote -g
 bunx skills update -g
 bunx skills update longbridge-quote -g
 ```
+
+### Full reinstall (use this after a release that renames or consolidates skills)
+
+`npx skills update` only refreshes skills whose name is **unchanged**. It does *not* remove
+skills that were renamed/removed, and does *not* add brand-new names — so after a
+consolidation release you can be left with stale orphan skills plus missing new ones, and
+their triggers fight each other. To wipe everything Longbridge-related and reinstall the
+current set cleanly:
+
+**One-liner (no clone needed, requires `git`):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/longbridge/skills/main/scripts/update.sh | bash
+
+# preview without changing anything:
+curl -fsSL https://raw.githubusercontent.com/longbridge/skills/main/scripts/update.sh | bash -s -- --dry-run
+```
+
+It pulls the latest skills and wipes every old `longbridge` / `longbridge-*` entry (directories
+**and** dangling symlinks) from each detected agent directory — `~/.claude`, `~/.agents`,
+`~/.gemini`, `~/.opencode` — before installing the current set fresh.
+
+**From a local clone (for development):**
+
+```bash
+scripts/reinstall.sh             # copy-install into every detected agent dir
+scripts/reinstall.sh --link      # symlink back to the repo for live edits
+scripts/reinstall.sh --dry-run   # preview only
+scripts/reinstall.sh --target ~/.claude/skills   # restrict to one dir
+```
+
+Restart any open agent session afterwards so it re-scans the skills directory.
 
 ---
 
@@ -122,5 +154,19 @@ Both authenticate with your Longbridge account. Pick "trade" permission during l
 - [CLAUDE.md](./CLAUDE.md) — repo-level instructions for Claude Code when developing inside this repo
 - [docs/architecture.md](./docs/architecture.md) — how the multilingual triggers + CLI/MCP routing work under the hood
 - [docs/install.md](./docs/install.md) — every install path, verification, troubleshooting
+
+### Maintainer rule: skill names are immutable
+
+**Once a skill is published, its `name` / directory slug must never change.** Installers match
+skills by slug, so renaming one does not upgrade the old install — it *orphans* it: the old
+skill lingers on every user's machine (stale, and competing for the same triggers) while the
+new name is never picked up by `npx skills update` at all.
+
+When a skill needs reorganizing:
+
+- **Prefer adding/editing content under the existing slug** rather than renaming it.
+- If a new slug is genuinely unavoidable, treat it as a **breaking change**: call it out in the
+  release notes and tell users to run the full reinstall (above), which is the only way to clear
+  the orphaned old slugs.
 
 License: [MIT](./LICENSE).
