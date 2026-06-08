@@ -10,34 +10,30 @@ Make your AI assistant fluent in [Longbridge](https://longbridge.com) — ask ab
 
 Pick whichever fits your workflow:
 
-### with `npx` (one line, no setup)
+### Fresh install (never installed Longbridge skills before)
 
 ```bash
-# Install everything globally (~/.claude/skills/)
+# npx — global install
 npx skills add longbridge/skills -g
 
-# Or just one skill, globally
-npx skills add longbridge/skills -g --skill longbridge-market-data
-```
-
-> Use `-g` (global) so the skills land in `~/.claude/skills/` and are reachable from any project. Without `-g`, the installer treats the current directory as a project and installs into `<cwd>/.claude/skills/` — which is fine for project-scoped skills but is a common surprise when you later run `npx skills remove` from a different directory.
-
-### with `bun`
-
-```bash
+# bun
 bunx skills add longbridge/skills -g
-bunx skills add longbridge/skills -g --skill longbridge-market-data
-```
 
-### inside Claude Code (plugin marketplace)
-
-```text
+# Claude Code plugin marketplace
 /plugin marketplace add longbridge/skills
 /plugin install longbridge@longbridge-skills
 ```
 
+### Upgrading from v1.x (had the old 127-skill version)
 
-> **Upgrading from v1.x?** If you had the previous 127-skill version installed, remove old skills first to avoid conflicts — see the [migration guide](./docs/install.md#migrating-from-v1x-127-skills-to-v2x-13-skills).
+> ⚠️ `npx skills add` and `npx skills update` will **not** remove the 127 old skills — they only add/refresh. Old skills will linger and compete with new triggers. Use the reinstall script instead:
+
+```bash
+# One-liner — wipes old longbridge-* skills, installs the new 13
+curl -fsSL https://raw.githubusercontent.com/longbridge/skills/main/scripts/update.sh | bash
+```
+
+See [Full reinstall](#full-reinstall-use-this-after-a-release-that-renames-or-consolidates-skills) below for details and dry-run option.
 
 📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
 
