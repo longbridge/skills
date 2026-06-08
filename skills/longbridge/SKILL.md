@@ -120,6 +120,7 @@ Add Longbridge API docs to IDE/RAG       LLMs.txt / Markdown API
 - **QuoteContext** — all quote methods + subscriptions: [references/python-sdk/quote-context.md](references/python-sdk/quote-context.md)
 - **TradeContext** — orders, account, executions: [references/python-sdk/trade-context.md](references/python-sdk/trade-context.md)
 - **Types & Enums** — Period, OrderType, SubType, push types: [references/python-sdk/types.md](references/python-sdk/types.md)
+| Python SDK — ContentContext (HttpClient fallback) | references/python-sdk/content-context.md |
 
 ### Rust SDK
 
