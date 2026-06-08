@@ -28,12 +28,19 @@ Trigger when user asks about: analyst ratings / price targets, EPS/revenue conse
 
 ## Sub-topic Routing
 
+**Analyst & Consensus Data**
+
 | User intent | Load references file |
 |---|---|
 | Analyst ratings / 机构评级 | references/institution-rating.md |
 | EPS / revenue forecasts | references/forecast-eps.md |
 | Consensus price target | references/consensus.md |
 | Finance calendar / events | references/finance-calendar.md |
+
+**Shareholder & Flow Data**
+
+| User intent | Load references file |
+|---|---|
 | Institutional shareholders | references/shareholder.md |
 | Fund holders / ETF holders | references/fund-holder.md |
 | Insider trades / Form 4 | references/insider-trades.md |
@@ -42,6 +49,11 @@ Trigger when user asks about: analyst ratings / price targets, EPS/revenue conse
 | Daily short sale volume | references/short-trades.md |
 | Industry ranking lists | references/industry-rank.md |
 | Industry peer group tree | references/industry-peers.md |
+
+**Investment Research Frameworks**
+
+| User intent | Load references file |
+|---|---|
 | Investment idea generation | references/investment-ideas.md |
 | Investment proposal / memo | references/investment-proposal.md |
 | Coverage initiation report | references/coverage-initiation.md |
@@ -51,10 +63,15 @@ Trigger when user asks about: analyst ratings / price targets, EPS/revenue conse
 | Post-investment monitoring | references/post-investment.md |
 | HK IPO analysis | references/hkipo-analysis.md |
 | Financial planning | references/financial-planning.md |
-| DeFi yield analysis | references/defi-yield.md |
-| On-chain data analysis | references/onchain.md |
 | Company profile / pitch book | references/company-profile.md |
 | Company tear sheet / one-pager | references/company-tearsheet.md |
+
+**Crypto & Alternative Data**
+
+| User intent | Load references file |
+|---|---|
+| DeFi yield analysis | references/defi-yield.md |
+| On-chain data analysis | references/onchain.md |
 
 ## CLI Commands
 
