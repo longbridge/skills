@@ -277,6 +277,42 @@ claude mcp remove longbridge                          # remove the MCP registrat
 
 ---
 
+
+---
+
+## Migrating from v1.x (127 skills) to v2.x (13 skills)
+
+If you had the previous 127-skill version installed, the old skills will conflict with the new consolidated ones. **Remove old skills first:**
+
+### npx / bun installs
+
+```bash
+# Remove all old longbridge-* skills
+npx skills list -g 2>/dev/null | grep -E '^longbridge(-|$)' | xargs -r npx skills remove -g
+# Then install the new consolidated skills
+npx skills add longbridge/skills -g
+```
+
+### Claude Code plugin marketplace
+
+```text
+/plugin uninstall longbridge@longbridge-skills
+/plugin marketplace remove longbridge-skills
+/plugin marketplace add longbridge/skills
+/plugin install longbridge@longbridge-skills
+```
+
+### Symlink installs
+
+```bash
+# Remove all old longbridge-* symlinks
+rm -rf ~/.claude/skills/longbridge ~/.claude/skills/longbridge-*
+# Then re-link from the updated clone
+for d in "$PWD"/skills/*; do
+  ln -sfn "$d" "$HOME/.claude/skills/$(basename "$d")"
+done
+```
+
 ## FAQ
 
 ### A skill never triggers after install
