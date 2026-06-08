@@ -12,7 +12,7 @@ description: |
   "财报分析", "业绩更新", "季度业绩", "季报", "年报", "盈利分析", "财报点评",
   "财报前瞻", "财报预览", "业绩前瞻", "财报要关注什么", "上季度指引",
   "財報分析", "業績更新", "季度業績", "季報", "年報", "財報點評",
-  "財報前瞻", "業績前瞻", "財報要關注什麼".
+  "財報前瞻", "業績前瞻", "財報要關注什麼", "財報預覽", "電話會要點"
 license: MIT
 metadata:
   author: longbridge
@@ -35,6 +35,7 @@ metadata:
 | Trigger                 | Example                                                    |
 | ----------------------- | ---------------------------------------------------------- |
 | Post-earnings analysis  | "Analyze TSLA.US latest earnings" / "帮我分析腾讯最新财报" |
+| Pre-earnings preview    | "NVDA earnings preview" / "腾讯财报前瞻" / "下季度财报要关注什么" |
 | Specific quarter update | "Tencent Q4 2024 earnings update" / "业绩更新"             |
 | Quarterly results       | "Q1/Q2/Q3/Q4 results for [company]"                        |
 

@@ -2,7 +2,7 @@
 name: longbridge-derivatives
 description: |
   Options chains, option quotes, option volume, Greeks (Delta/Gamma/Theta/Vega), implied volatility, and HK warrants (callable bull/bear, call/put warrants, issuer list) for HK/US markets via Longbridge.
-  Triggers: "期权", "期权链", "认购", "认沽", "行权价", "到期日", "IV", "隐含波动率", "Greeks", "delta", "gamma", "窝轮", "牛熊证", "认购证", "认沽证", "認購", "認沽", "行權價", "隱含波動率", "窩輪", "牛熊證", "option", "option chain", "call", "put", "strike", "expiry", "implied volatility", "warrant", "CBBC"
+  Triggers: "期权", "期权链", "认购", "认沽", "行权价", "到期日", "IV", "隐含波动率", "Greeks", "delta", "gamma", "窝轮", "牛熊证", "认购证", "认沽证", "認購", "認沽", "行權價", "隱含波動率", "窩輪", "牛熊證", "option", "option chain", "call", "put", "strike", "expiry", "implied volatility", "warrant", "CBBC", "期權", "期權鏈"
 license: MIT
 metadata:
   author: longbridge
@@ -90,6 +90,7 @@ Use MCP server tools for options/warrant data if CLI unavailable. Discover tools
 longbridge-derivatives/
 ├── SKILL.md
 └── references/
-    ├── option.md
-    └── warrant.md
+    ├── option.md · warrant.md
+    ├── options-strategy.md · options-pnl.md
+    └── options-volatility.md · options-advanced.md
 ```

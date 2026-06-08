@@ -2,7 +2,7 @@
 name: longbridge-fundamentals
 description: |
   Financial statements, business segments, dividends, valuation multiples (PE/PB/PS), industry comparison, operating data, corporate actions, company and executive profiles, cross-stock comparison, and valuation ranking via Longbridge. Also: DCF models, value investing screens (low PE/PB, margin of safety), and behavioral finance analysis frameworks.
-  Triggers: "财报", "三表", "利润表", "资产负债", "现金流", "估值", "PE", "PB", "分红", "公司信息", "高管", "行业估值", "并购", "DCF", "内在价值", "低估值", "安全边际", "行为金融", "小盘成长", "专精特新", "財報", "估值", "分紅", "內在價值", "安全邊際", "financial report", "income statement", "balance sheet", "valuation", "dividend", "company info", "industry valuation", "DCF", "value screen", "behavioral finance"
+  Triggers: "财报", "三表", "利润表", "资产负债", "现金流", "估值", "PE", "PB", "分红", "公司信息", "高管", "行业估值", "并购", "DCF", "内在价值", "低估值", "安全边际", "行为金融", "小盘成长", "专精特新", "財報", "估值", "分紅", "內在價值", "安全邊際", "financial report", "income statement", "balance sheet", "valuation", "dividend", "company info", "industry valuation", "DCF", "value screen", "behavioral finance", "利潤表", "資產負債", "現金流", "行業估值", "併購", "行為金融", "小盤成長"
 license: MIT
 metadata:
   author: longbridge
@@ -41,6 +41,8 @@ Trigger when user asks about: financial statements (income/balance sheet/cash fl
 | Equity / subsidiary relations | references/invest-relation.md |
 | Valuation rank in industry | references/valuation-rank.md |
 | Multi-stock comparison | references/compare.md |
+| Detailed financial statement with period | references/financial-statement.md |
+| Executive / key personnel profiles | references/executive.md |
 | Corporate overview / 公司概况 | references/corporate.md |
 | Corporate events calendar | references/corporate-events.md |
 | DCF valuation model | references/dcf.md |
