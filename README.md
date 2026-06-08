@@ -79,15 +79,6 @@ It pulls the latest skills and wipes every old `longbridge` / `longbridge-*` ent
 **and** dangling symlinks) from each detected agent directory — `~/.claude`, `~/.agents`,
 `~/.gemini`, `~/.opencode` — before installing the current set fresh.
 
-**From a local clone (for development):**
-
-```bash
-scripts/reinstall.sh             # copy-install into every detected agent dir
-scripts/reinstall.sh --link      # symlink back to the repo for live edits
-scripts/reinstall.sh --dry-run   # preview only
-scripts/reinstall.sh --target ~/.claude/skills   # restrict to one dir
-```
-
 Restart any open agent session afterwards so it re-scans the skills directory.
 
 ---
