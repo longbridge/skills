@@ -44,8 +44,13 @@ metadata:
 
 | User intent | Load references file |
 |---|---|
-| Pre-earnings preview / 财报前瞻 | [references/pre-earnings.md](references/pre-earnings.md) |
-| Post-earnings analysis / 财报后分析 | [references/post-earnings.md](references/post-earnings.md) |
+| Pre-earnings preview / 财报前瞻 | references/pre-earnings.md |
+| Post-earnings analysis / 财报后分析 | references/post-earnings.md |
+| Data collection + beat/miss workflow | references/workflow.md |
+| Valuation update (DCF / comps) | references/valuation-methodologies.md |
+| DOCX report structure / formatting | references/report-structure.md |
+| In-chat summary card format | references/summary-card-spec.md |
+| Quality checklist | references/best-practices.md |
 
 ## Data Sources
 
@@ -132,20 +137,18 @@ MCP-only extras worth pulling in for Step 3 valuation:
 
 ## Related skills
 
-This skill is the heaviest in the family (institutional-grade 8–12 page DOCX). For lighter or differently-framed asks, defer to a sibling:
+For lighter or differently-framed asks, defer to:
 
-| User asks for ...                                                                                    | Use                                                           |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Analyst consensus / EPS forecasts                                                                    | `longbridge-research`                                         |
-| Financial statements                                                                                 | `longbridge-fundamentals`                                     |
-| Historical PE/PB percentile, "is X expensive vs its own history / industry?"                         | [`longbridge-valuation`](../longbridge-valuation)             |
-| 5-dimension KPI overview (revenue / margins / ROE / dividend / consensus) without a DOCX deliverable | [`longbridge-fundamental`](../longbridge-fundamental)         |
-| Cross-symbol matrix, "X vs Y vs Z"                                                                   | [`longbridge-peer-comparison`](../longbridge-peer-comparison) |
-| Classified news + filings + community sentiment for a single name                                    | [`longbridge-news`](../longbridge-news)                       |
-| Daily incremental briefing across the user's watchlist                                               | [`longbridge-catalyst-radar`](../longbridge-catalyst-radar)   |
-| Live quote / valuation indices                                                                       | [`longbridge-quote`](../longbridge-quote)                     |
-
-If the user wants the full earnings DOCX _plus_ one of the above (e.g. "earnings update on TSLA and how it compares to Ford"), do this skill first, then chain to the other.
+| User asks for | Use |
+|---|---|
+| Analyst consensus / EPS forecasts | `longbridge-research` |
+| Financial statements | `longbridge-fundamentals` |
+| Historical PE/PB percentile / "is X expensive?" | `longbridge-fundamentals` (valuation) |
+| KPI overview without DOCX | `longbridge-fundamentals` |
+| Cross-symbol comparison | `longbridge-fundamentals` (compare) |
+| News + filings + community | `longbridge-content` |
+| Daily watchlist briefing | `longbridge-intel` (catalyst-radar) |
+| Live quote / valuation indices | `longbridge-market-data` |
 
 ## Reference Files
 

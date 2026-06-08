@@ -53,7 +53,17 @@ Run `longbridge warrant --help` for subcommands (quote / list / issuers).
 
 ## Frameworks
 
-No standalone frameworks — all data comes from CLI commands above.
+### Options Strategy
+Covered call, protective put, straddle, strangle, bull/bear spread selection. See [references/options-strategy.md](references/options-strategy.md).
+
+### Options P&L Analysis
+Payoff diagrams, breakeven, max profit/loss, Greeks sensitivity. See [references/options-pnl.md](references/options-pnl.md).
+
+### Implied Volatility Analysis
+IV vs HV, IV percentile rank, volatility smile and skew. See [references/options-volatility.md](references/options-volatility.md).
+
+### Advanced Options
+Volatility surface (SABR), dynamic delta hedging, calendar/diagonal spreads, skew trading. See [references/options-advanced.md](references/options-advanced.md).
 
 ## Error handling
 
@@ -71,8 +81,8 @@ Use MCP server tools for options/warrant data if CLI unavailable. Discover tools
 
 | User wants | Use |
 |---|---|
-| Options strategy / IV analysis | `longbridge-quant` (volatility-strategy) |
 | Real-time underlying quote | `longbridge-market-data` |
+| Quantitative volatility strategies (HV regime, straddle/condor) | `longbridge-quant` |
 
 ## File layout
 

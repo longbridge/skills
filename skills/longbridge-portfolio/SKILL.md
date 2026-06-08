@@ -118,6 +118,8 @@ Use MCP server if CLI unavailable. Discover tools at runtime.
 | Real-time market quotes | `longbridge-market-data` |
 | Fundamental analysis | `longbridge-fundamentals` |
 | Watchlist management | `longbridge-watchlist` |
+| **Institutional** shareholders / fund holders (not my account) | `longbridge-research` |
+| IPO subscription orders | `longbridge-market-data` (ipo command) |
 
 ## File layout
 
