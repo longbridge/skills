@@ -251,7 +251,7 @@ The output uses **four sections** written in natural language — no bullet dump
 
 | Situation                                                | Response                                                                                       |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `command not found: longbridge`                          | Fall back to MCP `mcp__longbridge__*`; if also unavailable, ask user to install longbridge CLI |
+| `command not found: longbridge`                          | Fall back to MCP — discover the tool from the server's tool list at runtime; if also unavailable, ask user to install longbridge CLI |
 | `not logged in` / `unauthorized`                         | Ask user to run `longbridge auth login`                                                        |
 | < 250 daily candles                                      | Refuse analysis with explanation                                                               |
 | Recent suspension / ST stock                             | Refuse analysis with explanation                                                               |
