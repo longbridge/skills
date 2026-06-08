@@ -34,6 +34,7 @@ longbridge-skills/
 - Directory name must match `^[a-z0-9]+(-[a-z0-9]+)*$` (lowercase ASCII + hyphens).
 - It MUST equal the `name:` value in the SKILL.md frontmatter.
 - Existing skills are namespaced `longbridge-*` (e.g. `longbridge-quote`). The single base skill is just `longbridge`.
+- **Slugs are immutable once published.** Never rename or delete a published skill's slug. Installers (`npx skills update`, `scripts/reinstall.sh`) match by slug, so a rename does not upgrade the old install — it orphans it on every user's machine (stale + competing for the same triggers) while the new name is never picked up by `update`. Reorganize by adding/editing content under the existing slug. If a new slug is genuinely unavoidable, it is a **breaking change**: note it in the release notes and direct users to the full reinstall (`scripts/update.sh`), the only thing that clears orphaned slugs.
 
 ### 2. Frontmatter
 
