@@ -5,16 +5,16 @@
     "url": "https://github.com/longbridge"
   },
   "metadata": {
-    "description": "Agent Skills for Longbridge securities — quotes, charts, fundamentals, valuation, portfolio analysis, news. Covers HK / US / A-share / SG markets with trilingual triggers (Simplified Chinese, Traditional Chinese, English).",
-    "version": "1.0.0",
+    "description": "Agent Skills for Longbridge securities — 13 consolidated skills covering market data, technical analysis, derivatives, fundamentals, research, portfolio, quant strategies, watchlist, content, market intelligence, earnings, and value investing. HK / US / A-share (SH/SZ) / Singapore markets. Trilingual (Simplified Chinese, Traditional Chinese, English).",
+    "version": "2.0.0",
     "pluginRoot": "./"
   },
   "plugins": [
     {
       "name": "longbridge",
       "source": "./",
-      "description": "Longbridge securities skill family: 125+ skills covering real-time quotes, K-line, fundamentals, valuation, portfolio, news, options, earnings, sector analysis, and more. Multilingual triggers (Simplified Chinese, Traditional Chinese, English). Markets: HK / US / A-share (SH/SZ) / Singapore.",
-      "version": "1.1.0",
+      "description": "Longbridge securities skill family (v2): 13 consolidated skills replacing the previous 127-skill set. Full coverage of market data, fundamentals, research, portfolio & account, quantitative strategies, and more. Requires reinstall (not just update) when upgrading from v1.x — see scripts/reinstall.sh.",
+      "version": "2.0.0",
       "author": {
         "name": "longbridge",
         "url": "https://longbridge.com"
@@ -22,9 +22,22 @@
       "homepage": "https://github.com/longbridge/skills",
       "repository": "https://github.com/longbridge/skills",
       "license": "MIT",
-      "keywords": ["longbridge", "stocks", "quotes", "trading", "valuation", "fundamentals", "portfolio", "hk-stocks", "us-stocks", "a-shares"],
+      "keywords": [
+        "longbridge",
+        "stocks",
+        "quotes",
+        "trading",
+        "valuation",
+        "fundamentals",
+        "portfolio",
+        "hk-stocks",
+        "us-stocks",
+        "a-shares"
+      ],
       "category": "finance",
-      "skills": ["./skills/"]
+      "skills": [
+        "./skills/"
+      ]
     }
   ]
 }

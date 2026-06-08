@@ -4,14 +4,14 @@ This file briefs Claude Code when working **inside this repo** (adding new skill
 
 ## What this repo is
 
-127 [Agent Skills](https://agentskills.io/specification) that wrap the [Longbridge Securities](https://longbridge.com) platform — quotes, charts, fundamentals, valuation, news, watchlist, account analytics, etc. Multilingual triggers (Simplified Chinese / Traditional Chinese / English). The default style is **prompt-only** (SKILL.md tells the LLM what `longbridge ...` command to run); `scripts/` and `commands/` subfolders are allowed but should be opt-in for clear runtime needs (DOCX generation, chart helpers, slash commands), not as a wrapper-by-default.
+~22 [Agent Skills](https://agentskills.io/specification) that wrap the [Longbridge Securities](https://longbridge.com) platform — quotes, charts, fundamentals, valuation, news, watchlist, account analytics, etc. Multilingual triggers (Simplified Chinese / Traditional Chinese / English). The default style is **prompt-only** (SKILL.md tells the LLM what `longbridge ...` command to run); `scripts/` and `commands/` subfolders are allowed but should be opt-in for clear runtime needs (DOCX generation, chart helpers, slash commands), not as a wrapper-by-default.
 
 ## Layout
 
 ```
 longbridge-skills/
 ├── .claude-plugin/marketplace.json    # plugin marketplace entry
-├── skills/                            # 127 skill folders
+├── skills/                            # ~22 skill folders
 │   ├── <slug>/
 │   │   ├── SKILL.md                   # required
 │   │   ├── references/                # optional — on-demand detail loaded by the LLM
@@ -34,6 +34,7 @@ longbridge-skills/
 - Directory name must match `^[a-z0-9]+(-[a-z0-9]+)*$` (lowercase ASCII + hyphens).
 - It MUST equal the `name:` value in the SKILL.md frontmatter.
 - Existing skills are namespaced `longbridge-*` (e.g. `longbridge-quote`). The single base skill is just `longbridge`.
+- **Slugs are immutable once published.** Never rename or delete a published skill's slug. Installers (`npx skills update`) match by slug, so a rename does not upgrade the old install — it orphans it on every user's machine (stale + competing for the same triggers) while the new name is never picked up by `update`. Reorganize by adding/editing content under the existing slug. If a new slug is genuinely unavoidable, it is a **breaking change**: note it in the release notes and direct users to the full reinstall (`scripts/update.sh`), the only thing that clears orphaned slugs.
 
 ### 2. Frontmatter
 
@@ -58,16 +59,16 @@ metadata:
 
 `description` must be **≤ 1024 characters total**. The `Triggers:` list inside it is the **only** thing Claude Code uses to decide whether to activate the skill — pack it with multilingual keywords (see §3).
 
-### 3. Trilingual triggers
+### 3. Language coverage for triggers
 
-`description` MUST cover all three languages explicitly:
+`description` MUST cover **Simplified Chinese + English**. Traditional Chinese is only added where the glyph differs from Simplified (e.g. `股价`→`股價`, `汇率`→`匯率`, `经纪`→`經紀`). Identical glyphs appear once only.
 
 - **Simplified Chinese**: 现在多少钱 / 涨跌幅 / 持仓 / ...
-- **Traditional Chinese**: 現在多少 / 漲跌幅 / 持倉 / ...
 - **English**: stock price / current quote / my holdings / ...
+- **Traditional Chinese** (divergent glyphs only): 股價 / 漲跌幅 / 持倉 / ...
 - **Ticker examples**: NVDA.US, 700.HK, 600519.SH
 
-Glyphs identical in Simplified and Traditional only need to appear once. Divergent glyphs (`股价`/`股價`, `经纪`/`經紀`) must appear in both forms.
+This reduces description size by ~15–20%, freeing space for more trigger concepts within the 1024-character limit.
 
 ### 4. Body — "Response language" directive (mandatory)
 
