@@ -2,7 +2,7 @@
 
 Make your AI assistant fluent in [Longbridge](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-23 skills covering market data, fundamentals, valuation, options, technical analysis, quantitative strategies, portfolio risk, research, cross-market analysis, community, IPO, and automation across HK / US / A-share / Singapore markets.
+13 skills covering market data, technical analysis, derivatives, fundamentals, research, portfolio & account, quantitative strategies, watchlist, content, market intelligence, earnings, and value investing across HK / US / A-share / Singapore markets.
 
 ---
 
@@ -17,7 +17,7 @@ Pick whichever fits your workflow:
 npx skills add longbridge/skills -g
 
 # Or just one skill, globally
-npx skills add longbridge/skills -g --skill longbridge-quote
+npx skills add longbridge/skills -g --skill longbridge-market-data
 ```
 
 > Use `-g` (global) so the skills land in `~/.claude/skills/` and are reachable from any project. Without `-g`, the installer treats the current directory as a project and installs into `<cwd>/.claude/skills/` — which is fine for project-scoped skills but is a common surprise when you later run `npx skills remove` from a different directory.
@@ -26,7 +26,7 @@ npx skills add longbridge/skills -g --skill longbridge-quote
 
 ```bash
 bunx skills add longbridge/skills -g
-bunx skills add longbridge/skills -g --skill longbridge-quote
+bunx skills add longbridge/skills -g --skill longbridge-market-data
 ```
 
 ### inside Claude Code (plugin marketplace)
@@ -35,6 +35,9 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 /plugin marketplace add longbridge/skills
 /plugin install longbridge@longbridge-skills
 ```
+
+
+> **Upgrading from v1.x?** If you had the previous 127-skill version installed, remove old skills first to avoid conflicts — see the [migration guide](./docs/install.md#migrating-from-v1x-127-skills-to-v2x-13-skills).
 
 📖 **Full guide** with prerequisites / verification / FAQ → [docs/install.md](./docs/install.md)
 
@@ -49,14 +52,14 @@ bunx skills add longbridge/skills -g --skill longbridge-quote
 npx skills update -g
 
 # Update a single skill
-npx skills update longbridge-quote -g
+npx skills update longbridge-market-data -g
 ```
 
 ### bun
 
 ```bash
 bunx skills update -g
-bunx skills update longbridge-quote -g
+bunx skills update longbridge-market-data -g
 ```
 
 ---
@@ -103,7 +106,7 @@ Click any name above to see what it can do.
 You need one or both of these set up:
 
 - **Longbridge CLI** (for live quotes, your holdings, watchlist) — install [longbridge-terminal](https://github.com/longportapp/longbridge-terminal), then run `longbridge auth login`.
-- **Longbridge MCP** (for valuation / news / fundamentals / portfolio analysis) — `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`.
+- **Longbridge MCP** (for analysis-tier features in fundamentals / research / portfolio / intel) — `claude mcp add --transport http longbridge https://openapi.longbridge.com/mcp`.
 
 Both authenticate with your Longbridge account. Pick "trade" permission during login if you want account-level skills (positions, orders, P&L).
 
