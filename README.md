@@ -160,3 +160,9 @@ When a skill needs reorganizing:
   the orphaned old slugs.
 
 License: [MIT](./LICENSE).
+
+---
+
+<a href="https://aiagentsdirectory.com/agent/longbridge" target="_blank" rel="noopener" title="Discover Longbridge on AI Agents Directory">
+  <img src="https://aiagentsdirectory.com/featured-badge.svg?v=2024" alt="Longbridge - Featured on AI Agents Directory" width="200" height="50" />
+</a>
