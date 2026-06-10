@@ -2,7 +2,7 @@
 name: longbridge-fundamentals
 description: |
   Financial statements, business segments, dividends, valuation multiples (PE/PB/PS), industry comparison, operating data, corporate actions, company and executive profiles, cross-stock comparison, and valuation ranking via Longbridge. Also: DCF models, value investing screens (low PE/PB, margin of safety), and behavioral finance analysis frameworks.
-  Triggers: "财报", "三表", "利润表", "资产负债", "现金流", "估值", "PE", "PB", "分红", "公司信息", "高管", "行业估值", "并购", "DCF", "内在价值", "低估值", "安全边际", "行为金融", "小盘成长", "专精特新", "財報", "估值", "分紅", "內在價值", "安全邊際", "financial report", "income statement", "balance sheet", "valuation", "dividend", "company info", "industry valuation", "DCF", "value screen", "behavioral finance", "利潤表", "資產負債", "現金流", "行業估值", "併購", "行為金融", "小盤成長"
+  Triggers: "财报", "三表", "利润表", "资产负债", "现金流", "估值", "PE", "PB", "分红", "公司信息", "高管", "行业估值", "并购", "DCF", "内在价值", "低估值", "安全边际", "行为金融", "小盘成长", "专精特新", "主营业务", "业务构成", "收入结构", "业务分析", "是做什么的", "是干嘛的", "公司画像", "行业排名", "行业龙头", "市场份额", "收入占比", "业务结构", "財報", "估值", "分紅", "內在價值", "安全邊際", "主營業務", "業務構成", "收入結構", "行業排名", "行業龍頭", "financial report", "income statement", "balance sheet", "valuation", "dividend", "company info", "industry valuation", "DCF", "value screen", "behavioral finance", "main business", "business composition", "revenue structure", "what does XX do", "industry ranking", "market share", "利潤表", "資產負債", "現金流", "行業估值", "併購", "行為金融", "小盤成長"
 license: MIT
 metadata:
   author: longbridge
@@ -24,7 +24,7 @@ Financial data, valuation, and company information for HK / US / A-share / Singa
 
 ## When to use
 
-Trigger when user asks about: financial statements (income/balance sheet/cash flow), business segments, dividends, valuation multiples, industry valuation comparison, operating reviews (HK stocks), corporate actions, company overview, executives, stock comparison, valuation ranking, DCF analysis, value investing screens, or behavioral finance concepts.
+Trigger when user asks about: financial statements (income/balance sheet/cash flow), business segments, dividends, valuation multiples, industry valuation comparison, operating reviews (HK stocks), corporate actions, company overview, executives, stock comparison, valuation ranking, DCF analysis, value investing screens, behavioral finance concepts, or **main business analysis** (what a company does, business model, revenue structure, segment breakdown, growth rate, industry ranking, market position).
 
 ## Sub-topic Routing
 
@@ -50,6 +50,7 @@ Trigger when user asks about: financial statements (income/balance sheet/cash fl
 | Behavioral finance | references/behavioral-finance.md |
 | Low-PE/PB value screen | references/value-screen.md |
 | Small-cap growth / 专精特新 | references/smallcap-growth.md |
+| Main business analysis / 主营业务分析 | references/main-business-analysis.md |
 
 ## CLI Commands
 
@@ -86,6 +87,9 @@ Low PE/PB + high ROE + dividend yield screening for undervalued stocks. See [ref
 ### Small-Cap Growth (专精特新)
 Market cap < 10B, revenue growth > 30%, ROE > 15%, low institutional ownership. See [references/smallcap-growth.md](references/smallcap-growth.md).
 
+### Main Business Analysis (主营业务分析)
+Revenue structure, segment breakdown, growth attribution (CR1/CR3/HHI), industry ranking, and competitive positioning. See [references/main-business-analysis.md](references/main-business-analysis.md).
+
 ## Auth requirements
 
 All commands: Public — no login required.
@@ -120,6 +124,6 @@ longbridge-fundamentals/
     ├── dividend.md · valuation.md · industry-valuation.md · operating.md
     ├── corp-action.md · invest-relation.md · company.md · executive.md
     ├── valuation-rank.md · compare.md
-    └── dcf.md · valuation-methodology.md · behavioral-finance.md
-        value-screen.md · smallcap-growth.md
+    ├── dcf.md · valuation-methodology.md · behavioral-finance.md
+    └── value-screen.md · smallcap-growth.md · main-business-analysis.md
 ```
