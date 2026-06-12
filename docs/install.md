@@ -162,14 +162,28 @@ Run a separate `ln -s` for `longbridge-watchlist-admin` once you're ready.
 
 ### Path D — Other agent products
 
-Skills are pure Markdown + Python and portable to any Agent-Skills-compatible product. Only the install directory differs:
+For OpenAI Codex, install the plugin marketplace so the bundled skills and plugin metadata stay together:
+
+```bash
+codex plugin marketplace add longbridge/skills
+codex plugin add longbridge@longbridge-skills
+```
+
+For local testing from a checkout:
+
+```bash
+codex plugin marketplace add .
+codex plugin add longbridge@longbridge-skills
+```
+
+Skills are also pure Markdown + Python and portable to other Agent-Skills-compatible products. For manual skill installs, only the install directory differs:
 
 | Agent product | Default skill directory |
 |---|---|
 | Claude Code | `~/.claude/skills/` |
 | Gemini CLI | `~/.gemini/skills/` |
 | OpenCode | `~/.opencode/skills/` |
-| OpenAI Codex | see vendor docs |
+| OpenAI Codex | use the plugin marketplace above |
 
 Example (Gemini CLI), assuming the repo is cloned locally:
 

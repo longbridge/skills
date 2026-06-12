@@ -19,6 +19,10 @@ npx skills add longbridge/skills -g
 # bun
 bunx skills add longbridge/skills -g
 
+# Codex plugin marketplace
+codex plugin marketplace add longbridge/skills
+codex plugin add longbridge@longbridge-skills
+
 # Claude Code plugin marketplace
 /plugin marketplace add longbridge/skills
 /plugin install longbridge@longbridge-skills
@@ -144,6 +148,22 @@ Both authenticate with your Longbridge account. Pick "trade" permission during l
 - [CLAUDE.md](./CLAUDE.md) — repo-level instructions for Claude Code when developing inside this repo
 - [docs/architecture.md](./docs/architecture.md) — how the multilingual triggers + CLI/MCP routing work under the hood
 - [docs/install.md](./docs/install.md) — every install path, verification, troubleshooting
+
+### Codex plugin development
+
+This repo is also a Codex plugin. The plugin root is the repository root:
+
+- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) declares the plugin and points Codex at `./skills/`.
+- [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) exposes the repo-local marketplace as `longbridge-skills`.
+
+For local testing from a checkout:
+
+```bash
+codex plugin marketplace add .
+codex plugin add longbridge@longbridge-skills
+```
+
+Restart Codex or open a new thread after reinstalling so the updated skills are reloaded.
 
 ### Maintainer rule: skill names are immutable
 
