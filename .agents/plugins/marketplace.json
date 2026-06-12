@@ -7,8 +7,8 @@
     {
       "name": "longbridge",
       "source": {
-        "source": "local",
-        "path": "./"
+        "source": "url",
+        "url": "https://github.com/longbridge/skills.git"
       },
       "policy": {
         "installation": "AVAILABLE",
