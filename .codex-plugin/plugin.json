@@ -1,0 +1,44 @@
+{
+  "id": "longbridge",
+  "name": "longbridge",
+  "version": "2.0.0",
+  "description": "Agent skills for Longbridge Securities: quotes, charts, fundamentals, valuation, portfolio, news, and market research across HK, US, A-share, and Singapore markets.",
+  "author": {
+    "name": "Longbridge",
+    "url": "https://longbridge.com"
+  },
+  "homepage": "https://github.com/longbridge/skills",
+  "repository": "https://github.com/longbridge/skills",
+  "license": "MIT",
+  "keywords": [
+    "longbridge",
+    "stocks",
+    "quotes",
+    "trading",
+    "valuation",
+    "fundamentals",
+    "portfolio",
+    "hk-stocks",
+    "us-stocks",
+    "a-shares"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Longbridge",
+    "shortDescription": "Market data and portfolio workflows for Longbridge Securities.",
+    "longDescription": "Longbridge bundles 13 skills for live quotes, K-line charts, options, warrants, fundamentals, research, portfolio and account data, watchlists, news, filings, market intelligence, earnings analysis, quantitative strategies, and value investing across HK, US, A-share, and Singapore markets. It supports Simplified Chinese, Traditional Chinese, and English.",
+    "developerName": "Longbridge",
+    "category": "Finance",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://longbridge.com",
+    "defaultPrompt": [
+      "What's NVDA's price on Longbridge?",
+      "How is my portfolio performing?",
+      "Compare AAPL and MSFT fundamentals."
+    ],
+    "brandColor": "#0A7C66"
+  }
+}

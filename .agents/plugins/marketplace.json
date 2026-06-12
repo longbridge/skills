@@ -1,0 +1,20 @@
+{
+  "name": "longbridge-skills",
+  "interface": {
+    "displayName": "Longbridge Skills"
+  },
+  "plugins": [
+    {
+      "name": "longbridge",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
