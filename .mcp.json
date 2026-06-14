@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "longbridge": {
+      "type": "http",
+      "url": "https://mcp.longbridge.com",
+      "note": "Official Longbridge MCP server. Uses OAuth on first connection for market data, portfolio, research, and trading workflows."
+    }
+  }
+}
