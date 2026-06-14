@@ -23,6 +23,7 @@
     "a-shares"
   ],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Longbridge",
     "shortDescription": "Market data and portfolio workflows for Longbridge Securities.",
@@ -39,6 +40,8 @@
       "How is my portfolio performing?",
       "Compare AAPL and MSFT fundamentals."
     ],
-    "brandColor": "#0A7C66"
+    "brandColor": "#00DBB6",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
   }
 }
