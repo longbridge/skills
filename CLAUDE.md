@@ -76,10 +76,11 @@ Every SKILL.md must include this line right after the H1 + intro paragraph:
 
 ```markdown
 > **Response language**: match the user's input language —
-> Simplified Chinese / Traditional Chinese / English.
+> English / Simplified Chinese / Traditional Chinese.
+> **RULE: Response language priority**: English is the default when language is ambiguous. If the user input is only a slash command, command name, ticker / symbol, or contains no natural-language language signal, you MUST respond in English. Do not infer Chinese from trigger keywords, skill metadata, or examples.
 ```
 
-This instructs the LLM to detect the user's input language and reply in the same language. Field tables and error reply tables must be 3-column (Simplified / Traditional / English).
+This instructs the LLM to detect the user's input language and reply in the same language. English must be listed first and is the mandatory fallback for ambiguous input. Slash-only commands such as `/longbridge-portfolio` default to English because they carry no natural-language signal; the model must not infer Chinese from the multilingual trigger list. Field tables and error reply tables must be 3-column (Simplified / Traditional / English).
 
 ### 4b. Body — "Data-source policy" directive (mandatory)
 
