@@ -77,9 +77,10 @@ Every SKILL.md must include this line right after the H1 + intro paragraph:
 ```markdown
 > **Response language**: match the user's input language —
 > Simplified Chinese / Traditional Chinese / English.
+> If the user input is only a slash command or contains no natural-language language signal, default to English.
 ```
 
-This instructs the LLM to detect the user's input language and reply in the same language. Field tables and error reply tables must be 3-column (Simplified / Traditional / English).
+This instructs the LLM to detect the user's input language and reply in the same language. Slash-only commands such as `/longbridge-portfolio` default to English because they carry no natural-language signal. Field tables and error reply tables must be 3-column (Simplified / Traditional / English).
 
 ### 4b. Body — "Data-source policy" directive (mandatory)
 
