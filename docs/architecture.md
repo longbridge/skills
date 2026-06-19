@@ -39,11 +39,11 @@ Every `SKILL.md`, immediately below the `# <skill-name>` heading and the intro p
 
 ```markdown
 > **Response language**: match the user's input language —
-> Simplified Chinese / Traditional Chinese / English.
-> If the user input is only a slash command or contains no natural-language language signal, default to English.
+> English / Simplified Chinese / Traditional Chinese.
+> **RULE: Response language priority**: English is the default when language is ambiguous. If the user input is only a slash command, command name, ticker / symbol, or contains no natural-language language signal, you MUST respond in English. Do not infer Chinese from trigger keywords, skill metadata, or examples.
 ```
 
-This instructs the LLM to **detect the user's input language** (Simplified, Traditional, or English) and **respond in the same language**. If the user invokes only a slash command, there is no natural-language signal, so the fallback is **English**. Modern LLMs already have this ability natively; we just have to surface the instruction inside the SKILL.
+This instructs the LLM to **detect the user's input language** (English, Simplified, or Traditional) and **respond in the same language**. English is listed first because it is the mandatory fallback for ambiguous input. If the user invokes only a slash command, command name, or ticker / symbol, there is no natural-language signal, so the fallback is **English**. The model must not infer Chinese from trigger keywords, skill metadata, or examples. Modern LLMs already have this ability natively; we just have to surface the instruction inside the SKILL.
 
 The data layer is language-agnostic — both the raw `longbridge` CLI (used by 17 skills) and the two Python wrappers (`longbridge-quote`, `longbridge-watchlist-admin`) emit English JSON only. Language switching happens when the LLM translates that JSON to natural language.
 
