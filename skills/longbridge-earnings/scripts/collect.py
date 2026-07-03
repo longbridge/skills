@@ -19,6 +19,7 @@ Pure standard library — no jq, no shell, works on Windows / macOS / Linux.
 """
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -40,10 +41,12 @@ def die(msg, code):
 
 def fetch(out_dir, name, args):
     """Run one CLI call; save raw JSON to <name>.json or error to <name>.err."""
+    env = {"LONGBRIDGE_SOURCE_SKILL": "longbridge-earnings", **os.environ}
     try:
         proc = subprocess.run(
             ["longbridge", *args, "--format", "json"],
             capture_output=True, text=True, encoding="utf-8", timeout=TIMEOUT,
+            env=env,
         )
         ok = proc.returncode == 0 and proc.stdout.strip()
     except (subprocess.TimeoutExpired, OSError) as e:

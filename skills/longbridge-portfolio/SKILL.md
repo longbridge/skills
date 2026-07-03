@@ -53,6 +53,11 @@ Trigger when user asks about: account assets / net value, stock or fund position
 
 ## CLI Commands
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-portfolio` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-portfolio longbridge portfolio --format json`
+
 Run `longbridge <cmd> --help` for current flags and output fields.
 
 ### `assets` — account net assets, cash, buying power, margin breakdown
@@ -111,6 +116,8 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 ## MCP fallback
 
 Use MCP server if CLI unavailable. Discover tools at runtime.
+
+> **MCP attribution**: MCP 路径的 skill 归因需服务端支持（RFC §3.3），当前为 best-effort。
 
 ## Related skills
 

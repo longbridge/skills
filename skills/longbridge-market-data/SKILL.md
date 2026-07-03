@@ -52,6 +52,11 @@ Trigger when the user asks about: stock price / quote, K-line / candlestick char
 
 ## CLI Commands
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-market-data` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-market-data longbridge quote TSLA.US --format json`
+
 Run `longbridge --help` to list all subcommands. Run `longbridge <cmd> --help` for flags.
 
 ### `quote` — real-time quote for one or more symbols

@@ -21,6 +21,11 @@ For setup and authentication details, see [references/setup.md](references/setup
 
 ## Investment Analysis Workflow
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge longbridge quote TSLA.US --format json`
+
 When the user asks about stock performance, portfolio advice, or market analysis:
 
 1. **Get live data** via CLI — quotes, positions, K-line history, intraday
