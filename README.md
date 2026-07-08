@@ -122,6 +122,8 @@ The right skill is picked automatically based on your question, in the language 
 
 Click any name above to see what it can do.
 
+Looking for something non-financial (quizzes, engagement/growth tools)? See [longbridge/extras-skills](https://github.com/longbridge/extras-skills).
+
 ---
 
 ## Prerequisites
