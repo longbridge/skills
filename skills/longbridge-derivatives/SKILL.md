@@ -40,6 +40,11 @@ Trigger when user asks about: options quotes, option chains, Greeks (Delta/Gamma
 
 ## CLI Commands
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-derivatives` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-derivatives longbridge option chain TSLA.US --format json`
+
 ### `option` — option quotes, option chain, option volume statistics
 
 Run `longbridge option --help` for subcommands (quote / chain / volume).

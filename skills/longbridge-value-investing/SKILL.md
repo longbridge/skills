@@ -54,6 +54,15 @@ Hard quant filter (ROE ≥ 15%, debt ≤ 50%, FCF positive, gross margin ≥ 30%
 
 All frameworks: Public — no login required.
 
+## CLI
+
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-value-investing` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-value-investing longbridge financial-report TSLA.US --format json`
+
+Run `longbridge --help` to discover available subcommands; `longbridge <cmd> --help` for flags.
+
 ## Error handling
 
 | Situation | Response |

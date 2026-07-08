@@ -178,3 +178,24 @@ Keep SKILL.md under ~200 lines. Push detail (long field dictionaries, multi-page
 ## License
 
 MIT. See [LICENSE](./LICENSE).
+
+## Skill attribution protocol
+
+Every skill MUST set `LONGBRIDGE_SOURCE_SKILL=<skill-slug>` as an env-var prefix before each `longbridge` CLI call so the backend can attribute the request to this skill.
+
+**Prompt layer (all skills)**: each SKILL.md `## CLI` section starts with:
+
+```
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=<skill-slug>` so the backend can attribute
+> the request to this skill.
+```
+
+**Script layer (`longbridge-earnings`)**: `scripts/collect.py` passes `env={"LONGBRIDGE_SOURCE_SKILL": "longbridge-earnings", **os.environ}` to every `subprocess.run()` call.
+
+**Protocol details**:
+- Env var name: `LONGBRIDGE_SOURCE_SKILL`
+- Value format: `^[a-z0-9]+(-[a-z0-9]+)*$` — matches the skill's `name:` frontmatter field exactly
+- HTTP header (RFC, CLI-side): `X-Lb-Skill: <skill-slug>` — injected by the CLI binary when the env var is set (external dependency)
+- Precision: best-effort; CLI ignores the env var until the binary implements RFC §3.2
+- MCP path attribution: pending server-side support (RFC §3.3)

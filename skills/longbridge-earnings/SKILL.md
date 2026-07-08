@@ -86,6 +86,12 @@ Read [references/full-report.md](references/full-report.md) and follow it. In sh
 
 ## Fallbacks
 
+> **Skill attribution**: before every direct `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-earnings` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-earnings longbridge financial-report snapshot TSLA.US --format json`
+> Note: `scripts/collect.py` already sets this env var automatically.
+
 - **Partial N/A sections**: the digest marks failed sources as `N/A (reason)`. Work with what succeeded; fetch a missing critical source directly (`longbridge <cmd> <SYMBOL> --format json`), checking `--help` only when a command errors.
 - **No Python (script-less path)**: issue the CLI calls yourself — in PARALLEL (multiple tool calls in one message), never sequentially, and keep raw output small: use `--format json` everywhere, `kline ... --count 30`, `news ... --count 10`, and SKIP the full income statement (`financial-report --kind IS` is ~100KB raw) — take revenue/NI/EPS trends from `consensus` (it carries ~6 periods of estimate + actual) and margins from `financial-report snapshot`.
 - **HK symbols**: leading zeros are stripped automatically (`09988.HK` → `9988.HK`); do the same when calling the CLI directly.

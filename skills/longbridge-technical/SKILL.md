@@ -29,6 +29,11 @@ Trigger when user asks about: candlestick patterns, Ichimoku cloud, technical in
 
 ## Data dependency
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-technical` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-technical longbridge kline TSLA.US --period day --count 200 --format json`
+
 ⚠️ All frameworks in this skill require OHLCV historical data. **Before running any analysis, fetch K-line data:**
 
 ```bash

@@ -37,6 +37,11 @@ Trigger when user asks about: viewing watchlist groups, adding or removing symbo
 
 ## CLI Commands
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-watchlist` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-watchlist longbridge watchlist --format json`
+
 Run `longbridge <cmd> --help` for current flags and output fields.
 
 ### `watchlist` — list groups; create / rename / delete groups; add / remove symbols 🔐 ⚠️ mutating

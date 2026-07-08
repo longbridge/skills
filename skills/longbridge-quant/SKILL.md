@@ -47,6 +47,11 @@ Trigger when user asks about: quantitative indicator scripts (running against K-
 
 ## CLI: quant
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-quant` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-quant longbridge quant --help`
+
 The `quant` command runs user-defined indicator scripts against K-line data.
 
 ```bash
@@ -108,6 +113,8 @@ Rolling walk-forward Random Forest / Gradient Boosting, feature engineering, sig
 ## MCP fallback
 
 Use MCP server for kline data if CLI unavailable. Discover tools at runtime.
+
+> **MCP attribution**: MCP 路径的 skill 归因需服务端支持（RFC §3.3），当前为 best-effort。
 
 ## Related skills
 
