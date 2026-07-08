@@ -79,6 +79,12 @@
       "path": "skills/longbridge-watchlist",
       "description": "Watchlist group management (list/create/rename/delete/add/remove symbols), price alerts (list/add/delete), and community stock lists (sharelist: list/detail/create/delete/manage) via Longbridge. Mutat",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-watchlist"
+    },
+    {
+      "name": "fxmacrodata-calendar",
+      "path": "skills/fxmacrodata-calendar",
+      "description": "Fetch official-source macro release-calendar rows from FXMacroData for CPI, payrolls, GDP, PCE, retail sales, PMI, and central-bank decision risk checks. Use when a market, portfolio, or strategy ques",
+      "location": "https://github.com/longbridge/skills/tree/main/skills/fxmacrodata-calendar"
     }
   ]
 }

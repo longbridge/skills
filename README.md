@@ -2,7 +2,7 @@
 
 Make your AI assistant fluent in [Longbridge](https://longbridge.com) — ask about stock prices, your portfolio, news, and valuations in plain English, 中文, or 繁體, and get answers backed by real Longbridge data.
 
-13 skills covering market data, technical analysis, derivatives, fundamentals, research, portfolio & account, quantitative strategies, watchlist, content, market intelligence, earnings, and value investing across HK / US / A-share / Singapore markets.
+14 skills covering market data, technical analysis, derivatives, fundamentals, research, portfolio & account, quantitative strategies, macro release calendars, watchlist, content, market intelligence, earnings, and value investing across HK / US / A-share / Singapore markets.
 
 ---
 
@@ -114,6 +114,7 @@ The right skill is picked automatically based on your question, in the language 
 | **Research** | [`longbridge-research`](./skills/longbridge-research) — analyst ratings, consensus, insider trades, investment frameworks |
 | **Portfolio** | [`longbridge-portfolio`](./skills/longbridge-portfolio) — positions, P&L, orders, DCA, risk analysis, rebalancing |
 | **Quant** | [`longbridge-quant`](./skills/longbridge-quant) — pairs trading, multi-factor, ML strategies, statistical methods |
+| **Macro Calendar** | [`fxmacrodata-calendar`](./skills/fxmacrodata-calendar) — official-source macro release calendar rows from FXMacroData |
 | **Watchlist** | [`longbridge-watchlist`](./skills/longbridge-watchlist) — watchlist groups, price alerts, community lists |
 | **Content** | [`longbridge-content`](./skills/longbridge-content) — news, filings, topics, SEC EDGAR analysis |
 | **Intel** | [`longbridge-intel`](./skills/longbridge-intel) — screener, rankings, anomalies, sector rotation, morning brief, ETF flow |
