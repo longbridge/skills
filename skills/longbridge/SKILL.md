@@ -101,6 +101,7 @@ Only fall back to WebSearch when Longbridge news is insufficient (e.g., breaking
 ### AI Integration
 
 - **MCP** — hosted service, self-hosted server, setup & auth: [references/mcp.md](references/mcp.md)
+- **A2A agent chat** — ask a Longbridge AI agent a question, follow up in the same conversation, and answer the clarifying questions it asks back. Defer to the `longbridge-agent` skill; the agent command also prints its own workflow document (see its `--help`). Note there is **no MCP path for agents** — the fallback is that skill's bundled script.
 - **LLMs & Markdown** — llms.txt, `open.longbridge.com` doc Markdown, `longbridge.com` live news/quote pages (`.md` suffix + Accept header), Cursor/IDE integration: [references/llm.md](references/llm.md)
 
 Load specific reference files on demand — do not load all at once.
@@ -125,5 +126,6 @@ The skills below are the consolidated sibling skills. Defer to them for speciali
 | Screener, rankings, anomalies, sector rotation, morning brief | `longbridge-intel` |
 | Post-earnings analysis (summary card + Markdown report) | `longbridge-earnings` |
 | Graham / Buffett value investing | `longbridge-value-investing` |
+| Ask a Longbridge AI agent, multi-turn agent conversation | `longbridge-agent` |
 
 This base skill (`longbridge`) is the fallback for cross-cutting queries and developer topics (MCP, CLI reference) not covered by any specialist skill above.

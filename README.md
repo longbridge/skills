@@ -119,6 +119,7 @@ The right skill is picked automatically based on your question, in the language 
 | **Intel** | [`longbridge-intel`](./skills/longbridge-intel) — screener, rankings, anomalies, sector rotation, morning brief, ETF flow |
 | **Earnings** | [`longbridge-earnings`](./skills/longbridge-earnings) — post-earnings analysis: summary card + full Markdown report |
 | **Value Investing** | [`longbridge-value-investing`](./skills/longbridge-value-investing) — Graham NCAV/net-net + Buffett moat analysis |
+| **AI Agent** | [`longbridge-agent`](./skills/longbridge-agent) — ask a Longbridge AI agent, multi-turn conversations, answering an interrupted run |
 
 Click any name above to see what it can do.
 
