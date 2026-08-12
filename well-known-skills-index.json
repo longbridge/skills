@@ -13,6 +13,11 @@
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge"
     },
     {
+      "name": "longbridge-agent",
+      "description": "Talk to Longbridge AI agents (A2A) — discover agents across workspaces, ask a question, follow up in the same conversation, and answer the clarifying questions an agent asks back. Answers stream over ",
+      "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-agent"
+    },
+    {
       "name": "longbridge-content",
       "description": "Latest news articles, regulatory filings, community discussion topics for listed stocks, and SEC EDGAR filing analysis (10-K/10-Q/8-K/proxy/Form 4) via Longbridge.   Triggers: \"新闻\", \"公告\", \"资讯\", \"话题\", ",
       "location": "https://github.com/longbridge/skills/tree/main/skills/longbridge-content"
