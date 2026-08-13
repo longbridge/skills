@@ -114,6 +114,27 @@ longbridge filing list TSLA.US
 longbridge filing detail TSLA.US 610186794100660481 --file-index 0
 ```
 
+## Longbridge AI Agents
+
+`longbridge agent` talks to Longbridge's own AI agents (research, stock analysis, screeners, custom workflow agents). This is distinct from the data commands above: the agent answers in prose, not JSON records.
+
+```bash
+longbridge agent workspaces                       # workspaces holding your agents
+longbridge agent list                             # chat-capable agents (--all includes workflow agents)
+longbridge agent chat chatbot "分析一下 TSLA"      # first round
+longbridge agent chat chatbot <CHAT_UID> <MSG_ID> "继续"   # follow-up
+longbridge agent continue chatbot <CHAT_UID> <MSG_ID> --answer "…"  # resume an interrupted run
+longbridge agent --skill                          # skill document written for AI harnesses
+```
+
+Key points:
+
+- **`chatbot` (LongbridgeAI) is public** — usable by any account, and it does not appear in `agent list` because no endpoint enumerates public agents.
+- **Runs take 1–2 minutes.** Transport is SSE; `--stream` prints tokens as they arrive.
+- **Follow-ups need both IDs** from the previous response: `chat_uid` and `message_id`.
+- **`status: "interrupted"`** means the agent asked clarifying questions — answer them with `agent continue`, not `agent chat`.
+- **`--skill`** prints a static document (no auth, no network) describing the whole flow; point a harness at it rather than duplicating the details here.
+
 ## Extended Hours (Pre/Post Market)
 
 `quote`, `intraday`, `kline`, `kline history` all support extended-hours data. Use `longbridge <command> --help` for exact flags — key points:
