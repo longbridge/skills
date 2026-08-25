@@ -47,6 +47,11 @@ longbridge topic SYMBOL.US          # community discussion
 longbridge topic search "keyword"   # keyword search across community topics
 longbridge market-temp              # market sentiment index (0–100)
 
+# Strategy signals & catalysts
+longbridge signals                  # strategy signals: headline, outlook, target prices, triggering catalyst
+longbridge signal <signal_id>       # one signal; --format json adds the full strategy analysis
+longbridge facts SYMBOL.US          # fact (catalyst) events a signal reacts to
+
 # Fundamentals & analysis
 longbridge financial-statement SYMBOL.US --kind ALL   # hierarchical IS/BS/CF with YoY
 longbridge financial-report SYMBOL.US --latest        # key KPI summary (revenue/EPS/ROE)
