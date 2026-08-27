@@ -106,12 +106,13 @@ Nothing has been sent to the exchange. To place this order, run:
 
     longbridge order buy TSLA.US 100 --price 250.00 --execute 707
 
-Code 707 is single use, expires in 10 minutes, and only works for this exact request.
+Code 707 only works for this exact order.
 ```
 
-`--execute` requires that code; a bare `--execute` does not parse. A wrong guess
-also spends the pending code, so it cannot be walked through by brute force, and
-editing any field after reading the code invalidates it.
+`--execute` requires that code; a bare `--execute` does not parse. The code is
+derived from the order itself — symbol, side, quantity and price — so editing any
+of them after reading it invalidates it. Equivalent spellings are tolerated:
+`400`, `400.00` and `+400` are one price, `700.hk` and `700.HK` one symbol.
 
 **Never quote the code back on your own initiative.** The required sequence is:
 

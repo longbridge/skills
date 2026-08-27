@@ -67,8 +67,9 @@ return a preview, and reach no exchange.
 }
 ```
 
-The code is a string, not a boolean (`execute: true` is rejected). It is single
-use — a wrong guess also spends it, so it cannot be brute-forced — expires in 10
-minutes, and applies only to that exact request. The real call returns
+The code is a string, not a boolean (`execute: true` is rejected). It is derived
+from the order itself — symbol, side, quantity and price — so editing any of them
+invalidates it, while equivalent spellings (`400` / `400.00`, `700.hk` /
+`700.HK`) are tolerated. The real call returns
 `{"dry_run": false, …}`. The server also states this rule in its `initialize`
 instructions.
