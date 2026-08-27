@@ -90,6 +90,21 @@ longbridge positions --format json | jq '.[] | {symbol, quantity, cost_price}'
 longbridge order --format json | jq '.[] | select(.status == "New")'
 ```
 
+## Placing, Cancelling or Modifying an Order
+
+Commands that can move real money preview by default and reach no exchange on
+the first run:
+
+- `order buy`, `order sell`, `order cancel`, `order replace`
+- `grid submit`, `grid replace`, `grid cancel`, `grid suspend`, `grid restart`
+
+Run the command, show the preview to the user, and only after they explicitly
+confirm, run the command the preview printed — verbatim. Never assemble that
+second command yourself.
+
+`longbridge serve` works the same way: its order methods return a preview that
+says what to send to carry the order out.
+
 ## AI Agent Integration
 
 ### Count / limit alias
