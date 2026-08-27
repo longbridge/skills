@@ -98,28 +98,36 @@ Every command that can move real money is a **dry run by default**:
 - `grid submit`, `grid replace`, `grid cancel`, `grid suspend`, `grid restart`
 
 Run without `--execute` and the CLI validates the request, prints exactly what
-would be sent, and contacts no exchange. `--execute` is the only thing that goes
-live.
+would be sent, and contacts no exchange. The preview ends with the command to
+run, carrying a three-digit confirmation code:
 
-**Never add `--execute` on your own initiative.** The required sequence is:
+```
+Nothing has been sent to the exchange. To place this order, run:
+
+    longbridge order buy TSLA.US 100 --price 250.00 --execute 707
+
+Code 707 is single use, expires in 10 minutes, and only works for this exact request.
+```
+
+`--execute` requires that code; a bare `--execute` does not parse. A wrong guess
+also spends the pending code, so it cannot be walked through by brute force, and
+editing any field after reading the code invalidates it.
+
+**Never quote the code back on your own initiative.** The required sequence is:
 
 1. Run the command **without** `--execute`.
 2. Show the returned preview to the user.
-3. Re-run the identical command with `--execute` only after the user explicitly
-   confirms that exact order.
+3. Run the printed command only after the user explicitly confirms that exact
+   order.
 
-```bash
-longbridge order buy TSLA.US 100 --price 250.00 --format json   # preview only
-# …show it, get an explicit "yes"…
-longbridge order buy TSLA.US 100 --price 250.00 --execute        # places it
-```
-
-With `--format json` the dry run returns `{"dry_run": true, …, "message": "…"}`.
-The legacy `-y` / `--yes` flag has been removed — it is wrong wherever you see it.
+With `--format json` the dry run returns `{"dry_run": true, …,
+"confirmation_code": "707"}`. The legacy `-y` / `--yes` flag has been removed —
+it is wrong wherever you see it.
 
 `longbridge serve` enforces the same gate: `trade.submit_order`,
-`trade.cancel_order` and `trade.replace_order` need `"execute": true` in their
-params, and `initialize` advertises this under `capabilities.orderExecution`.
+`trade.cancel_order` and `trade.replace_order` return a `confirmation_code` and
+require it back as `"execute": "<CODE>"`. `initialize` advertises this under
+`capabilities.orderExecution`.
 
 ## AI Agent Integration
 

@@ -65,30 +65,33 @@ Options:
 
 `order buy`, `order sell`, `order cancel` and `order replace` **place nothing on
 the first run**. Without `--execute` they are dry runs: the CLI validates every
-argument, prints the exact order (buy/sell previews also show the last traded
-price and estimated amount; cancel/replace show the order being targeted), and
-contacts no exchange.
+argument, prints the exact order, and contacts no exchange. The preview ends
+with a ready-to-run command carrying a three-digit confirmation code:
 
-Never add `--execute` on your own initiative. The required sequence is:
+```
+Nothing has been sent to the exchange. To place this order, run:
+
+    longbridge order buy TSLA.US 100 --price 250.00 --execute 707
+
+Code 707 is single use, expires in 10 minutes, and only works for this exact request.
+```
+
+`--execute` requires that code — a bare `--execute` does not even parse. The
+code is single use (a wrong guess also spends it, so it cannot be brute-forced),
+expires in 10 minutes, and is bound to the exact request: edit the price after
+reading the code and it stops working.
+
+Never quote the code back on your own initiative. The required sequence is:
 
 1. Run the command **without** `--execute`.
 2. Show the returned preview to the user.
-3. Only after the user explicitly confirms **that exact order**, re-run the
-   identical command with `--execute`.
+3. Only after the user explicitly confirms **that exact order**, run the command
+   the preview printed.
 
-```bash
-# 1. Preview — nothing is placed
-longbridge order buy TSLA.US 100 --price 250.00 --format json
-
-# 2. …show the preview, get an explicit "yes" from the user…
-
-# 3. Place it
-longbridge order buy TSLA.US 100 --price 250.00 --execute
-```
-
-The JSON dry run returns `{"dry_run": true, ..., "message": "..."}` — relay it
-rather than summarising it away. The legacy `-y` / `--yes` flag has been removed;
-if you find it in an old script or example, it is wrong.
+With `--format json` the dry run returns `{"dry_run": true, …,
+"confirmation_code": "707", "message": "…"}` — relay it rather than summarising
+it away. The legacy `-y` / `--yes` flag has been removed; if you find it in an
+old script or example, it is wrong.
 
 The same gate applies to every `grid` write command (`grid submit`, `replace`,
 `cancel`, `suspend`, `restart`) — a live grid keeps placing orders on its own,

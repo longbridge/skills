@@ -47,43 +47,28 @@ Add to MCP config in any compatible client:
 
 The money-moving tools — `submit_order`, `cancel_order`, `replace_order` and the
 grid writes (`grid_submit`, `grid_replace`, `grid_cancel`, `grid_suspend`,
-`grid_restart`) — are **dry runs unless you pass `execute: true`**. Called
-without it they validate the request, return a preview, and reach no exchange.
+`grid_restart`) — are **dry runs unless `execute` carries the confirmation code
+from that request's own dry run**. Called without it they validate the request,
+return a preview, and reach no exchange.
 
-**Never set `execute: true` on your own initiative.** The required sequence is:
+**Never quote the code back on your own initiative.** The required sequence is:
 
 1. Call the tool **without** `execute`.
 2. Show the returned `preview` to the user.
-3. Call again with `execute: true` only after the user explicitly confirms that
-   exact order.
+3. Call again with `execute` set to the returned `confirmation_code`, only after
+   the user explicitly confirms that exact order.
 
-The dry run returns `{"dry_run": true, "preview": {…}, "next_step": "…"}`; the
-real call returns `{"dry_run": false, …}`. The server also states this rule in
-its `initialize` instructions.
-
----
-
-## Available MCP Tools
-
-When the MCP server is connected, available tools are automatically exposed to the AI — no hardcoded list needed. The AI can directly inspect and call all tools.
-
-If you need to know what tools are available, ask the AI to list the connected MCP tools, or check the official docs: https://open.longbridge.com
-
----
-
-## Example AI Prompts
-
+```json
+{
+  "dry_run": true,
+  "preview": { "action": "submit_order", "symbol": "700.HK", "…": "…" },
+  "confirmation_code": "492",
+  "next_step": "DRY RUN — nothing was sent to the exchange. …"
+}
 ```
-# Market data
-"What is the current price and PE ratio of TSLA.US?"
 
-# Trade analysis
-"Show my current HK stock positions and unrealized P&L"
-
-# Order placement (always confirm first)
-"I want to buy 100 shares of 700.HK at limit price 50 HKD.
- Please confirm the order details before placing it."
-
-# Research
-"Get the latest news and filings for AAPL.US"
-```
+The code is a string, not a boolean (`execute: true` is rejected). It is single
+use — a wrong guess also spends it, so it cannot be brute-forced — expires in 10
+minutes, and applies only to that exact request. The real call returns
+`{"dry_run": false, …}`. The server also states this rule in its `initialize`
+instructions.
