@@ -43,15 +43,14 @@ Add to MCP config in any compatible client:
 - Only approve scopes required for the task (least privilege)
 - Periodically review and revoke unused authorizations
 
-### Order Execution Gate
+### Placing, Cancelling or Modifying an Order
 
 The money-moving tools — `submit_order`, `cancel_order`, `replace_order` and the
-grid writes — do nothing on the first call. Without `execute` they return a
-preview and a `confirmation_code`.
+grid writes — do nothing on the first call. They return a preview of the order
+and a `next_step` saying how to carry it out.
 
-1. Call the tool **without** `execute`.
-2. Show the returned `preview` to the user.
-3. Only after they explicitly confirm, call again with `execute` set to that
-   `confirmation_code`.
+1. Call the tool.
+2. Show the returned `preview` to the user and ask them to confirm.
+3. Only after they explicitly confirm, follow `next_step` exactly.
 
-Never invent a code, and never carry one over to a different order.
+Never improvise that second call, and never reuse one across different orders.

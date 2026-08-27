@@ -61,19 +61,19 @@ Options:
           Print help (see a summary with '-h')
 ```
 
-## Two-step execution gate — MANDATORY
+## Placing, cancelling or modifying an order — MANDATORY
 
 `order buy`, `order sell`, `order cancel`, `order replace` and every `grid`
-write command place nothing on the first run. Without `--execute` they print a
-preview and contact no exchange.
+write command preview by default. The first run reaches no exchange: it prints
+the order for review, and ends with the exact command that would carry it out.
 
-1. Run the command **without** `--execute`.
-2. Show the preview to the user.
+1. Run the command.
+2. Show the preview to the user and ask them to confirm.
 3. Only after they explicitly confirm, run the command the preview printed —
-   it carries the confirmation code `--execute` needs.
+   verbatim.
 
-Never construct that command yourself, and never carry a code over to a
-different order.
+Never assemble that second command yourself, and never reuse one across
+different orders.
 
 ## Usage
 

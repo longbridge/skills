@@ -90,21 +90,20 @@ longbridge positions --format json | jq '.[] | {symbol, quantity, cost_price}'
 longbridge order --format json | jq '.[] | select(.status == "New")'
 ```
 
-## Order Execution Gate
+## Placing, Cancelling or Modifying an Order
 
-Commands that can move real money place nothing on the first run:
+Commands that can move real money preview by default and reach no exchange on
+the first run:
 
 - `order buy`, `order sell`, `order cancel`, `order replace`
 - `grid submit`, `grid replace`, `grid cancel`, `grid suspend`, `grid restart`
 
-Without `--execute` they print a preview and contact no exchange. Run the
-command, show the preview to the user, and only after they explicitly confirm,
-run the command the preview printed — it carries the confirmation code
-`--execute` needs. Never construct that command yourself.
+Run the command, show the preview to the user, and only after they explicitly
+confirm, run the command the preview printed — verbatim. Never assemble that
+second command yourself.
 
-`longbridge serve` enforces the same gate on `trade.submit_order`,
-`trade.cancel_order` and `trade.replace_order`; `initialize` advertises it under
-`capabilities.orderExecution`.
+`longbridge serve` works the same way: its order methods return a preview that
+says what to send to carry the order out.
 
 ## AI Agent Integration
 
