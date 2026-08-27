@@ -90,6 +90,37 @@ longbridge positions --format json | jq '.[] | {symbol, quantity, cost_price}'
 longbridge order --format json | jq '.[] | select(.status == "New")'
 ```
 
+## Order Execution Gate
+
+Every command that can move real money is a **dry run by default**:
+
+- `order buy`, `order sell`, `order cancel`, `order replace`
+- `grid submit`, `grid replace`, `grid cancel`, `grid suspend`, `grid restart`
+
+Run without `--execute` and the CLI validates the request, prints exactly what
+would be sent, and contacts no exchange. `--execute` is the only thing that goes
+live.
+
+**Never add `--execute` on your own initiative.** The required sequence is:
+
+1. Run the command **without** `--execute`.
+2. Show the returned preview to the user.
+3. Re-run the identical command with `--execute` only after the user explicitly
+   confirms that exact order.
+
+```bash
+longbridge order buy TSLA.US 100 --price 250.00 --format json   # preview only
+# …show it, get an explicit "yes"…
+longbridge order buy TSLA.US 100 --price 250.00 --execute        # places it
+```
+
+With `--format json` the dry run returns `{"dry_run": true, …, "message": "…"}`.
+The legacy `-y` / `--yes` flag has been removed — it is wrong wherever you see it.
+
+`longbridge serve` enforces the same gate: `trade.submit_order`,
+`trade.cancel_order` and `trade.replace_order` need `"execute": true` in their
+params, and `initialize` advertises this under `capabilities.orderExecution`.
+
 ## AI Agent Integration
 
 ### Count / limit alias

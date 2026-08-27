@@ -41,8 +41,25 @@ Add to MCP config in any compatible client:
 ### Security Recommendations
 
 - Only approve scopes required for the task (least privilege)
-- For order placement, instruct AI to always ask for confirmation before executing
 - Periodically review and revoke unused authorizations
+
+### Order Execution Gate
+
+The money-moving tools — `submit_order`, `cancel_order`, `replace_order` and the
+grid writes (`grid_submit`, `grid_replace`, `grid_cancel`, `grid_suspend`,
+`grid_restart`) — are **dry runs unless you pass `execute: true`**. Called
+without it they validate the request, return a preview, and reach no exchange.
+
+**Never set `execute: true` on your own initiative.** The required sequence is:
+
+1. Call the tool **without** `execute`.
+2. Show the returned `preview` to the user.
+3. Call again with `execute: true` only after the user explicitly confirms that
+   exact order.
+
+The dry run returns `{"dry_run": true, "preview": {…}, "next_step": "…"}`; the
+real call returns `{"dry_run": false, …}`. The server also states this rule in
+its `initialize` instructions.
 
 ---
 

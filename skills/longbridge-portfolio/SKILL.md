@@ -69,7 +69,7 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 ### `bank-cards` — list bank cards for the current account
 ### `withdrawals` — withdrawal history 🔐
 ### `deposits` — deposit history 🔐
-### `order` — list, detail, buy, sell, cancel, replace orders 🔐 ⚠️ mutating
+### `order` — list, detail, buy, sell, cancel, replace orders 🔐 ⚠️ mutating, `--execute`-gated
 ### `dca` — recurring investment: list, create, pause, resume, cancel 🔐 ⚠️ mutating
 
 ## Auth requirements
@@ -78,6 +78,23 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 - `assets`, `cash-flow`, `portfolio`, `profit-analysis`: 🔐 Requires Quote permission
 - `positions`, `fund-positions`, `statement`, `bank-cards`, `withdrawals`, `deposits`: 🔐 Requires Trade permission
 - `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**
+
+## Order execution gate — MANDATORY
+
+`order buy` / `sell` / `cancel` / `replace` (and every `grid` write command)
+**place nothing on the first run**. Without `--execute` they are dry runs that
+validate the request, print exactly what would be sent, and contact no exchange.
+
+Never add `--execute` on your own initiative:
+
+1. Run the command **without** `--execute`.
+2. Show the returned preview to the user.
+3. Re-run the identical command with `--execute` only after the user explicitly
+   confirms that exact order.
+
+The legacy `-y` / `--yes` flag has been removed — it is wrong wherever you see
+it. Over MCP the same gate is the `execute: true` parameter. See
+[references/order.md](references/order.md).
 
 ## Frameworks
 
@@ -108,7 +125,8 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 |---|---|
 | `command not found: longbridge` | Install longbridge-terminal |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
-| `order` / `dca` mutation | Always preview plan first; wait for user confirmation before executing |
+| `order` / `grid` mutation | Dry run by default — run without `--execute`, show the preview, and only re-run with `--execute` after the user explicitly confirms |
+| `dca` mutation | Always preview the plan first; wait for user confirmation before executing |
 
 ## MCP fallback
 
