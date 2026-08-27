@@ -46,30 +46,12 @@ Add to MCP config in any compatible client:
 ### Order Execution Gate
 
 The money-moving tools — `submit_order`, `cancel_order`, `replace_order` and the
-grid writes (`grid_submit`, `grid_replace`, `grid_cancel`, `grid_suspend`,
-`grid_restart`) — are **dry runs unless `execute` carries the confirmation code
-from that request's own dry run**. Called without it they validate the request,
-return a preview, and reach no exchange.
-
-**Never quote the code back on your own initiative.** The required sequence is:
+grid writes — do nothing on the first call. Without `execute` they return a
+preview and a `confirmation_code`.
 
 1. Call the tool **without** `execute`.
 2. Show the returned `preview` to the user.
-3. Call again with `execute` set to the returned `confirmation_code`, only after
-   the user explicitly confirms that exact order.
+3. Only after they explicitly confirm, call again with `execute` set to that
+   `confirmation_code`.
 
-```json
-{
-  "dry_run": true,
-  "preview": { "action": "submit_order", "symbol": "700.HK", "…": "…" },
-  "confirmation_code": "492",
-  "next_step": "DRY RUN — nothing was sent to the exchange. …"
-}
-```
-
-The code is a string, not a boolean (`execute: true` is rejected). It is derived
-from the order itself — symbol, side, quantity and price — so editing any of them
-invalidates it, while equivalent spellings (`400` / `400.00`, `700.hk` /
-`700.HK`) are tolerated. The real call returns
-`{"dry_run": false, …}`. The server also states this rule in its `initialize`
-instructions.
+Never invent a code, and never carry one over to a different order.

@@ -92,42 +92,18 @@ longbridge order --format json | jq '.[] | select(.status == "New")'
 
 ## Order Execution Gate
 
-Every command that can move real money is a **dry run by default**:
+Commands that can move real money place nothing on the first run:
 
 - `order buy`, `order sell`, `order cancel`, `order replace`
 - `grid submit`, `grid replace`, `grid cancel`, `grid suspend`, `grid restart`
 
-Run without `--execute` and the CLI validates the request, prints exactly what
-would be sent, and contacts no exchange. The preview ends with the command to
-run, carrying a three-digit confirmation code:
+Without `--execute` they print a preview and contact no exchange. Run the
+command, show the preview to the user, and only after they explicitly confirm,
+run the command the preview printed — it carries the confirmation code
+`--execute` needs. Never construct that command yourself.
 
-```
-Nothing has been sent to the exchange. To place this order, run:
-
-    longbridge order buy TSLA.US 100 --price 250.00 --execute 707
-
-Code 707 only works for this exact order.
-```
-
-`--execute` requires that code; a bare `--execute` does not parse. The code is
-derived from the order itself — symbol, side, quantity and price — so editing any
-of them after reading it invalidates it. Equivalent spellings are tolerated:
-`400`, `400.00` and `+400` are one price, `700.hk` and `700.HK` one symbol.
-
-**Never quote the code back on your own initiative.** The required sequence is:
-
-1. Run the command **without** `--execute`.
-2. Show the returned preview to the user.
-3. Run the printed command only after the user explicitly confirms that exact
-   order.
-
-With `--format json` the dry run returns `{"dry_run": true, …,
-"confirmation_code": "707"}`. The legacy `-y` / `--yes` flag has been removed —
-it is wrong wherever you see it.
-
-`longbridge serve` enforces the same gate: `trade.submit_order`,
-`trade.cancel_order` and `trade.replace_order` return a `confirmation_code` and
-require it back as `"execute": "<CODE>"`. `initialize` advertises this under
+`longbridge serve` enforces the same gate on `trade.submit_order`,
+`trade.cancel_order` and `trade.replace_order`; `initialize` advertises it under
 `capabilities.orderExecution`.
 
 ## AI Agent Integration

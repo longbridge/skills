@@ -81,22 +81,10 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 
 ## Order execution gate — MANDATORY
 
-`order buy` / `sell` / `cancel` / `replace` (and every `grid` write command)
-**place nothing on the first run**. Without `--execute` they are dry runs that
-validate the request, print exactly what would be sent, and contact no exchange.
-The preview ends with a ready-to-run command carrying a three-digit confirmation
-code, and `--execute` requires that code — a bare `--execute` does not parse.
-
-Never quote the code back on your own initiative:
-
-1. Run the command **without** `--execute`.
-2. Show the returned preview to the user.
-3. Run the command the preview printed only after the user explicitly confirms
-   that exact order.
-
-The code is derived from the order itself — symbol, side, quantity and price —
-so editing any of them invalidates it. The legacy `-y` / `--yes` flag has been removed — it is wrong wherever
-you see it. Over MCP the same gate is the `execute` parameter, set to the
+`order buy` / `sell` / `cancel` / `replace` and every `grid` write command place
+nothing on the first run. Run without `--execute`, show the preview to the user,
+and only after they explicitly confirm, run the command the preview printed.
+Over MCP the equivalent is the `execute` parameter, set to the
 `confirmation_code` the dry run returned. See
 [references/order.md](references/order.md).
 

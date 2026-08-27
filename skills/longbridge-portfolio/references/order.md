@@ -63,40 +63,17 @@ Options:
 
 ## Two-step execution gate — MANDATORY
 
-`order buy`, `order sell`, `order cancel` and `order replace` **place nothing on
-the first run**. Without `--execute` they are dry runs: the CLI validates every
-argument, prints the exact order, and contacts no exchange. The preview ends
-with a ready-to-run command carrying a three-digit confirmation code:
-
-```
-Nothing has been sent to the exchange. To place this order, run:
-
-    longbridge order buy TSLA.US 100 --price 250.00 --execute 707
-
-Code 707 only works for this exact order.
-```
-
-`--execute` requires that code — a bare `--execute` does not even parse. The
-code is derived from the order itself — symbol, side, quantity and price — so
-editing any of them after reading it stops it working. Equivalent spellings are
-tolerated: `400`, `400.00` and `+400` are one price, `700.hk` and `700.HK` one
-symbol.
-
-Never quote the code back on your own initiative. The required sequence is:
+`order buy`, `order sell`, `order cancel`, `order replace` and every `grid`
+write command place nothing on the first run. Without `--execute` they print a
+preview and contact no exchange.
 
 1. Run the command **without** `--execute`.
-2. Show the returned preview to the user.
-3. Only after the user explicitly confirms **that exact order**, run the command
-   the preview printed.
+2. Show the preview to the user.
+3. Only after they explicitly confirm, run the command the preview printed —
+   it carries the confirmation code `--execute` needs.
 
-With `--format json` the dry run returns `{"dry_run": true, …,
-"confirmation_code": "707", "message": "…"}` — relay it rather than summarising
-it away. The legacy `-y` / `--yes` flag has been removed; if you find it in an
-old script or example, it is wrong.
-
-The same gate applies to every `grid` write command (`grid submit`, `replace`,
-`cancel`, `suspend`, `restart`) — a live grid keeps placing orders on its own,
-so it deserves at least as much care as a single order.
+Never construct that command yourself, and never carry a code over to a
+different order.
 
 ## Usage
 
