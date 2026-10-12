@@ -13,31 +13,8 @@
     {
       "name": "longbridge",
       "source": "./",
-      "description": "Longbridge securities skill family (v2): 13 consolidated skills replacing the previous 127-skill set. Full coverage of market data, fundamentals, research, portfolio & account, quantitative strategies, and more. Requires reinstall (not just update) when upgrading from v1.x — see scripts/reinstall.sh.",
-      "version": "2.0.0",
-      "author": {
-        "name": "longbridge",
-        "url": "https://longbridge.com"
-      },
-      "homepage": "https://github.com/longbridge/skills",
-      "repository": "https://github.com/longbridge/skills",
-      "license": "MIT",
-      "keywords": [
-        "longbridge",
-        "stocks",
-        "quotes",
-        "trading",
-        "valuation",
-        "fundamentals",
-        "portfolio",
-        "hk-stocks",
-        "us-stocks",
-        "a-shares"
-      ],
-      "category": "finance",
-      "skills": [
-        "./skills/"
-      ]
+      "description": "Longbridge securities skill family (v2): 13 consolidated skills replacing the previous 127-skill set. Full coverage of market data, fundamentals, research, portfolio & account, quantitative strategies, and more. Requires reinstall (not just update) when upgrading from v1.x — see scripts/update.sh.",
+      "category": "finance"
     }
   ]
 }

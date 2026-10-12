@@ -26,7 +26,7 @@ from longbridge.openapi import (
 
 ### OAuth 2.0 (Recommended)
 
-Token cached at `~/.longbridge/openapi/tokens/<client_id>`. Re-runs browser auth only when token is expired.
+The SDK stores and refreshes the token itself and re-runs browser auth only when token is expired.
 
 **Register once:**
 
