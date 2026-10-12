@@ -147,7 +147,7 @@ Both authenticate with your Longbridge account. Pick "trade" permission during l
 
 ## For developers
 
-- [.claude/CLAUDE.md](./.claude/CLAUDE.md) — repo-level instructions for Claude Code when developing inside this repo
+- [CLAUDE.md](./CLAUDE.md) — repo-level instructions for Claude Code when developing inside this repo
 - [docs/architecture.md](./docs/architecture.md) — how the multilingual triggers + CLI/MCP routing work under the hood
 - [docs/install.md](./docs/install.md) — every install path, verification, troubleshooting
 

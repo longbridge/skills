@@ -21,5 +21,8 @@
     "hk-stocks",
     "us-stocks",
     "a-shares"
+  ],
+  "skills": [
+    "./"
   ]
 }

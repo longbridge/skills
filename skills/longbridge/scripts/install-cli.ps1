@@ -2,6 +2,8 @@
 # Longbridge Terminal CLI installer for Windows
 # Bundled copy of https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1
 # so the plugin runs a local file instead of piping a remote script into iex.
+# The archive's SHA-256 is checked against the .sha256 published on the GitHub
+# release before anything is installed.
 # Usage: pwsh -File install-cli.ps1   (or: powershell -ExecutionPolicy Bypass -File install-cli.ps1)
 
 $ErrorActionPreference = 'Stop'
@@ -28,7 +30,9 @@ Write-Host "Latest release: $version"
 
 # ── Download ──────────────────────────────────────────────────────────────────
 
-$downloadUrl = "https://assets.lbkrs.com/github/release/longbridge-terminal/$version/$packageName-windows-amd64.zip"
+$archive     = "$packageName-windows-amd64.zip"
+$downloadUrl = "https://assets.lbkrs.com/github/release/longbridge-terminal/$version/$archive"
+$checksumUrl = "https://github.com/longbridge/longbridge-terminal/releases/download/$version/$archive.sha256"
 
 Write-Host "Downloading $packageName@$version ..."
 Write-Host $downloadUrl
@@ -42,6 +46,19 @@ try {
     $wc = New-Object System.Net.WebClient
     $wc.DownloadFile($downloadUrl, $zipPath)
     $wc.Dispose()
+
+    # ── Verify checksum ───────────────────────────────────────────────────────
+
+    try {
+        $expected = ((Invoke-WebRequest -Uri $checksumUrl -UseBasicParsing -TimeoutSec 15).Content.Trim() -split '\s+')[0]
+    } catch {
+        throw "Failed to fetch the checksum for ${archive}; aborting: $_"
+    }
+    $actual = (Get-FileHash -Path $zipPath -Algorithm SHA256).Hash
+    if ($actual -ne $expected) {
+        throw "Checksum mismatch for $archive (expected $expected, got $actual); aborting."
+    }
+    Write-Host "Checksum verified."
 
     # ── Extract ───────────────────────────────────────────────────────────────
 

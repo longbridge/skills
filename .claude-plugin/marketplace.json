@@ -6,13 +6,12 @@
   },
   "metadata": {
     "description": "Agent Skills for Longbridge securities — 13 consolidated skills covering market data, technical analysis, derivatives, fundamentals, research, portfolio, quant strategies, watchlist, content, market intelligence, earnings, and value investing. HK / US / A-share (SH/SZ) / Singapore markets. Trilingual (Simplified Chinese, Traditional Chinese, English).",
-    "version": "2.0.0",
-    "pluginRoot": "./"
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "longbridge",
-      "source": "./",
+      "source": "./skills",
       "description": "Longbridge securities skill family (v2): 13 consolidated skills replacing the previous 127-skill set. Full coverage of market data, fundamentals, research, portfolio & account, quantitative strategies, and more. Requires reinstall (not just update) when upgrading from v1.x — see scripts/update.sh.",
       "category": "finance"
     }

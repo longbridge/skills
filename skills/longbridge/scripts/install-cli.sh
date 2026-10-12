@@ -3,6 +3,9 @@
 # Bundled copy of https://open.longbridge.com/longbridge/longbridge-terminal/install
 # so the plugin runs a local file instead of piping a remote script into sh.
 #
+# The archive's SHA-256 is checked against the .sha256 published on the GitHub
+# release before anything is installed.
+#
 # Usage: sh install-cli.sh
 # Installs to /usr/local/bin when writable (or via sudo when a TTY is available),
 # otherwise to ~/.local/bin. Override with LONGBRIDGE_INSTALL_DIR=/some/dir.
@@ -12,6 +15,16 @@ type curl > /dev/null || { echo "curl: not found"; exit 1; }
 bin_name='longbridge'
 package_name='longbridge-terminal'
 release_base='https://assets.lbkrs.com/github/release/longbridge-terminal'
+github_base='https://github.com/longbridge/longbridge-terminal/releases/download'
+
+if command -v sha256sum > /dev/null; then
+  sha256() { sha256sum "$1" | cut -d' ' -f1; }
+elif command -v shasum > /dev/null; then
+  sha256() { shasum -a 256 "$1" | cut -d' ' -f1; }
+else
+  echo "sha256sum / shasum: not found" >&2
+  exit 1
+fi
 
 version=$(curl --silent --fail "$release_base/latest") || version=''
 if [ -z "$version" ]; then
@@ -34,7 +47,8 @@ if [ "$platform" = "linux" ]; then
   libc='-musl'
 fi
 
-download_url="$release_base/$version/$package_name-$platform$libc-$arch.tar.gz"
+archive="$package_name-$platform$libc-$arch.tar.gz"
+download_url="$release_base/$version/$archive"
 echo "Downloading $package_name@$version ..."
 echo "$download_url"
 
@@ -42,6 +56,18 @@ tmp_dir=$(mktemp -d)
 trap 'rm -rf "$tmp_dir"' EXIT
 
 curl --fail -Lo "$tmp_dir/$bin_name.tar.gz" "$download_url"
+
+expected=$(curl --silent --fail -L "$github_base/$version/$archive.sha256" | cut -d' ' -f1) || expected=''
+if [ -z "$expected" ]; then
+  echo "Failed to fetch the checksum for $archive; aborting." >&2
+  exit 1
+fi
+actual=$(sha256 "$tmp_dir/$bin_name.tar.gz")
+if [ "$expected" != "$actual" ]; then
+  echo "Checksum mismatch for $archive (expected $expected, got $actual); aborting." >&2
+  exit 1
+fi
+echo "Checksum verified."
 tar zxf "$tmp_dir/$bin_name.tar.gz" -C "$tmp_dir"
 
 install_dir="${LONGBRIDGE_INSTALL_DIR:-/usr/local/bin}"
