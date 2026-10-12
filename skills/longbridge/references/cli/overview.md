@@ -17,33 +17,26 @@ Do not rely on hardcoded documentation for command syntax or flags — use `--he
 
 ## Installation
 
+> **Quickest:** run the installer bundled with the `longbridge` skill — `sh scripts/install-cli.sh` (macOS / Linux) or `powershell -ExecutionPolicy Bypass -File scripts\install-cli.ps1` (Windows), paths relative to the `longbridge` skill directory. Confirm with the user before installing.
+
 ```bash
 # macOS (Homebrew — recommended)
 brew install --cask longbridge/tap/longbridge-terminal
-
-# macOS / Linux (install script)
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
-# Installs `longbridge` binary to /usr/local/bin
 ```
 
-Windows (Scoop or PowerShell):
+Windows (Scoop):
 
 ```powershell
-# Scoop
 scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
-
-# Or PowerShell install script
-iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
 ```
+
+Other platforms: download a release binary from <https://github.com/longbridge/longbridge-terminal/releases> and put `longbridge` on your `PATH`.
 
 ## Update
 
 ```bash
 # Built-in updater
 longbridge update
-
-# Or re-run the install script (any platform)
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
 ```
 
 ## Authentication
@@ -51,13 +44,12 @@ curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | s
 Uses OAuth 2.0 — no manual token or key management needed:
 
 ```bash
-longbridge auth login    # Opens browser OAuth flow; token saved to
-                         # ~/.longbridge/terminal/.openapi-session
-longbridge auth logout   # Clear saved session token
+longbridge auth login    # Opens browser OAuth flow; the CLI manages the session itself
+longbridge auth logout   # Sign out and clear the session
 longbridge check    # Verify connectivity and token (no auth required)
 ```
 
-**China Mainland:** The CLI auto-detects CN by probing `geotest.lbkrs.com` on startup (non-blocking). Result cached at `~/.longbridge/openapi/region-cache`. CN users automatically use `.cn` endpoints.
+**China Mainland:** The CLI auto-detects CN by probing `geotest.lbkrs.com` on startup (non-blocking). CN users automatically use `.cn` endpoints.
 
 ## Environment Variables
 

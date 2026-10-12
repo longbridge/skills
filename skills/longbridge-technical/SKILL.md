@@ -94,7 +94,7 @@ All frameworks are analytical — no CLI login required. Data fetching via `long
 
 | Situation | Response |
 |---|---|
-| `command not found: longbridge` | Install longbridge-terminal first; use to fetch kline data |
+| `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `ModuleNotFoundError: czsc` | Run `pip install czsc` before using Chan Theory |
 | `ModuleNotFoundError: smartmoneyconcepts` | Run `pip install smartmoneyconcepts` before using SMC |
 | Insufficient history | Request more periods with `--count` or wider date range |

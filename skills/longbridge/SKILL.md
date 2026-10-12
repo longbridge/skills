@@ -19,6 +19,22 @@ Full-stack financial data and trading platform: CLI, MCP, and LLM integration.
 
 For setup and authentication details, see [references/setup.md](references/setup.md).
 
+## Installing the CLI
+
+If a `longbridge` command fails with `command not found`, install the CLI with the installer bundled in this skill (no remote script is piped into a shell). Tell the user what will be installed, get their OK, then run:
+
+```bash
+# macOS / Linux — installs to /usr/local/bin, or ~/.local/bin when that isn't writable
+sh <this skill's directory>/scripts/install-cli.sh
+```
+
+```powershell
+# Windows — installs to %LOCALAPPDATA%\Programs\longbridge and adds it to the user PATH
+powershell -ExecutionPolicy Bypass -File <this skill's directory>\scripts\install-cli.ps1
+```
+
+Alternatives: `brew install --cask longbridge/tap/longbridge-terminal` (macOS) or `scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json` (Windows). Then run `longbridge auth login` and retry the original command.
+
 ---
 
 ## Investment Analysis Workflow

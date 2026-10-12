@@ -10,18 +10,19 @@ This file briefs Claude Code when working **inside this repo** (adding new skill
 
 ```
 longbridge-skills/
-├── .claude-plugin/marketplace.json    # plugin marketplace entry
-├── skills/                            # ~22 skill folders
+├── .claude-plugin/marketplace.json    # marketplace entry — plugin source is ./skills
+├── skills/                            # the plugin root: only this directory ships in the plugin
+│   ├── .claude-plugin/plugin.json     # plugin manifest (name, version, privacyPolicyUrl, skills: ["./"])
 │   ├── <slug>/
 │   │   ├── SKILL.md                   # required
 │   │   ├── references/                # optional — on-demand detail loaded by the LLM
 │   │   ├── scripts/                   # optional — Python helpers (e.g. DOCX, charts) when there's a clear runtime need
 │   │   └── commands/                  # optional — Claude Code slash commands (`/<command>`)
 │   └── ...
-├── docs/
+├── docs/                              # repo docs (not shipped in the plugin)
 │   ├── architecture.md                # multilingual + CLI/MCP routing design
 │   └── install.md                     # install / verify / FAQ
-├── CLAUDE.md                          # this file
+├── CLAUDE.md                          # this file (outside the plugin root)
 ├── README.md
 ├── LICENSE                            # MIT
 └── .gitignore
@@ -153,7 +154,7 @@ Keep SKILL.md under ~200 lines. Push detail (long field dictionaries, multi-page
 6. If the skill genuinely needs a runtime helper (DOCX / chart / safety gate), add `scripts/<helper>.py` and document inputs/outputs in SKILL.md. Otherwise stay prompt-only.
 7. If a slash command makes sense (`/<name> <arg>` → run this skill), add `commands/<name>.md` with `description:` and `argument-hint:`.
 8. Update [README.md](./README.md) "What's inside" table to include the new skill.
-9. Plugin marketplace auto-discovers it (`.claude-plugin/marketplace.json` declares `skills: ["./skills/"]`); no marketplace edit needed.
+9. The plugin auto-discovers it (`skills/.claude-plugin/plugin.json` declares `skills: ["./"]`); no manifest edit needed. Keep the plugin root at `skills/` — everything outside it (CI, docs, README, `scripts/update.sh`) stays out of the published plugin, and anything added under `skills/` is scanned by the Claude plugin directory review (no `curl | sh`, no reading local credential files). Don't add component paths to `marketplace.json`.
 10. Sanity-check by hand:
     - Slug matches dir name? `ls skills/<slug>/` and `grep '^name:' skills/<slug>/SKILL.md`
     - All three languages in triggers?
