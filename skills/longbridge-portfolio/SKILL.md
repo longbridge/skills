@@ -106,7 +106,7 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 
 | Situation | Response |
 |---|---|
-| `command not found: longbridge` | Install longbridge-terminal |
+| `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
 | `order` / `dca` mutation | Always preview plan first; wait for user confirmation before executing |
 

@@ -94,7 +94,7 @@ Carry trade opportunity analysis using spot rates, forward points, and interest 
 
 | Situation | Response |
 |---|---|
-| `command not found: longbridge` | Install longbridge-terminal: `brew tap longbridge/tap && brew install longbridge/tap/longbridge-terminal` |
+| `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login` |
 | Empty result | "No data returned — verify the symbol format is `<CODE>.<MARKET>` (e.g. NVDA.US, 700.HK)" |
 | Other stderr | Surface verbatim — do not retry silently |

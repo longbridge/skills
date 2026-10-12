@@ -101,7 +101,7 @@ All commands: Public — no login required.
 
 | Situation | Response |
 |---|---|
-| `command not found: longbridge` | Install longbridge-terminal |
+| `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | No data returned | Verify symbol and market; HK `operating` only works for HK stocks |
 | Other stderr | Surface verbatim |
 

@@ -2,7 +2,7 @@
 
 ## CLI Installation
 
-> Installing the CLI is a one-time step the **user** performs in their own terminal. Do not run install scripts on the user's behalf — show them these options and let them choose.
+> **Quickest:** run the installer bundled with the `longbridge` skill — `sh scripts/install-cli.sh` (macOS / Linux) or `powershell -ExecutionPolicy Bypass -File scripts\install-cli.ps1` (Windows), paths relative to the `longbridge` skill directory. Confirm with the user before installing.
 
 ```bash
 # macOS (Homebrew — recommended)
