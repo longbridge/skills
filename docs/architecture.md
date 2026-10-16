@@ -92,8 +92,8 @@ The LLM reads `longbridge` stderr directly and translates the situation into the
    3. Response-language directive tells the LLM:
         user typed zh-Hant → reply in zh-Hant
                             ↓
-     longbridge quote NVDA.US --format json   (LLM may also call `static`
-                            ↓                   and `calc-index` and merge by symbol)
+     LONGBRIDGE_SOURCE_SKILL=longbridge-quote longbridge quote NVDA.US --format json
+                            ↓
        longbridge CLI returns a JSON array (English fields)
                             ↓
    4. LLM uses zh-Hant + the multilingual tables in §3/§4 to compose:
@@ -120,7 +120,7 @@ Every `SKILL.md` tells the LLM the same rule: **default to CLI; fall back to MCP
 ### Default rule
 
 ```
-1. LLM calls `longbridge <subcommand> --format json` directly.
+1. LLM calls `LONGBRIDGE_SOURCE_SKILL=<skill-slug> longbridge <subcommand> --format json` directly.
 2. Shell returns `command not found` → fall back to MCP.
 3. Otherwise parse the JSON output (or surface stderr verbatim if non-zero exit).
 4. MCP also unconfigured → tell the user: install longbridge-terminal or run `claude mcp add ...`.
