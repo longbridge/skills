@@ -79,6 +79,14 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 - `positions`, `fund-positions`, `statement`, `bank-cards`, `withdrawals`, `deposits`: 🔐 Requires Trade permission
 - `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**
 
+## Placing, cancelling or modifying an order — MANDATORY
+
+`order buy` / `sell` / `cancel` / `replace` and every `grid` write command
+preview by default and reach no exchange on the first run. Run the command,
+show the preview to the user, and only after they explicitly confirm, run the
+command the preview printed — verbatim. Over MCP, follow the `next_step` the
+dry-run response returns. See [references/order.md](references/order.md).
+
 ## Frameworks
 
 ### Portfolio Diagnosis
@@ -108,7 +116,8 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 |---|---|
 | `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
-| `order` / `dca` mutation | Always preview plan first; wait for user confirmation before executing |
+| `order` / `grid` mutation | Previews by default — show the preview, and only after the user explicitly confirms, run the command it printed |
+| `dca` mutation | Always preview the plan first; wait for user confirmation before executing |
 
 ## MCP fallback
 
