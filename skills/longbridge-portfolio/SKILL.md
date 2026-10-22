@@ -77,7 +77,15 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 - `margin-ratio`, `max-qty`: Public — no login required
 - `assets`, `cash-flow`, `portfolio`, `profit-analysis`: 🔐 Requires Quote permission
 - `positions`, `fund-positions`, `statement`, `bank-cards`, `withdrawals`, `deposits`: 🔐 Requires Trade permission
-- `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**
+- `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**. Order commands are dry runs by default: the preview prints a confirmation code, and the order is only placed when the identical command is re-run with `--execute <CODE>` after the user confirms. See [references/order.md](references/order.md).
+
+## Longbridge US accounts
+
+Longbridge US (LBUS) accounts use separate US account APIs, and some AP-account data does not exist for them:
+
+- **Holdings, cash and buying power**: use `positions` (US asset overview: stocks, options, crypto, cash, buying power).
+- **Not available for US accounts**: fund positions, margin ratio and trade executions. Tell the user this data is not available for US accounts instead of retrying.
+- **`portfolio`, `assets`, `cash-flow`**: older CLI versions call AP-only endpoints and fail for US accounts with `internal server error` (code 12). If that happens, fall back to `positions` and tell the user to update the CLI.
 
 ## Frameworks
 
@@ -108,7 +116,9 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 |---|---|
 | `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
-| `order` / `dca` mutation | Always preview plan first; wait for user confirmation before executing |
+| `order` / `dca` mutation | Always preview plan first; wait for user confirmation, then re-run the same command with `--execute <CODE>` |
+| `only available in the AP data center` / `not available for US accounts` | The data does not exist for Longbridge US accounts; say so, do not retry |
+| US account + `internal server error` (code 12) on `portfolio` / `assets` / `cash-flow` | Older CLI; use `positions` instead and suggest updating the CLI |
 
 ## MCP fallback
 
