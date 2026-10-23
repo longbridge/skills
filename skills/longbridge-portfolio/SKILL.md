@@ -70,14 +70,28 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 ### `withdrawals` — withdrawal history 🔐
 ### `deposits` — deposit history 🔐
 ### `order` — list, detail, buy, sell, cancel, replace orders 🔐 ⚠️ mutating
-### `dca` — recurring investment: list, create, pause, resume, cancel 🔐 ⚠️ mutating
+### `dca` — recurring investment: list, create, update, pause, resume, stop 🔐 ⚠️ mutating
 
 ## Auth requirements
 
 - `margin-ratio`, `max-qty`: Public — no login required
 - `assets`, `cash-flow`, `portfolio`, `profit-analysis`: 🔐 Requires Quote permission
 - `positions`, `fund-positions`, `statement`, `bank-cards`, `withdrawals`, `deposits`: 🔐 Requires Trade permission
-- `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**
+- `order`, `dca`, `fund submit-order`, `fund cancel-order` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**.
+  - `order`: dry run by default — the preview prints a confirmation code, and the order is only placed when the identical command is re-run with `--execute <CODE>` after the user confirms. See [references/order.md](references/order.md).
+  - `dca`: no dry run — `create` / `update` / `pause` / `resume` / `stop` / `set-reminder` take effect immediately. Show the plan yourself and get explicit confirmation **before** running the command. See [references/dca.md](references/dca.md).
+  - `fund submit-order` / `fund cancel-order`: no dry run — without `--yes` the CLI stops at an interactive prompt. Preview first: before `submit-order`, run `longbridge fund validate-order` with the same counter id, `--action`, `--currency`, `--amount` / `--units` and `--dividend-option` (it checks the order and places nothing); for `cancel-order`, show the order with `longbridge fund order <ORDER_ID>`. Show the preview and the exact command you will run, and only after the user explicitly confirms that exact preview, run it with `--yes`. Never run either command without that confirmation, and never pipe input into the interactive prompt.
+    - CLI 0.30.0 `fund validate-order` has no `--sell-all`, `--fee` or `--remark`. When the order uses any of them, validate with the comparable arguments (e.g. the held `--units` for `--sell-all`), tell the user which flags the preview could not check, and show the exact `submit-order` command before running it.
+- `dca` is available for AP accounts only (not Longbridge US accounts).
+
+## Longbridge US accounts
+
+Longbridge US (LBUS) accounts use separate US account APIs, and some AP-account data does not exist for them:
+
+- **Holdings, cash and buying power**: use `positions`. On a US account its JSON output is an object (`account_type`, `cash_buy_power`, `stock_list`, `option_list`, `crypto_list`, `cash_list`), not the array of `{symbol, name, quantity, ...}` returned for AP accounts. Run `longbridge positions --schema` to check the shape instead of assuming the AP array.
+- **Not available for US accounts**: fund positions and margin ratio. Tell the user this data is not available for US accounts instead of retrying.
+- **Executions**: CLI 0.30.0 `order executions` is AP-only; for a US account use `order --history --format json` and keep orders whose executed quantity (`executed_qty`) is above 0 (covers partially filled then cancelled/expired orders). It returns one row per order (any status), not one row per fill. On a US account its results are paged (default `--page 1 --limit 20`): raise `--limit` or step `--page` until a page returns fewer than `--limit` orders to cover the whole range. `--start` filters by when the order was placed, so fills of orders placed before the start date (e.g. GTC orders) are missed: widen `--start` back to cover those orders.
+- **`portfolio`, `assets`, `cash-flow`, `exchange-rate`**: CLI 0.30.0 does not support these on Longbridge US accounts. Use `positions` for holdings and do not retry these commands; if the Longbridge MCP server is connected, its `account_balance`, `cash_flow`, `exchange_rate` and `stock_positions` tools serve US accounts.
 
 ## Frameworks
 
@@ -108,11 +122,16 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 |---|---|
 | `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
-| `order` / `dca` mutation | Always preview plan first; wait for user confirmation before executing |
+| `order` mutation | Run once to preview; after the user confirms, re-run the same command with `--execute <CODE>` |
+| `dca` mutation | No dry run — show the plan and wait for explicit confirmation before running the command at all |
+| `only available in the AP data center` / `not available for US accounts` | The data does not exist for Longbridge US accounts; say so, do not retry |
+| `fund submit-order` / `fund cancel-order` | Preview first (`fund validate-order` / `fund order <ORDER_ID>`); after the user explicitly confirms that exact preview, run the command with `--yes`. Never run it unconfirmed and never pipe input into the prompt |
+| US account + `portfolio` / `assets` / `cash-flow` / `exchange-rate` | CLI 0.30.0 does not support these on Longbridge US accounts; use `positions` for holdings and do not retry (MCP `account_balance` / `cash_flow` / `exchange_rate` / `stock_positions` serve US accounts) |
+| US account + `order executions` | CLI 0.30.0 `order executions` is AP-only; use `order --history --format json` and keep orders whose executed quantity (`executed_qty`) is above 0 (covers partially filled then cancelled/expired orders) — one row per order, not per fill. It is paged on US accounts (default `--limit 20`), so use `--page`/`--limit` to fetch them all, and widen `--start` for orders placed earlier (e.g. GTC) |
 
 ## MCP fallback
 
-Use MCP server if CLI unavailable. Discover tools at runtime.
+Use MCP server if CLI unavailable. Discover tools at runtime. For Longbridge US accounts, the MCP tools `account_balance`, `cash_flow`, `exchange_rate`, `stock_positions` and `today_executions` / `history_executions` also serve the account data the CLI does not cover. MCP order writes keep the same rule: preview, explicit confirmation, then execute.
 
 ## Related skills
 

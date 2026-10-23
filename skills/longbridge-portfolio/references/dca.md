@@ -19,7 +19,7 @@ If anything is unclear after one round of clarification, **do not proceed** — 
 
 Every mutation must run as **two distinct turns**:
 
-1. **Preview** — describe exactly what you are about to do (symbol, amount + currency, frequency, day-of-week / day-of-month, plan id for pause/resume/stop/update), in the user's language. **Do not run the CLI yet.** For `create`, list every parameter on a separate line and explicitly note that this will execute real buy orders going forward.
+1. **Preview** — describe exactly what you are about to do (symbol, amount + currency, frequency, day-of-week / day-of-month, plan id for pause/resume/stop/update, reminder hours for `set-reminder`), in the user's language. **Do not run the CLI yet.** For `create`, list every parameter on a separate line and explicitly note that this will execute real buy orders going forward.
 2. **Wait for explicit confirmation** containing "确认 / yes / 是的 / confirm". If the user replies anything ambiguous, ask again — do **not** assume consent. Casual acknowledgements like "好" / "ok" / "嗯" alone are NOT confirmation for a `create` — require an explicit "确认" / "confirm" / "是的".
 3. **Execute** — only after step 2, run the actual `longbridge dca <subcommand> ...` command.
 
@@ -42,7 +42,7 @@ Every mutation must run as **two distinct turns**:
 | Pause a plan (mutating)            | `longbridge dca pause <PLAN_ID> --format json`                                                               |
 | Resume a paused plan (mutating)    | `longbridge dca resume <PLAN_ID> --format json`                                                              |
 | Stop a plan permanently (mutating) | `longbridge dca stop <PLAN_ID> --format json`                                                                |
-| Set pre-trade reminder hours       | `longbridge dca set-reminder ... --format json`                                                              |
+| Set pre-trade reminder hours (mutating) | `longbridge dca set-reminder <1\|6\|12> --format json`                                                |
 
 > Other flags exist (start date, end date, daily / fortnightly frequency, etc.). The exact spelling can drift between CLI versions — **always verify with `longbridge dca create --help` before issuing the command, and quote the exact command back to the user in the preview.**
 
