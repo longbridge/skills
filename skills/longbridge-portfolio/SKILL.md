@@ -90,7 +90,7 @@ Longbridge US (LBUS) accounts use separate US account APIs, and some AP-account 
 
 - **Holdings, cash and buying power**: use `positions`. On a US account its JSON output is an object (`account_type`, `cash_buy_power`, `stock_list`, `option_list`, `crypto_list`, `cash_list`), not the array of `{symbol, name, quantity, ...}` returned for AP accounts. Run `longbridge positions --schema` to check the shape instead of assuming the AP array.
 - **Not available for US accounts**: fund positions and margin ratio. Tell the user this data is not available for US accounts instead of retrying.
-- **Executions**: CLI 0.30.0 `order executions` is AP-only; for a US account use `order --history` for filled orders. On a US account its results are paged (default `--page 1 --limit 20`): raise `--limit` or step `--page` until a page returns fewer than `--limit` orders to get every fill.
+- **Executions**: CLI 0.30.0 `order executions` is AP-only; for a US account use `order --history` and filter to filled orders by `status`. It returns one row per order (any status), not one row per fill. On a US account its results are paged (default `--page 1 --limit 20`): raise `--limit` or step `--page` until a page returns fewer than `--limit` orders to cover the whole range.
 - **`portfolio`, `assets`, `cash-flow`, `exchange-rate`**: CLI 0.30.0 does not support these on Longbridge US accounts. Use `positions` for holdings and do not retry these commands; if the Longbridge MCP server is connected, its `account_balance`, `cash_flow`, `exchange_rate` and `stock_positions` tools serve US accounts.
 
 ## Frameworks
