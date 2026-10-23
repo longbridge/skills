@@ -84,3 +84,5 @@ Order commands are **dry runs by default**. Without the execute flag, `buy` / `s
 3. Re-run the **identical** command with `--execute <CODE>`, using the code from the preview. Check `longbridge order buy --help` if the flag has changed.
 
 Never add the execute flag before the user has confirmed, and never reuse a code from a different preview.
+
+The confirmation code is single-use, expires 10 minutes after the preview, and is tied to that exact request — changing any field invalidates it. If the code is rejected or has expired, re-run the preview, show it to the user again and get a fresh confirmation.
