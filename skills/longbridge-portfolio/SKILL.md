@@ -77,7 +77,10 @@ Run `longbridge <cmd> --help` for current flags and output fields.
 - `margin-ratio`, `max-qty`: Public — no login required
 - `assets`, `cash-flow`, `portfolio`, `profit-analysis`: 🔐 Requires Quote permission
 - `positions`, `fund-positions`, `statement`, `bank-cards`, `withdrawals`, `deposits`: 🔐 Requires Trade permission
-- `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**. Order commands are dry runs by default: the preview prints a confirmation code, and the order is only placed when the identical command is re-run with `--execute <CODE>` after the user confirms. See [references/order.md](references/order.md).
+- `order`, `dca` (mutating operations): 🔐 Requires Trade permission — **always present a preview before executing, wait for explicit confirmation**.
+  - `order`: dry run by default — the preview prints a confirmation code, and the order is only placed when the identical command is re-run with `--execute <CODE>` after the user confirms. See [references/order.md](references/order.md).
+  - `dca`: no dry run — `create` / `update` / `pause` / `resume` / `stop` take effect immediately. Show the plan yourself and get explicit confirmation **before** running the command. See [references/dca.md](references/dca.md).
+- `dca` is available for AP accounts only (not Longbridge US accounts).
 
 ## Longbridge US accounts
 
@@ -116,7 +119,8 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 |---|---|
 | `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
-| `order` / `dca` mutation | Always preview plan first; wait for user confirmation, then re-run the same command with `--execute <CODE>` |
+| `order` mutation | Run once to preview; after the user confirms, re-run the same command with `--execute <CODE>` |
+| `dca` mutation | No dry run — show the plan and wait for explicit confirmation before running the command at all |
 | `only available in the AP data center` / `not available for US accounts` | The data does not exist for Longbridge US accounts; say so, do not retry |
 | US account + `internal server error` (code 12) on `portfolio` / `assets` / `cash-flow` | Older CLI; use `positions` instead and suggest updating the CLI |
 
