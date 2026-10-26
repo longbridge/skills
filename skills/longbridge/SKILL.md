@@ -50,6 +50,7 @@ When the user asks about stock performance, portfolio advice, or market analysis
 longbridge quote SYMBOL.US
 longbridge positions                # stock positions
 longbridge portfolio                # P/L, asset distribution, holdings, cash (always pull when user asks about "my portfolio")
+                                    # Longbridge US accounts: if portfolio fails, use `longbridge positions`
 longbridge portfolio short-margin   # short-selling margin deposit details per position
 longbridge kline history SYMBOL.US --start YYYY-MM-DD --end YYYY-MM-DD --period day
 longbridge intraday SYMBOL.US
