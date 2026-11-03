@@ -57,6 +57,11 @@ Trigger when user asks about: financial statements (income/balance sheet/cash fl
 
 ## CLI Commands
 
+> **Skill attribution**: before every `longbridge` CLI call, prefix it with
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-fundamentals` so the backend can attribute
+> the request to this skill. Example:
+> `LONGBRIDGE_SOURCE_SKILL=longbridge-fundamentals longbridge financial-report TSLA.US --format json`
+
 Run `longbridge <cmd> --help` for current flags and output fields.
 
 ### `financial-report` — income statement, balance sheet, cash flow
@@ -108,6 +113,8 @@ All commands: Public — no login required.
 ## MCP fallback
 
 Use MCP server if CLI unavailable. Discover tools at runtime.
+
+> **MCP attribution**: MCP 路径的 skill 归因需服务端支持（RFC §3.3），当前为 best-effort。
 
 ## Related skills
 
