@@ -114,6 +114,21 @@ longbridge filing list TSLA.US
 longbridge filing detail TSLA.US 610186794100660481 --file-index 0
 ```
 
+## Strategy Signals & Catalysts
+
+`signals` / `signal` / `facts` cover the signal surface: a **signal** is a strategy's take on a
+security triggered by a **catalyst**, and a **fact** is the catalyst event itself.
+
+```bash
+longbridge signals                       # list; filter by symbol / strategy / catalyst / time
+longbridge signal <signal_id>            # one signal
+longbridge facts SYMBOL.US               # catalyst events for a security
+```
+
+- The list omits the strategy analysis (several KB per signal). `longbridge signal <id> --format json`
+  adds it under `analysis`: fit scores, valuation scenarios, evidence sources, related fact IDs.
+- A signal names the fact that triggered it in `key_fact_id`; look it up with `facts` on the same symbol.
+
 ## Longbridge AI Agents
 
 `longbridge agent` talks to Longbridge's own AI agents (research, stock analysis, screeners, custom workflow agents). This is distinct from the data commands above: the agent answers in prose, not JSON records.
