@@ -84,6 +84,12 @@ longbridge order --format json | jq '.[] | select(.status == "New")'
 
 ## AI Agent Integration
 
+### Symbols
+
+- Pass a **ticker with a market suffix** (`TSLA.US`, `700.HK`, `600519.SH`), never a company name — `tesla.US` does not exist. US indexes take a leading dot (`.DJI.US`, `.SPX.US`); stocks do not.
+- Symbols are case-insensitive on input and returned upper-case: `tsla.us` queries `TSLA.US`, and the JSON `symbol` field reads `TSLA.US`. Match results on the upper-cased symbol.
+- An unknown symbol is an **error (non-zero exit)**, never an empty success. The stderr message names the symbol and, when one exists, the spelling to retry with (`Did you mean ".DJI.US"?`). For a batch, the symbols that exist are still printed on stdout before the error.
+
 ### Count / limit alias
 
 All commands with a `--count` flag also accept `--limit` as an alias. Both are equivalent — use whichever feels natural in generated commands.
