@@ -89,6 +89,7 @@ longbridge order --format json | jq '.[] | select(.status == "New")'
 - Pass a **ticker with a market suffix** (`TSLA.US`, `700.HK`, `600519.SH`), never a company name — `tesla.US` does not exist. US indexes take a leading dot (`.DJI.US`, `.SPX.US`); stocks do not.
 - Symbols are case-insensitive on input and returned upper-case: `tsla.us` queries `TSLA.US`, and the JSON `symbol` field reads `TSLA.US`. Match results on the upper-cased symbol.
 - An unknown symbol is an **error (non-zero exit)**, never an empty success. The stderr message names the symbol and, when one exists, the spelling to retry with (`Did you mean ".DJI.US"?`). For a batch, the symbols that exist are still printed on stdout before the error.
+- With `--format json`, errors are JSON on stderr: `{"error": {"code", "message", "trace_id", "hints"}}`. `hints` carries the retry suggestion and, for `403308`, which permission to grant via `longbridge auth login`.
 
 ### Count / limit alias
 
