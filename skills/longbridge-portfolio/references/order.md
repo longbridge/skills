@@ -63,6 +63,23 @@ Options:
           Print help (see a summary with '-h')
 ```
 
+## Placing, cancelling or modifying an order — MANDATORY
+
+`order buy`, `order sell`, `order cancel`, `order replace` and every `grid`
+write command preview by default. The first run reaches no exchange: it prints
+the order for review, and ends with the exact command that would carry it out.
+
+1. Run the command.
+2. Show the preview to the user and ask them to confirm.
+3. Only after they explicitly confirm, run the command the preview printed —
+   verbatim.
+
+Never assemble that second command yourself, and never reuse one across
+different orders.
+
+The confirmation code is single-use, expires 10 minutes after the preview, and is tied to that exact request — changing any field invalidates it. If the code is rejected or has expired, re-run the preview, show it to the user again and get a fresh confirmation.
+
+
 ## Usage
 
 ```bash
@@ -72,17 +89,3 @@ longbridge order --format json
 # See all options
 longbridge order --help
 ```
-
-> ⚠️ **Mutating command** — `order buy`, `order sell`, `order cancel`, `order replace` modify account state. Always present a preview to the user and wait for explicit confirmation before executing.
-
-## Placing, cancelling or changing an order
-
-Order commands are **dry runs by default**. Without the execute flag, `buy` / `sell` / `cancel` / `replace` only print a preview and a confirmation code; nothing is sent.
-
-1. Run the command without the execute flag and show the user the preview.
-2. Wait for an explicit confirmation from the user.
-3. Re-run the **identical** command with `--execute <CODE>`, using the code from the preview. Check `longbridge order buy --help` if the flag has changed.
-
-Never add the execute flag before the user has confirmed, and never reuse a code from a different preview.
-
-The confirmation code is single-use, expires 10 minutes after the preview, and is tied to that exact request — changing any field invalidates it. If the code is rejected or has expired, re-run the preview, show it to the user again and get a fresh confirmation.

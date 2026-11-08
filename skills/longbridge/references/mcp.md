@@ -41,32 +41,16 @@ Add to MCP config in any compatible client:
 ### Security Recommendations
 
 - Only approve scopes required for the task (least privilege)
-- For order placement, instruct AI to always ask for confirmation before executing
 - Periodically review and revoke unused authorizations
 
----
+### Placing, Cancelling or Modifying an Order
 
-## Available MCP Tools
+The money-moving tools — `submit_order`, `cancel_order`, `replace_order` and the
+grid writes — do nothing on the first call. They return a preview of the order
+and a `next_step` saying how to carry it out.
 
-When the MCP server is connected, available tools are automatically exposed to the AI — no hardcoded list needed. The AI can directly inspect and call all tools.
+1. Call the tool.
+2. Show the returned `preview` to the user and ask them to confirm.
+3. Only after they explicitly confirm, follow `next_step` exactly.
 
-If you need to know what tools are available, ask the AI to list the connected MCP tools, or check the official docs: https://open.longbridge.com
-
----
-
-## Example AI Prompts
-
-```
-# Market data
-"What is the current price and PE ratio of TSLA.US?"
-
-# Trade analysis
-"Show my current HK stock positions and unrealized P&L"
-
-# Order placement (always confirm first)
-"I want to buy 100 shares of 700.HK at limit price 50 HKD.
- Please confirm the order details before placing it."
-
-# Research
-"Get the latest news and filings for AAPL.US"
-```
+Never improvise that second call, and never reuse one across different orders.
