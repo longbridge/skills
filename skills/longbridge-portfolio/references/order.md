@@ -3,17 +3,19 @@
 ```
 Order management: list, detail, buy, sell, cancel, replace, executions
 
+Behavior adapts to your account's region automatically; you never pass a region. --action/--page/--limit apply only to US accounts.
+
 Without a subcommand, lists today's orders (or historical with --history). Example: longbridge order Example: longbridge order --history --start 2024-01-01 --symbol TSLA.US Example: longbridge order detail 20240101-123456789 Example: longbridge order buy TSLA.US 100 --price 250.00 Example: longbridge order sell TSLA.US 100 --price 260.00 Example: longbridge order cancel 20240101-123456789 Example: longbridge order replace 20240101-123456789 --qty 200 --price 255.00 Example: longbridge order executions --history --start 2024-01-01
 
 Usage: longbridge order [OPTIONS] [COMMAND]
 
 Commands:
   detail      Full detail for a single order including charges and history
-  executions  Today's trade executions (fills), or historical with --history
-  buy         Preview a buy order (dry run); add --execute to actually place it
-  sell        Preview a sell order (dry run); add --execute to actually place it
-  cancel      Preview cancelling a pending order (dry run); add --execute to cancel it
-  replace     Preview modifying a pending order (dry run); add --execute to apply it
+  executions  AP accounts only: today's trade executions (fills), or the full history with --history
+  buy         Preview a buy order (dry run); add --execute <CODE> to place it
+  sell        Preview a sell order (dry run); add --execute <CODE> to place it
+  cancel      Preview cancelling a pending order (dry run); add --execute <CODE> to cancel it
+  replace     Preview modifying a pending order (dry run); add --execute <CODE> to apply it
   help        Print this message or the help of the given subcommand(s)
 
 Options:
@@ -30,15 +32,15 @@ Options:
           Filter by symbol (e.g. TSLA.US)
 
       --action <DIRECTION>
-          US accounts only: filter by direction (buy | sell)
+          US accounts only: filter by direction (buy | sell). Ignored for AP accounts (the region is inferred from your account — do not pass it)
 
       --page <PAGE>
-          US accounts only: page number (default: 1)
+          US accounts only: page number (default: 1). Ignored for AP accounts (the region is inferred from your account — do not pass it)
           
           [default: 1]
 
       --limit <LIMIT>
-          US accounts only: page size (default: 20)
+          US accounts only: page size (default: 20). Ignored for AP accounts (the region is inferred from your account — do not pass it)
           
           [default: 20]
 
@@ -74,6 +76,9 @@ the order for review, and ends with the exact command that would carry it out.
 
 Never assemble that second command yourself, and never reuse one across
 different orders.
+
+The confirmation code is single-use, expires 10 minutes after the preview, and is tied to that exact request — changing any field invalidates it. If the code is rejected or has expired, re-run the preview, show it to the user again and get a fresh confirmation.
+
 
 ## Usage
 

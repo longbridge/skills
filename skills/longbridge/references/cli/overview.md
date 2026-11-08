@@ -17,33 +17,26 @@ Do not rely on hardcoded documentation for command syntax or flags — use `--he
 
 ## Installation
 
+> **Quickest:** run the installer bundled with the `longbridge` skill — `sh scripts/install-cli.sh` (macOS / Linux) or `powershell -ExecutionPolicy Bypass -File scripts\install-cli.ps1` (Windows), paths relative to the `longbridge` skill directory. Confirm with the user before installing.
+
 ```bash
 # macOS (Homebrew — recommended)
 brew install --cask longbridge/tap/longbridge-terminal
-
-# macOS / Linux (install script)
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
-# Installs `longbridge` binary to /usr/local/bin
 ```
 
-Windows (Scoop or PowerShell):
+Windows (Scoop):
 
 ```powershell
-# Scoop
 scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
-
-# Or PowerShell install script
-iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
 ```
+
+Other platforms: download a release binary from <https://github.com/longbridge/longbridge-terminal/releases> and put `longbridge` on your `PATH`.
 
 ## Update
 
 ```bash
 # Built-in updater
 longbridge update
-
-# Or re-run the install script (any platform)
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
 ```
 
 ## Authentication
@@ -51,13 +44,12 @@ curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | s
 Uses OAuth 2.0 — no manual token or key management needed:
 
 ```bash
-longbridge auth login    # Opens browser OAuth flow; token saved to
-                         # ~/.longbridge/terminal/.openapi-session
-longbridge auth logout   # Clear saved session token
+longbridge auth login    # Opens browser OAuth flow; the CLI manages the session itself
+longbridge auth logout   # Sign out and clear the session
 longbridge check    # Verify connectivity and token (no auth required)
 ```
 
-**China Mainland:** The CLI auto-detects CN by probing `geotest.lbkrs.com` on startup (non-blocking). Result cached at `~/.longbridge/openapi/region-cache`. CN users automatically use `.cn` endpoints.
+**China Mainland:** The CLI auto-detects CN by probing `geotest.lbkrs.com` on startup (non-blocking). CN users automatically use `.cn` endpoints.
 
 ## Environment Variables
 
@@ -106,6 +98,14 @@ second command yourself.
 says what to send to carry the order out.
 
 ## AI Agent Integration
+
+### Symbols
+
+- Pass a **ticker with a market suffix** (`TSLA.US`, `700.HK`, `600519.SH`), never a company name — `tesla.US` does not exist. US indexes take a leading dot (`.DJI.US`, `.SPX.US`); stocks do not.
+- Symbols are case-insensitive on input and returned upper-case: `tsla.us` queries `TSLA.US`, and the JSON `symbol` field reads `TSLA.US`. Match results on the upper-cased symbol.
+- An unknown symbol is an **error (non-zero exit)**, never an empty success. The stderr message names the symbol and, when one exists, the spelling to retry with (`Did you mean ".DJI.US"?`). For a batch, the symbols that exist are still printed on stdout before the error.
+- With `--format json`, errors are JSON on stderr: `{"error": {"code", "message", "trace_id", "hints", "symbols"}}`. `symbols` lists each unresolved symbol with a stable `status` — `no_data` (exists, no data: check quote access with `longbridge auth status`), `suggest` (retry with `suggestions`), `unknown` (use a ticker), `unchecked` — so branch on `status`, never on the localised `message`. `hints` says, for `403308`, which permission to grant via `longbridge auth login`.
+- A non-zero exit from `quote` / `static` / `calc-index` does not void stdout: the symbols that resolved are still there.
 
 ### Count / limit alias
 

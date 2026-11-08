@@ -2,23 +2,20 @@
 
 ## CLI Installation
 
-```bash
-# macOS (Homebrew)
-brew install --cask longbridge/tap/longbridge-terminal
+> **Quickest:** run the installer bundled with the `longbridge` skill — `sh scripts/install-cli.sh` (macOS / Linux) or `powershell -ExecutionPolicy Bypass -File scripts\install-cli.ps1` (Windows), paths relative to the `longbridge` skill directory. Confirm with the user before installing.
 
-# macOS / Linux
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
+```bash
+# macOS (Homebrew — recommended)
+brew install --cask longbridge/tap/longbridge-terminal
 ```
 
-Windows (Scoop or PowerShell):
+Windows (Scoop):
 
 ```powershell
-# Scoop
 scoop install https://open.longbridge.com/longbridge/longbridge-terminal/longbridge.json
-
-# Or PowerShell install script
-iwr https://open.longbridge.com/longbridge/longbridge-terminal/install.ps1 | iex
 ```
+
+Other platforms: download a release binary from <https://github.com/longbridge/longbridge-terminal/releases> and put `longbridge` on your `PATH`.
 
 Authenticate:
 
@@ -31,9 +28,6 @@ longbridge auth login
 ```bash
 # Built-in updater
 longbridge update
-
-# Or re-run the install script
-curl -sSL https://open.longbridge.com/longbridge/longbridge-terminal/install | sh
 ```
 
 ## MCP (for AI tools — no code)
@@ -53,7 +47,8 @@ To revoke access, go to your Longbridge account → Security Settings → manage
 
 All tools use **OAuth 2.0** — no manual token or API key management needed.
 
-**Token cache:** `~/.longbridge/openapi/tokens/<client_id>`
+Credentials are handled entirely by the OAuth flow (`longbridge auth login` for the CLI, the browser prompt on first MCP call). Never read, print, or copy token files.
+
 **Register OAuth client:** POST `https://openapi.longbridge.com/oauth2/register`
 
 ## Rate Limits

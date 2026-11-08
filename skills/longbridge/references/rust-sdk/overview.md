@@ -34,7 +34,7 @@ use longbridge::{
 use longbridge::{Config, QuoteContext};
 use longbridge_oauth::OAuthBuilder;  // in oauth crate
 
-// Token cached at ~/.longbridge/openapi/tokens/<client_id>
+// Token storage and refresh are handled by the SDK
 let oauth = OAuthBuilder::new("your-client-id")
     .build(|url| println!("Open URL to authorize: {url}"))
     .await?;

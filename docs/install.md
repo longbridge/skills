@@ -9,14 +9,15 @@ Different tiers of skills have different runtime dependencies — install only w
 1. **Longbridge CLI** (Rust binary, runs in-process):
 
    ```bash
-   # macOS / Linux — see https://github.com/longportapp/longbridge-terminal
-   brew install longportapp/tap/longbridge          # macOS Homebrew
-   # Or download a release binary onto your PATH
+   # macOS — see https://github.com/longbridge/longbridge-terminal
+   brew install --cask longbridge/tap/longbridge-terminal
+   # Other platforms: download a release binary onto your PATH
+   # https://github.com/longbridge/longbridge-terminal/releases
    ```
 
    Verify with `longbridge --version` — it should print a version string.
 
-2. **Log in to your Longbridge account** (the OAuth token is cached locally and shared with the TUI):
+2. **Log in to your Longbridge account** (OAuth in the browser; the CLI manages the session itself):
 
    ```bash
    longbridge auth login
@@ -279,7 +280,7 @@ This works regardless of how the skills were originally installed (npx / bun / m
 ### Revoke Longbridge CLI authorisation
 
 ```bash
-longbridge auth logout                                # clears the local token
+longbridge auth logout                                # signs out of the CLI
 ```
 
 ### Revoke Longbridge MCP authorisation

@@ -1,0 +1,28 @@
+{
+  "name": "longbridge",
+  "version": "2.0.0",
+  "description": "Longbridge securities skill family: market data, technical analysis, derivatives, fundamentals, research, portfolio & account, quant strategies, watchlist, content, market intelligence, earnings, and value investing. HK / US / A-share (SH/SZ) / Singapore markets. Trilingual (Simplified Chinese, Traditional Chinese, English).",
+  "author": {
+    "name": "longbridge",
+    "url": "https://longbridge.com"
+  },
+  "homepage": "https://github.com/longbridge/skills",
+  "repository": "https://github.com/longbridge/skills",
+  "license": "MIT",
+  "privacyPolicyUrl": "https://longbridge.com/hk/en/support/topics/misc/privacy_policy",
+  "keywords": [
+    "longbridge",
+    "stocks",
+    "quotes",
+    "trading",
+    "valuation",
+    "fundamentals",
+    "portfolio",
+    "hk-stocks",
+    "us-stocks",
+    "a-shares"
+  ],
+  "skills": [
+    "./"
+  ]
+}

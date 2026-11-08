@@ -21,7 +21,7 @@ Options:
           Print verbose request info (host, elapsed) to stderr, prefixed with `*` like curl -v
 
       --lang <LANG>
-          Language for content fetched from longbridge.com: zh-CN or en. Defaults to system LANG env var, then en
+          Language for content fetched from longbridge.com: zh-CN or en. Defaults to the system locale, then en
 
       --schema
           Show response fields for this command and exit
@@ -85,7 +85,7 @@ Options:
           Print verbose request info (host, elapsed) to stderr, prefixed with `*` like curl -v
 
       --lang <LANG>
-          Language for content fetched from longbridge.com: zh-CN or en. Defaults to system LANG env var, then en
+          Language for content fetched from longbridge.com: zh-CN or en. Defaults to the system locale, then en
 
       --schema
           Show response fields for this command and exit
