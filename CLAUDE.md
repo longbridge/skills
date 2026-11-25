@@ -127,6 +127,7 @@ A `<skill>/commands/<name>.md` file declares a `/<name>` slash command that trig
 ### 6. Path selection: CLI vs MCP
 
 Default rule: CLI first; fall back to MCP when the shell returns `command not found: longbridge` (binary not installed).
+Exception: when Longbridge MCP tools are already connected (skill loaded from the MCP server, or no shell as on claude.ai), call the MCP tools directly; every SKILL.md carries a `> **Tool path**` note saying so.
 
 **Do not enumerate specific MCP tool names in SKILL.md.** MCP tool names (e.g. `mcp__longbridge__financial_report`) change as the server evolves. Instead, skill files must instruct the LLM to discover available tools at runtime — the MCP server exposes a tool list that the LLM can inspect. Describe _what capability is needed_ ("get financial statements", "fetch analyst consensus"), not _which exact tool name_ to call.
 
