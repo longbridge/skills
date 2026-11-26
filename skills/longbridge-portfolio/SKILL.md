@@ -131,7 +131,7 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 
 ## MCP fallback
 
-Use MCP server if CLI unavailable. Discover tools at runtime. For Longbridge US accounts, the MCP tools `account_balance`, `cash_flow`, `exchange_rate`, `stock_positions` and `today_executions` / `history_executions` also serve the account data the CLI does not cover. MCP order writes keep the same rule: preview, explicit confirmation, then execute.
+Use MCP server if CLI unavailable. Discover tools at runtime. For Longbridge US accounts, the MCP tools `account_balance`, `cash_flow`, `exchange_rate`, `stock_positions` and `today_executions` / `history_executions` also serve the account data the CLI does not cover. Over MCP, writes that move money or act for the user later — orders, fund orders, grid strategies, DCA plans and price alerts — have a server-side dry run: the first call returns a preview and a `confirmation_code`, or the client asks the user with a confirmation form. That preview is the confirmation step. Show it, and call again with the code only after the user explicitly confirms that exact preview; the CLI rules above that `dca` and `fund` writes have no dry run do not apply over MCP. A code expires 10 to 20 minutes after its preview.
 
 ## Related skills
 

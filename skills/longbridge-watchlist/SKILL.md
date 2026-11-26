@@ -72,6 +72,8 @@ Never skip step 2. If the user's intent is ambiguous, ask rather than assume.
 
 Use MCP server if CLI unavailable. Discover tools at runtime.
 
+Over MCP, price-alert writes (add / delete / enable / disable) have a server-side dry run: the first call returns a preview and a `confirmation_code`, or the client asks the user with a confirmation form. That preview is step 1 of the protocol above; call again with the code only after the user confirms it. Watchlist group and sharelist writes have no server-side dry run and take effect on the first call, so keep the full preview-and-confirm protocol for them.
+
 ## Related skills
 
 | User wants | Use |

@@ -88,6 +88,10 @@ For pause / resume / stop / update — list plan id + symbol + amount + frequenc
 - _"About to permanently stop DCA plan 12345 (AAPL.US, 500 USD monthly). Confirm?"_
 - _"即將恢復定投 12345。是否確認?"_
 
+## Over MCP
+
+The DCA tools on the Longbridge MCP server preview before they act: the first call to create, update, pause, resume or stop a plan returns a preview and a `confirmation_code` (or the client shows the user a confirmation form) and changes nothing. Over MCP, that preview replaces step 1 above: read it back with every parameter listed there, wait for the explicit confirmation in step 2, then call again with the code. Do not ask for a confirmation before the first call as well — the user would be asked twice. The code expires 10 to 20 minutes after the preview; if it has expired, preview again.
+
 ## OAuth scope
 
 DCA mutations require the **trade scope**. Without it, both CLI and MCP fail with `unauthorized` / `not in authorized scope`. Tell the user to `longbridge auth logout && longbridge auth login` and tick "Trade" in the browser. Read-only DCA listing also requires trade scope to view account-bound plan data.
