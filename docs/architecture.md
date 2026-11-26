@@ -222,6 +222,19 @@ For prompt-only skills (the default style — no `scripts/cli.py` between the LL
 
 **A missing binary is the only signal that triggers a path switch.** Other errors must not push the LLM to MCP — the underlying error is unrelated to the path.
 
+### Skills served over MCP
+
+The MCP server also serves this `skills/` directory to MCP clients (Skills over MCP). The model then has no shell, and every money-moving write is gated server-side (preview + `confirmation_code`, or a client confirmation form). The server adapts each `SKILL.md` on load rather than keeping a second copy of the content:
+
+| What | Why |
+|---|---|
+| Inserts an MCP preamble after the frontmatter | Tells the model there is no CLI, to map CLI instructions to the tools in its tool list, and that the tool's preview is the confirmation step, so it neither tries to install the CLI nor asks the user to confirm twice. Writes without a dry run still need the user's agreement first |
+| Serves one copy per data center | The preamble names the tools that account's data center cannot use (e.g. DCA for US accounts), so the model says the feature is unavailable instead of searching for it. Clients check skill digests, so the text cannot change per request |
+| Cuts `Triggers:` to the end of `description` | The trigger list is for CLI-side activation; over MCP it only costs context on every connection |
+| Hides `risk_level: mutating` skills on the read-only connector | That connector has no write tools, so the skill would only send the model looking for them |
+
+Where a CLI rule does not hold over MCP, the skill says so in `## MCP fallback` (e.g. DCA and price-alert writes have a dry run over MCP).
+
 ---
 
 ## 3. Maintainer guidelines

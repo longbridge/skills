@@ -60,6 +60,8 @@ metadata:
 
 `description` must be **≤ 1024 characters total**. The `Triggers:` list inside it is the **only** thing Claude Code uses to decide whether to activate the skill — pack it with multilingual keywords (see §3).
 
+**Keep `Triggers:` as the last part of `description`.** When the Longbridge MCP server serves these skills over MCP, it cuts `description` from `Triggers:` to the end (see §6), so anything written after the trigger list is lost there.
+
 ### 3. Language coverage for triggers
 
 `description` MUST cover **Simplified Chinese + English**. Traditional Chinese is only added where the glyph differs from Simplified (e.g. `股价`→`股價`, `汇率`→`匯率`, `经纪`→`經紀`). Identical glyphs appear once only.
@@ -129,6 +131,16 @@ A `<skill>/commands/<name>.md` file declares a `/<name>` slash command that trig
 Default rule: CLI first; fall back to MCP when the shell returns `command not found: longbridge` (binary not installed).
 
 **Do not enumerate specific MCP tool names in SKILL.md.** MCP tool names (e.g. `mcp__longbridge__financial_report`) change as the server evolves. Instead, skill files must instruct the LLM to discover available tools at runtime — the MCP server exposes a tool list that the LLM can inspect. Describe _what capability is needed_ ("get financial statements", "fetch analyst consensus"), not _which exact tool name_ to call.
+
+### 6b. Skills served over MCP
+
+The Longbridge MCP server also serves this `skills/` directory to MCP clients (Skills over MCP, SEP-2640), so `mcp.longbridge.com` users get the skills without installing anything. There is no shell on that path, so the server rewrites each `SKILL.md` when it loads it:
+
+- it inserts a short "Loaded from the Longbridge MCP server" preamble after the frontmatter: there is no CLI, read CLI instructions as capabilities and use the tools in the tool list, a gated write's preview is the confirmation step, writes with no dry run (watchlist groups, sharelists, posts) need the user's agreement before the call, and which tools the account's data center cannot use (one copy per data center);
+- it cuts the `Triggers:` list from `description` (§2);
+- skills with `risk_level: mutating` are hidden on the read-only connector.
+
+`references/` and every other file are served unchanged. So: write CLI-first as usual, but where a CLI rule does not hold over MCP (e.g. "`dca` has no dry run" — over MCP it does), say so in the skill's `## MCP fallback` section. The preamble lives in the MCP server (`src/tools/support/skills.rs` in `longbridge/longbridge-mcp`); change it there.
 
 ### 7. Error handling
 
