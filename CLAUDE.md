@@ -136,7 +136,7 @@ Default rule: CLI first; fall back to MCP when the shell returns `command not fo
 
 The Longbridge MCP server also serves this `skills/` directory to MCP clients (Skills over MCP, SEP-2640), so `mcp.longbridge.com` users get the skills without installing anything. There is no shell on that path, so the server rewrites each `SKILL.md` when it loads it:
 
-- it inserts a short "Loaded from the Longbridge MCP server" preamble after the frontmatter: there is no CLI, read CLI instructions as capabilities and use the tools in the tool list, and a gated write's preview is the confirmation step;
+- it inserts a short "Loaded from the Longbridge MCP server" preamble after the frontmatter: there is no CLI, read CLI instructions as capabilities and use the tools in the tool list, a gated write's preview is the confirmation step, writes with no dry run (watchlist groups, sharelists, posts) need the user's agreement before the call, and which tools the account's data center cannot use (one copy per data center);
 - it cuts the `Triggers:` list from `description` (§2);
 - skills with `risk_level: mutating` are hidden on the read-only connector.
 
