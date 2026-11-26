@@ -93,6 +93,14 @@ Longbridge US (LBUS) accounts use separate US account APIs, and some AP-account 
 - **Executions**: CLI 0.30.0 `order executions` is AP-only; for a US account use `order --history --format json` and keep orders whose executed quantity (`executed_qty`) is above 0 (covers partially filled then cancelled/expired orders). It returns one row per order (any status), not one row per fill. On a US account its results are paged (default `--page 1 --limit 20`): raise `--limit` or step `--page` until a page returns fewer than `--limit` orders to cover the whole range. `--start` filters by when the order was placed, so fills of orders placed before the start date (e.g. GTC orders) are missed: widen `--start` back to cover those orders.
 - **`portfolio`, `assets`, `cash-flow`, `exchange-rate`**: CLI 0.30.0 does not support these on Longbridge US accounts. Use `positions` for holdings and do not retry these commands; if the Longbridge MCP server is connected, its `account_balance`, `cash_flow`, `exchange_rate` and `stock_positions` tools serve US accounts.
 
+## Placing, cancelling or modifying an order — MANDATORY
+
+`order buy` / `sell` / `cancel` / `replace` and every `grid` write command
+preview by default and reach no exchange on the first run. Run the command,
+show the preview to the user, and only after they explicitly confirm, run the
+command the preview printed — verbatim. Over MCP, follow the `next_step` the
+dry-run response returns. See [references/order.md](references/order.md).
+
 ## Frameworks
 
 ### Portfolio Diagnosis
@@ -122,7 +130,7 @@ Identify unrealised losses, suggest substitutes, track 30-day wash-sale window. 
 |---|---|
 | `command not found: longbridge` | Install the Longbridge CLI with the bundled installer: `sh ../longbridge/scripts/install-cli.sh` (Windows: `../longbridge/scripts/install-cli.ps1`; paths relative to this skill's directory) after the user confirms — see the `longbridge` skill's *Installing the CLI* section |
 | `not logged in` / `unauthorized` | Run `longbridge auth login`; tick Trade permission |
-| `order` mutation | Run once to preview; after the user confirms, re-run the same command with `--execute <CODE>` |
+| `order` / `grid` mutation | Previews by default — show the preview, and only after the user explicitly confirms, run the command it printed |
 | `dca` mutation | No dry run — show the plan and wait for explicit confirmation before running the command at all |
 | `only available in the AP data center` / `not available for US accounts` | The data does not exist for Longbridge US accounts; say so, do not retry |
 | `fund submit-order` / `fund cancel-order` | Preview first (`fund validate-order` / `fund order <ORDER_ID>`); after the user explicitly confirms that exact preview, run the command with `--yes`. Never run it unconfirmed and never pipe input into the prompt |
