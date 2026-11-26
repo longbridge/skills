@@ -117,6 +117,14 @@ Each capability (quote, positions, capital flow, …) is reachable through two p
 
 Every `SKILL.md` tells the LLM the same rule: **default to CLI; fall back to MCP under specific conditions.**
 
+### Exception: skills loaded through MCP
+
+The Longbridge MCP server can also serve these skills itself (longbridge-mcp, `LONGBRIDGE_MCP_SKILLS_DIR`). In that case — and in any client without a shell, such as claude.ai — the MCP tools are already connected and the CLI may not exist. Every `SKILL.md` therefore carries a `> **Tool path**` note right after the language rule:
+
+- Longbridge MCP tools already available in the session → call them directly and skip the CLI steps.
+- Match tools by capability from the tool list. Never assume a name prefix like `mcp__longbridge__`: the prefix is client-specific (Claude Code adds it, claude.ai and other clients do not).
+- Otherwise the default rule below applies.
+
 ### Default rule
 
 ```
@@ -126,7 +134,7 @@ Every `SKILL.md` tells the LLM the same rule: **default to CLI; fall back to MCP
 4. MCP also unconfigured → tell the user: install longbridge-terminal or run `claude mcp add ...`.
 ```
 
-Each read-tier `SKILL.md` ends with an `## MCP fallback` section that lists the **subcommand ↔ MCP tool** mapping. Example: [longbridge-quote/SKILL.md](../skills/longbridge-quote/SKILL.md):
+Each read-tier `SKILL.md` ends with an `## MCP fallback` section that describes the MCP path (older versions listed a **subcommand ↔ MCP tool** mapping; the names below are illustrative only and must not be hard-coded). Example: [longbridge-quote/SKILL.md](../skills/longbridge-quote/SKILL.md):
 
 ```markdown
 | CLI subcommand | MCP tool |
