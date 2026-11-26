@@ -142,6 +142,13 @@ Key points:
 - **`quote`**: always returns `pre_market_quote` / `post_market_quote` / `overnight_quote` when available (US only). Table format appends an "Extended Hours" section; JSON includes them as nested objects.
 - **`intraday` / `kline` / `kline history`**: default to intraday session only; pass `--session all` to include pre/post-market data. `kline`/`kline history` add a **Session** column when `--session all` is used.
 
+## Historical Candlesticks
+
+`kline history` has two modes — see `longbridge kline history --help` for flags:
+
+- **Date range** (`--start` + `--end`): every candle in the range. Fine for daily bars, but a single day of `1m` bars is several hundred rows.
+- **Offset** (`--time`, `--direction`, `--count`): `--count` candles walking backward (default) or forward from a reference time, which is in the **exchange's local time** and is itself included. Prefer this for minute bars around a specific moment. Without `--time` it starts from the latest candle.
+
 ## Rate Limits
 
 - Max **10 API calls/second**

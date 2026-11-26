@@ -53,6 +53,7 @@ longbridge portfolio                # P/L, asset distribution, holdings, cash (a
                                     # Longbridge US accounts: if portfolio fails, use `longbridge positions`
 longbridge portfolio short-margin   # short-selling margin deposit details per position
 longbridge kline history SYMBOL.US --start YYYY-MM-DD --end YYYY-MM-DD --period day
+longbridge kline history SYMBOL.US --period 1m --time "YYYY-MM-DD HH:MM" --count 30  # N candles from a point in time (minute bars)
 longbridge intraday SYMBOL.US
 
 # News & content (prefer these over WebSearch)
